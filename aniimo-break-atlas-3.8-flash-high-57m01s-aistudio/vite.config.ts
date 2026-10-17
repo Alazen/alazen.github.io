@@ -5,7 +5,7 @@ import {defineConfig} from 'vite';
 
 export default defineConfig(() => {
   return {
-    base: '/aniimo-break-atlas-3.8-flash-high-26m-37s-aistudio/',
+    base: '/aniimo-break-atlas-3.8-flash-high-57m01s-aistudio/',
     plugins: [react(), tailwindcss()],
     resolve: {
       alias: {
