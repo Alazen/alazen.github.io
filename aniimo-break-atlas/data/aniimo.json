@@ -1,0 +1,533 @@
+{
+  "checkedAt": "2026-10-12",
+  "source": "https://wiki.aniimo.com/",
+  "form": "Basic Form",
+  "creatures": [
+    {
+      "id": "004",
+      "name": "Inferlupa",
+      "elements": [
+        "fire",
+        "dark"
+      ],
+      "stage": 3,
+      "imageSource": "https://worldx-website-cdn.aniimo.com/official-website/worldx/wiki_stage/init/Wiki_Aniimo_10055.png",
+      "source": "https://wiki.aniimo.com/item/004/basic-form",
+      "stats": {
+        "hp": 95,
+        "break": 108,
+        "atk": 89,
+        "mdef": 80,
+        "pdef": 70,
+        "regen": 99
+      },
+      "total": 541,
+      "image": "assets/aniimo-004.webp"
+    },
+    {
+      "id": "010",
+      "name": "Tubster",
+      "elements": [
+        "wind"
+      ],
+      "stage": 3,
+      "imageSource": "https://worldx-website-cdn.aniimo.com/official-website/worldx/wiki_stage/init/Wiki_Aniimo_10187.png",
+      "source": "https://wiki.aniimo.com/item/010/basic-form",
+      "stats": {
+        "hp": 108,
+        "break": 107,
+        "atk": 80,
+        "mdef": 109,
+        "pdef": 66,
+        "regen": 80
+      },
+      "total": 550,
+      "image": "assets/aniimo-010.webp"
+    },
+    {
+      "id": "020",
+      "name": "Hummin",
+      "elements": [
+        "grass"
+      ],
+      "stage": 1,
+      "imageSource": "https://worldx-website-cdn.aniimo.com/official-website/worldx/wiki_stage/init/Wiki_Aniimo_10201.png",
+      "source": "https://wiki.aniimo.com/item/020/basic-form",
+      "stats": {
+        "hp": 94,
+        "break": 80,
+        "atk": 68,
+        "mdef": 94,
+        "pdef": 71,
+        "regen": 60
+      },
+      "total": 467,
+      "image": "assets/aniimo-020.webp"
+    },
+    {
+      "id": "022",
+      "name": "Tuckin",
+      "elements": [
+        "grass"
+      ],
+      "stage": 2,
+      "imageSource": "https://worldx-website-cdn.aniimo.com/official-website/worldx/wiki_stage/init/Wiki_Aniimo_10207.png",
+      "source": "https://wiki.aniimo.com/item/022/basic-form",
+      "stats": {
+        "hp": 106,
+        "break": 100,
+        "atk": 80,
+        "mdef": 110,
+        "pdef": 83,
+        "regen": 71
+      },
+      "total": 550,
+      "image": "assets/aniimo-022.webp"
+    },
+    {
+      "id": "023",
+      "name": "Budclaw",
+      "elements": [
+        "rock",
+        "grass"
+      ],
+      "stage": 1,
+      "imageSource": "https://worldx-website-cdn.aniimo.com/official-website/worldx/wiki_stage/init/Wiki_Aniimo_10161.png",
+      "source": "https://wiki.aniimo.com/item/023/basic-form",
+      "stats": {
+        "hp": 76,
+        "break": 84,
+        "atk": 64,
+        "mdef": 65,
+        "pdef": 93,
+        "regen": 72
+      },
+      "total": 454,
+      "image": "assets/aniimo-023.webp"
+    },
+    {
+      "id": "024",
+      "name": "Shrubclaw",
+      "elements": [
+        "rock",
+        "grass"
+      ],
+      "stage": 2,
+      "imageSource": "https://worldx-website-cdn.aniimo.com/official-website/worldx/wiki_stage/init/Wiki_Aniimo_10162.png",
+      "source": "https://wiki.aniimo.com/item/024/basic-form",
+      "stats": {
+        "hp": 95,
+        "break": 104,
+        "atk": 80,
+        "mdef": 77,
+        "pdef": 109,
+        "regen": 85
+      },
+      "total": 550,
+      "image": "assets/aniimo-024.webp"
+    },
+    {
+      "id": "025",
+      "name": "Geoclaw",
+      "elements": [
+        "ice"
+      ],
+      "stage": 2,
+      "imageSource": "https://worldx-website-cdn.aniimo.com/official-website/worldx/wiki_stage/init/Wiki_Aniimo_10163.png",
+      "source": "https://wiki.aniimo.com/item/025/basic-form",
+      "stats": {
+        "hp": 93,
+        "break": 103,
+        "atk": 80,
+        "mdef": 79,
+        "pdef": 113,
+        "regen": 82
+      },
+      "total": 550,
+      "image": "assets/aniimo-025.webp"
+    },
+    {
+      "id": "036",
+      "name": "Pomegg",
+      "elements": [
+        "grass"
+      ],
+      "stage": 1,
+      "imageSource": "https://worldx-website-cdn.aniimo.com/official-website/worldx/wiki_stage/init/Wiki_Aniimo_10471.png",
+      "source": "https://wiki.aniimo.com/item/036/basic-form",
+      "stats": {
+        "hp": 74,
+        "break": 91,
+        "atk": 72,
+        "mdef": 65,
+        "pdef": 68,
+        "regen": 85
+      },
+      "total": 455,
+      "image": "assets/aniimo-036.webp"
+    },
+    {
+      "id": "037",
+      "name": "Pomawk",
+      "elements": [
+        "grass"
+      ],
+      "stage": 2,
+      "imageSource": "https://worldx-website-cdn.aniimo.com/official-website/worldx/wiki_stage/init/Wiki_Aniimo_10475.png",
+      "source": "https://wiki.aniimo.com/item/037/basic-form",
+      "stats": {
+        "hp": 87,
+        "break": 107,
+        "atk": 90,
+        "mdef": 76,
+        "pdef": 80,
+        "regen": 100
+      },
+      "total": 540,
+      "image": "assets/aniimo-037.webp"
+    },
+    {
+      "id": "045",
+      "name": "Bolty",
+      "elements": [
+        "electric"
+      ],
+      "stage": 1,
+      "imageSource": "https://worldx-website-cdn.aniimo.com/official-website/worldx/wiki_stage/init/Wiki_Aniimo_10221.png",
+      "source": "https://wiki.aniimo.com/item/045/basic-form",
+      "stats": {
+        "hp": 85,
+        "break": 87,
+        "atk": 85,
+        "mdef": 60,
+        "pdef": 60,
+        "regen": 73
+      },
+      "total": 450,
+      "image": "assets/aniimo-045.webp"
+    },
+    {
+      "id": "046",
+      "name": "Blazen",
+      "elements": [
+        "electric"
+      ],
+      "stage": 2,
+      "imageSource": "https://worldx-website-cdn.aniimo.com/official-website/worldx/wiki_stage/init/Wiki_Aniimo_10222.png",
+      "source": "https://wiki.aniimo.com/item/046/basic-form",
+      "stats": {
+        "hp": 100,
+        "break": 104,
+        "atk": 100,
+        "mdef": 70,
+        "pdef": 70,
+        "regen": 86
+      },
+      "total": 530,
+      "image": "assets/aniimo-046.webp"
+    },
+    {
+      "id": "047",
+      "name": "Squarrel",
+      "elements": [
+        "fire"
+      ],
+      "stage": 1,
+      "imageSource": "https://worldx-website-cdn.aniimo.com/official-website/worldx/wiki_stage/init/Wiki_Aniimo_10511.png",
+      "source": "https://wiki.aniimo.com/item/047/basic-form",
+      "stats": {
+        "hp": 53,
+        "break": 94,
+        "atk": 80,
+        "mdef": 72,
+        "pdef": 79,
+        "regen": 77
+      },
+      "total": 455,
+      "image": "assets/aniimo-047.webp"
+    },
+    {
+      "id": "048",
+      "name": "Squashel",
+      "elements": [
+        "fire"
+      ],
+      "stage": 2,
+      "imageSource": "https://worldx-website-cdn.aniimo.com/official-website/worldx/wiki_stage/init/Wiki_Aniimo_10512.png",
+      "source": "https://wiki.aniimo.com/item/048/basic-form",
+      "stats": {
+        "hp": 110,
+        "break": 108,
+        "atk": 82,
+        "mdef": 80,
+        "pdef": 80,
+        "regen": 88
+      },
+      "total": 548,
+      "image": "assets/aniimo-048.webp"
+    },
+    {
+      "id": "049",
+      "name": "Susuta",
+      "elements": [
+        "water"
+      ],
+      "stage": 1,
+      "imageSource": "https://worldx-website-cdn.aniimo.com/official-website/worldx/wiki_stage/init/Wiki_Aniimo_10171.png",
+      "source": "https://wiki.aniimo.com/item/049/basic-form",
+      "stats": {
+        "hp": 81,
+        "break": 72,
+        "atk": 61,
+        "mdef": 80,
+        "pdef": 53,
+        "regen": 64
+      },
+      "total": 411,
+      "image": "assets/aniimo-049.webp"
+    },
+    {
+      "id": "050",
+      "name": "Popota",
+      "elements": [
+        "water"
+      ],
+      "stage": 2,
+      "imageSource": "https://worldx-website-cdn.aniimo.com/official-website/worldx/wiki_stage/init/Wiki_Aniimo_10172.png",
+      "source": "https://wiki.aniimo.com/item/050/basic-form",
+      "stats": {
+        "hp": 92,
+        "break": 80,
+        "atk": 96,
+        "mdef": 68,
+        "pdef": 68,
+        "regen": 67
+      },
+      "total": 471,
+      "image": "assets/aniimo-050.webp"
+    },
+    {
+      "id": "052",
+      "name": "Panpanta",
+      "elements": [
+        "water"
+      ],
+      "stage": 3,
+      "imageSource": "https://worldx-website-cdn.aniimo.com/official-website/worldx/wiki_stage/init/Wiki_Aniimo_10174.png",
+      "source": "https://wiki.aniimo.com/item/052/basic-form",
+      "stats": {
+        "hp": 104,
+        "break": 100,
+        "atk": 85,
+        "mdef": 106,
+        "pdef": 70,
+        "regen": 80
+      },
+      "total": 545,
+      "image": "assets/aniimo-052.webp"
+    },
+    {
+      "id": "061",
+      "name": "Helmut",
+      "elements": [
+        "dark"
+      ],
+      "stage": 1,
+      "imageSource": "https://worldx-website-cdn.aniimo.com/official-website/worldx/wiki_stage/init/Wiki_Aniimo_10021.png",
+      "source": "https://wiki.aniimo.com/item/061/basic-form",
+      "stats": {
+        "hp": 60,
+        "break": 60,
+        "atk": 52,
+        "mdef": 48,
+        "pdef": 68,
+        "regen": 51
+      },
+      "total": 339,
+      "image": "assets/aniimo-061.webp"
+    },
+    {
+      "id": "063",
+      "name": "Rookey",
+      "elements": [
+        "dark"
+      ],
+      "stage": 2,
+      "imageSource": "https://worldx-website-cdn.aniimo.com/official-website/worldx/wiki_stage/init/Wiki_Aniimo_10027.png",
+      "source": "https://wiki.aniimo.com/item/063/basic-form",
+      "stats": {
+        "hp": 100,
+        "break": 105,
+        "atk": 90,
+        "mdef": 70,
+        "pdef": 100,
+        "regen": 75
+      },
+      "total": 540,
+      "image": "assets/aniimo-063.webp"
+    },
+    {
+      "id": "064",
+      "name": "Jawling",
+      "elements": [
+        "wind"
+      ],
+      "stage": 1,
+      "imageSource": "https://worldx-website-cdn.aniimo.com/official-website/worldx/wiki_stage/init/Wiki_Aniimo_10024.png",
+      "source": "https://wiki.aniimo.com/item/064/basic-form",
+      "stats": {
+        "hp": 78,
+        "break": 76,
+        "atk": 65,
+        "mdef": 51,
+        "pdef": 74,
+        "regen": 63
+      },
+      "total": 407,
+      "image": "assets/aniimo-064.webp"
+    },
+    {
+      "id": "065",
+      "name": "Helmwhelp",
+      "elements": [
+        "wind"
+      ],
+      "stage": 2,
+      "imageSource": "https://worldx-website-cdn.aniimo.com/official-website/worldx/wiki_stage/init/Wiki_Aniimo_10022.png",
+      "source": "https://wiki.aniimo.com/item/065/basic-form",
+      "stats": {
+        "hp": 94,
+        "break": 92,
+        "atk": 78,
+        "mdef": 61,
+        "pdef": 88,
+        "regen": 76
+      },
+      "total": 489,
+      "image": "assets/aniimo-065.webp"
+    },
+    {
+      "id": "066",
+      "name": "Helgon",
+      "elements": [
+        "wind"
+      ],
+      "stage": 3,
+      "imageSource": "https://worldx-website-cdn.aniimo.com/official-website/worldx/wiki_stage/init/Wiki_Aniimo_10023.png",
+      "source": "https://wiki.aniimo.com/item/066/basic-form",
+      "stats": {
+        "hp": 104,
+        "break": 102,
+        "atk": 87,
+        "mdef": 68,
+        "pdef": 98,
+        "regen": 84
+      },
+      "total": 543,
+      "image": "assets/aniimo-066.webp"
+    },
+    {
+      "id": "070",
+      "name": "Pebbling",
+      "elements": [
+        "rock"
+      ],
+      "stage": 1,
+      "imageSource": "https://worldx-website-cdn.aniimo.com/official-website/worldx/wiki_stage/init/Wiki_Aniimo_10281.png",
+      "source": "https://wiki.aniimo.com/item/070/basic-form",
+      "stats": {
+        "hp": 83,
+        "break": 79,
+        "atk": 68,
+        "mdef": 74,
+        "pdef": 52,
+        "regen": 56
+      },
+      "total": 412,
+      "image": "assets/aniimo-070.webp"
+    },
+    {
+      "id": "071",
+      "name": "Lavazar",
+      "elements": [
+        "fire",
+        "rock"
+      ],
+      "stage": 2,
+      "imageSource": "https://worldx-website-cdn.aniimo.com/official-website/worldx/wiki_stage/init/Wiki_Aniimo_10282.png",
+      "source": "https://wiki.aniimo.com/item/071/basic-form",
+      "stats": {
+        "hp": 99,
+        "break": 93,
+        "atk": 82,
+        "mdef": 80,
+        "pdef": 63,
+        "regen": 68
+      },
+      "total": 485,
+      "image": "assets/aniimo-071.webp"
+    },
+    {
+      "id": "072",
+      "name": "Magmarex",
+      "elements": [
+        "fire",
+        "rock"
+      ],
+      "stage": 3,
+      "imageSource": "https://worldx-website-cdn.aniimo.com/official-website/worldx/wiki_stage/init/Wiki_Aniimo_10283.png",
+      "source": "https://wiki.aniimo.com/item/072/basic-form",
+      "stats": {
+        "hp": 110,
+        "break": 104,
+        "atk": 91,
+        "mdef": 89,
+        "pdef": 70,
+        "regen": 75
+      },
+      "total": 539,
+      "image": "assets/aniimo-072.webp"
+    },
+    {
+      "id": "073",
+      "name": "Geodeback",
+      "elements": [
+        "rock"
+      ],
+      "stage": 2,
+      "imageSource": "https://worldx-website-cdn.aniimo.com/official-website/worldx/wiki_stage/init/Wiki_Aniimo_10284.png",
+      "source": "https://wiki.aniimo.com/item/073/basic-form",
+      "stats": {
+        "hp": 99,
+        "break": 102,
+        "atk": 81,
+        "mdef": 54,
+        "pdef": 80,
+        "regen": 70
+      },
+      "total": 486,
+      "image": "assets/aniimo-073.webp"
+    },
+    {
+      "id": "074",
+      "name": "Minespine",
+      "elements": [
+        "rock"
+      ],
+      "stage": 3,
+      "imageSource": "https://worldx-website-cdn.aniimo.com/official-website/worldx/wiki_stage/init/Wiki_Aniimo_10285.png",
+      "source": "https://wiki.aniimo.com/item/074/basic-form",
+      "stats": {
+        "hp": 110,
+        "break": 105,
+        "atk": 90,
+        "mdef": 60,
+        "pdef": 97,
+        "regen": 78
+      },
+      "total": 540,
+      "image": "assets/aniimo-074.webp"
+    }
+  ],
+  "artSource": "https://www.aniimo.com/main/"
+}

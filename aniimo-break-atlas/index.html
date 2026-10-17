@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#ebf7f7">
+  <meta name="description" content="Find your next big break. Explore, rank, and compare all 26 Break-role Aniimo using official Basic Form stats.">
+  <title>Aniimo Break Atlas | Find your next big break</title>
+  <link rel="icon" href="assets/logo.webp" type="image/webp">
+  <link rel="preload" href="assets/aniimo-rounded.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/nimbus-fields.webp" as="image">
+  <link rel="stylesheet" href="styles.css">
+  <script src="app.js" type="module"></script>
+</head>
+<body>
+  <a class="skip-link" href="#rankings">Skip to rankings</a>
+  <header class="site-header">
+    <div class="nav-inner">
+      <a href="#home" class="brand" aria-label="Aniimo Break Atlas home"><img src="assets/logo.webp" width="124" height="44" alt="Aniimo"><span>BREAK ATLAS</span></a>
+      <nav aria-label="Main navigation">
+        <a class="nav-link active" href="#rankings">Rankings</a>
+        <a class="nav-link" href="#compare">Compare <span id="nav-count" class="nav-count">2</span></a>
+        <a class="nav-link" href="#method">How we rank</a>
+      </nav>
+      <a class="official-link" href="https://www.aniimo.com/main/" target="_blank" rel="noopener noreferrer">Explore Aniimo <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M7 7h10v10"/></svg></a>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" id="home" aria-labelledby="hero-title">
+      <div class="hero-scenery" aria-hidden="true"></div>
+      <div class="hero-inner container">
+        <div class="hero-copy">
+          <p class="eyebrow hero-eyebrow"><span class="tiny-spark" aria-hidden="true"></span> YOUR FIELD GUIDE TO BREAK ANIIMO</p>
+          <h1 id="hero-title">Find your next<br>big <span>break.</span></h1>
+          <p class="hero-description">Small friends. Serious impact.<br>Explore the Break specialists, compare their stats,<br class="desktop-break"> and find the right fit for your team.</p>
+          <div class="hero-actions">
+            <a href="#rankings" class="button button-primary">Meet the best <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></a>
+            <a href="#compare" class="button button-glass">Compare Aniimo <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3v18M16 3v18M5 7h6M13 17h6"/></svg></a>
+          </div>
+          <p class="hero-note"><span aria-hidden="true"></span> Official base stats. A little curiosity goes a long way.</p>
+        </div>
+        <div class="hero-showcase" aria-label="Top ranked Aniimo spotlight">
+          <div class="orbit orbit-outer" aria-hidden="true"></div><div class="orbit orbit-inner" aria-hidden="true"></div>
+          <span class="floating-spark spark-one" aria-hidden="true"></span><span class="floating-spark spark-two" aria-hidden="true"></span><span class="floating-spark spark-three" aria-hidden="true"></span>
+          <div class="hero-stat"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m13 2-9 12h7l-1 8 10-13h-8l1-7Z"/></svg><div><strong id="hero-break">108</strong><span>BASE BREAK</span></div></div>
+          <button id="hero-creature" class="hero-creature" aria-label="View Squashel stats"><img id="hero-image" src="assets/aniimo-048.webp" width="512" height="840" alt="Squashel, the orange fire squirrel Aniimo" fetchpriority="high"></button>
+          <div class="hero-caption"><span class="spotlight-rank" id="hero-rank">01</span><div><span class="spotlight-small">MEET A TOP BREAK PICK</span><h2 id="hero-name">Squashel</h2></div><div id="hero-element" class="hero-element">Fire</div></div>
+          <div class="spotlight-switcher" id="spotlight-switcher" aria-label="Choose a spotlight Aniimo"></div>
+        </div>
+      </div>
+      <div class="hero-bottom"><span>THE WORLD IS BETTER WITH A FRIEND</span><a href="#rankings" aria-label="Scroll to the Break index"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m7 8 5 5 5-5M7 14l5 5 5-5"/></svg></a><span>NIMBUS FIELDS / ADVENTURE AWAITS</span></div>
+      <svg class="hero-wave" viewBox="0 0 1440 70" preserveAspectRatio="none" aria-hidden="true"><path d="M0 30C240 85 360 2 620 24c250 21 430 56 820-9v55H0Z"/></svg>
+    </section>
+
+    <div class="field-notes container" aria-label="About this index">
+      <div class="field-note"><span class="note-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 3 8v8l9 5 9-5V8l-9-5Zm0 0v18M3 8l9 5 9-5"/></svg></span><div><strong>26 Break Aniimo</strong><span>A whole role to explore</span></div></div>
+      <div class="field-note"><span class="note-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 17h4V9H4v8Zm6 0h4V4h-4v13Zm6 0h4v-5h-4v5ZM3 21h18"/></svg></span><div><strong>Real stats, clear rankings</strong><span>Every number has a source</span></div></div>
+      <div class="field-note"><span class="note-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-8-5-8-11a5 5 0 0 1 8-4 5 5 0 0 1 8 4c0 6-8 11-8 11Z"/></svg></span><div><strong>Find your kind of friend</strong><span>Compare what matters to you</span></div></div>
+    </div>
+
+    <section class="ranking-section container" id="rankings" aria-labelledby="ranking-title">
+      <div class="section-heading">
+        <div><p class="eyebrow"><span class="tiny-spark" aria-hidden="true"></span> THE BREAK INDEX</p><h2 id="ranking-title">A little friend.<br class="mobile-break"> A big advantage.</h2><p>Meet the best by base BREAK. Make the list your own.</p></div>
+        <div class="view-switch" role="group" aria-label="Ranking display"><button id="view-cards" class="is-active" aria-pressed="true"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Cards</button><button id="view-chart" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4v16h16M8 7h12M8 12h9M8 17h5"/></svg>Chart</button></div>
+      </div>
+      <div class="ranking-controls">
+        <div class="search-field"><label for="search">Find an Aniimo</label><div><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></svg><input id="search" type="search" placeholder="Search a little friend..." autocomplete="off" maxlength="80"></div></div>
+        <div class="select-field"><label for="stage">Evolution stage</label><select id="stage"><option value="all">All stages</option><option value="3">Nova stage</option><option value="2">Gamma stage</option><option value="1">Lumin stage</option></select></div>
+        <div class="select-field"><label for="sort">Rank by</label><select id="sort"><option value="break">Base BREAK</option><option value="total">Total attributes</option><option value="hp">HP</option><option value="atk">ATK</option><option value="mdef">Magic defense</option><option value="pdef">Physical defense</option><option value="regen">REGEN</option></select></div>
+      </div>
+      <div class="element-filters" id="element-filters" role="group" aria-label="Filter by element"></div>
+      <div class="results-heading"><p id="result-count" role="status" aria-live="polite">Loading the Break index...</p><a href="#compare"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3v18M16 3v18M5 7h6M13 17h6"/></svg>Select up to 3 to compare</a></div>
+      <p class="ranking-context" id="ranking-context">Highest BREAK first. Ties use total attributes.</p>
+      <div id="rank-results" class="creature-grid" aria-label="Ranked Aniimo"></div>
+      <div id="empty-state" class="empty-state" hidden><span class="empty-orbit" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></svg></span><h3>No friends found here.</h3><p>Try another name, element, or evolution stage.</p><button id="reset-filters" class="button button-primary">Reset filters</button></div>
+      <div class="show-more-wrap"><button id="show-more" class="button button-outline" hidden>Show all 26 Aniimo <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button></div>
+      <div class="source-note"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 12l2 2 4-4M12 3l8 3v6c0 5-8 9-8 9s-8-4-8-9V6l8-3Z"/></svg><span>Basic Form stats checked 12 Oct 2026. Skill kits and team synergy can change your best choice.</span><a href="https://wiki.aniimo.com/" target="_blank" rel="noopener noreferrer">Official wiki <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M7 7h10v10"/></svg></a></div>
+    </section>
+
+    <section class="comparison-section" id="compare" aria-labelledby="compare-title">
+      <div class="comparison-inner container">
+        <div class="section-heading"><div><p class="eyebrow"><span class="tiny-spark" aria-hidden="true"></span> BETTER SIDE BY SIDE</p><h2 id="compare-title">Who is your perfect partner?</h2><p>Same role. Different strengths. Compare up to three friends.</p></div><button id="share-comparison" class="button button-outline"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-2 2M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l2-2"/></svg>Copy comparison link</button></div>
+        <div class="comparison-layout">
+          <div class="comparison-picks"><div class="pick-heading"><h3>Your line-up</h3><button id="clear-comparison" class="text-button">Clear all</button></div><div id="comparison-slots"></div><p class="pick-hint">Choose a friend here, or tap Compare on any creature above.</p><p id="comparison-summary" class="comparison-summary" role="status" aria-live="polite"></p></div>
+          <div class="chart-panel">
+            <div class="chart-heading"><div><h3>Get to know their strengths</h3><p>Official base attributes</p></div><div class="view-switch compact" role="group" aria-label="Comparison chart type"><button id="chart-radar" class="is-active" aria-pressed="true">Radar</button><button id="chart-bars" aria-pressed="false">Bars</button></div></div>
+            <div id="comparison-legend" class="comparison-legend"></div>
+            <div id="comparison-chart" class="comparison-chart"></div>
+            <p class="chart-scale">All six axes use the same 0 to 150 scale.</p>
+          </div>
+        </div>
+        <div class="exact-stats"><div class="table-heading"><h3>The numbers, side by side</h3><span>Higher base values are highlighted</span></div><div class="table-wrap" id="comparison-table"></div></div>
+      </div>
+    </section>
+
+    <section class="method-section container" id="method" aria-labelledby="method-title">
+      <div class="method-intro"><p class="eyebrow"><span class="tiny-spark" aria-hidden="true"></span> A GUIDE, WITH THE RECEIPTS</p><h2 id="method-title">Good choices start<br>with clear numbers.</h2><p>These rankings give you a starting point. Your playstyle, skill choices, and team matter too.</p><a class="button button-outline" href="https://wiki.aniimo.com/" target="_blank" rel="noopener noreferrer">Visit the official wiki <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M7 7h10v10"/></svg></a></div>
+      <div class="method-questions"><details open><summary><span>01</span>How are the Aniimo ranked?<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></summary><p>By default, we sort the 26 Break-role Aniimo by base BREAK, highest first. Equal BREAK values use total attributes as a tie-breaker, then Aniilog number. Use the Rank by control to explore another stat. Rank numbers refer to the full roster before filtering.</p></details><details><summary><span>02</span>Why is Squashel ahead of Inferlupa?<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></summary><p>Both have 108 base BREAK. Squashel has 548 total attributes and Inferlupa has 541, so Squashel wins the tie-break. That small difference does not settle which skill kit suits your team.</p></details><details><summary><span>03</span>Which forms and stages are included?<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></summary><p>All 26 Basic Form entries assigned to the Break role in the official Aniimo wiki. Lumin, Gamma, and Nova stages are included, and you can filter by stage. Alternate and Prismana forms have their own entries and are outside this index.</p></details><details><summary><span>04</span>Where do the stats come from?<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></summary><p>Each creature's official wiki entry, checked on 12 October 2026. Open any creature to follow its source. Consult the official wiki for each creature's skills, alternate forms, and later balance changes.</p></details></div>
+    </section>
+  </main>
+
+  <footer class="site-footer"><div class="container footer-inner"><a class="footer-brand" href="#home" aria-label="Back to top"><img src="assets/logo.webp" width="116" height="40" alt="Aniimo"><span>A little guide to your next adventure.</span></a><div><span>Independent fan guide. Artwork belongs to Aniimo.</span><a href="https://www.aniimo.com/main/" target="_blank" rel="noopener noreferrer">Official website <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M7 7h10v10"/></svg></a></div></div></footer>
+  <dialog id="creature-dialog" aria-labelledby="dialog-name"><div class="dialog-shell"><button id="close-dialog" class="icon-button dialog-close" aria-label="Close creature details"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M6 18 18 6"/></svg></button><div id="dialog-content"></div></div></dialog>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <noscript><div class="noscript-notice">Enable JavaScript to explore the rankings and compare Aniimo. You can also browse the <a href="https://wiki.aniimo.com/">official wiki</a>.</div></noscript>
+</body>
+</html>
