@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Aniimo Break Tier Atlas &amp; Interactive Stagger Visualizer</title>
+  <meta name="description" content="Interactive ranking and visualization atlas of all 28 Break Aniimo across Lv.70 Break Gauge Speed, MetaBot Build 1.0 scores, body size multipliers, and boss stagger simulations." />
+  <link rel="icon" type="image/webp" href="assets/ui/role-break.webp" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <a href="#rankings" class="skip-link">Skip to Interactive Break Rankings</a>
+
+  <!-- 1. Official Aniimo Wavy Glassmorphic Top Navbar -->
+  <header class="aniimo-navbar" role="banner">
+    <div class="navbar-left">
+      <a href="#overview" class="navbar-brand" aria-label="Aniimo Break Atlas Home">
+        <img src="assets/ui/logo-dark.webp" alt="Aniimo" class="navbar-logo logo-light-only" width="148" height="52" />
+        <img src="assets/ui/logo-light.webp" alt="Aniimo" class="navbar-logo logo-dark-only" width="148" height="52" />
+        <span class="navbar-badge">BREAK ATLAS 1.0</span>
+      </a>
+      <nav aria-label="Primary sections">
+        <ul class="navbar-menu">
+          <li><a href="#overview" class="navbar-link is-active" data-nav-link="overview">Overview</a></li>
+          <li><a href="#rankings" class="navbar-link" data-nav-link="rankings">Tier Rankings</a></li>
+          <li><a href="#spotlight" class="navbar-link" data-nav-link="spotlight">Aniimo Dossier</a></li>
+          <li><a href="#analytics" class="navbar-link" data-nav-link="analytics">Radar &amp; Scatter</a></li>
+          <li><a href="#simulator" class="navbar-link" data-nav-link="simulator">Stagger Sim</a></li>
+        </ul>
+      </nav>
+    </div>
+
+    <div class="navbar-right">
+      <a href="#simulator" class="aniimo-pill-cta">
+        <span>BOSS SIMULATOR</span>
+      </a>
+      <button type="button" id="themeToggleBtn" class="icon-circle-btn" aria-label="Switch between Idyll Day and Night theme" title="Toggle Day / Night Mode">
+        <svg id="themeIconSun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" hidden>
+          <circle cx="12" cy="12" r="5"></circle>
+          <line x1="12" y1="1" x2="12" y2="3"></line>
+          <line x1="12" y1="21" x2="12" y2="23"></line>
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+          <line x1="1" y1="12" x2="3" y2="12"></line>
+          <line x1="21" y1="12" x2="23" y2="12"></line>
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+        </svg>
+        <svg id="themeIconMoon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <main id="mainContent">
+    <!-- 2. Hero Section & Official Welfare-Style Standout Breaker Board -->
+    <section id="overview" class="hero-section" aria-labelledby="heroHeading">
+      <div class="hero-container">
+        <div class="hero-top-grid">
+          <div class="hero-copy-card">
+            <div class="eyebrow-pill">
+              <span class="eyebrow-dot" aria-hidden="true"></span>
+              <span>28 Break Aniimo Indexed | Lv.70 Sim + MetaBot 1.0.3634150</span>
+            </div>
+            <h1 id="heroHeading" class="hero-title">
+              Rank the Best <span class="hero-title-accent">Break Aniimo</span> in Idyll
+            </h1>
+            <p class="hero-lead">
+              Break Aniimo specialize in shattering Boss Shield Gauges to trigger vulnerable stagger windows. Because raw BREAK stats, Extra-Large body size multipliers (+50% BREAK per hit), multi-hit skill cadence, and raid debuffs favor different contenders, this interactive atlas unifies every major ranking lens in one live workspace.
+            </p>
+
+            <div class="hero-rotation-strip" aria-label="Optimal 4-step boss combat rotation">
+              <span class="rotation-label">Boss Loop:</span>
+              <span class="rotation-step">1. Buff</span>
+              <span class="rotation-arrow" aria-hidden="true">&rarr;</span>
+              <span class="rotation-step">2. Regen (EP)</span>
+              <span class="rotation-arrow" aria-hidden="true">&rarr;</span>
+              <span class="rotation-step is-break">
+                <img src="assets/ui/role-break.webp" alt="" width="16" height="16" />
+                3. Break Shield
+              </span>
+              <span class="rotation-arrow" aria-hidden="true">&rarr;</span>
+              <span class="rotation-step">4. Burst DPS</span>
+            </div>
+
+            <div class="hero-cta-row">
+              <a href="#rankings" class="aniimo-img-btn">Explore Rankings</a>
+              <a href="#spotlight" class="aniimo-img-btn secondary">Inspect 28 Dossiers</a>
+            </div>
+          </div>
+
+          <!-- Dynamic #1 Champion Card (updates live with active ranking lens) -->
+          <div class="hero-champion-showcase" id="heroChampionCard" aria-live="polite">
+            <div class="hero-champion-inner">
+              <div class="champ-header">
+                <span class="champ-rank-pill" id="champLensBadge">#1 COMPOSITE CHAMPION</span>
+                <span class="champ-dex" id="champDex">No.066</span>
+              </div>
+              <div class="champ-body">
+                <div>
+                  <h2 class="champ-name" id="champName">Helgon</h2>
+                  <p class="champ-Copy" id="champSummary">
+                    Fastest solo Break gauge shredder in Launch 1.0. Its Extra-Large body adds +50% BREAK to every hit, and Counter Strike boosts BREAK efficiency by another 25% after taking damage.
+                  </p>
+                  <div class="champ-metrics">
+                    <div class="champ-metric-box">
+                      <small id="champMetric1Label">Active Score</small>
+                      <strong id="champMetric1Val">96.4</strong>
+                    </div>
+                    <div class="champ-metric-box">
+                      <small>Gauge Speed</small>
+                      <strong id="champMetric2Val">100%</strong>
+                    </div>
+                    <div class="champ-metric-box">
+                      <small>BREAK / Size</small>
+                      <strong id="champMetric3Val">102 (+50%)</strong>
+                    </div>
+                  </div>
+                </div>
+                <div class="champ-art-wrap">
+                  <img id="champArtImg" src="assets/creatures/helgon.webp" alt="Helgon full artwork" class="champ-art-img" width="185" height="205" />
+                </div>
+              </div>
+              <div class="champ-footer">
+                <span id="champTraitLine">Trait: Counter Strike (+25% BREAK for 10s)</span>
+                <button type="button" id="champInspectBtn" class="preset-chip" style="background: rgba(255,255,255,0.16); color: #ffffff; border-color: rgba(255,255,255,0.35);">
+                  Open Dossier &rarr;
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Official Aniimo Welfare-Style 4 Standout Cards -->
+        <div class="overview-board">
+          <div class="overview-board-inner">
+            <div class="board-section-header">
+              <div class="board-title-group">
+                <img src="assets/ui/stars.webp" alt="" class="star-ornament" width="18" height="18" />
+                <h2 class="board-title">Four Crown Pillars of the Break Meta</h2>
+              </div>
+              <p class="board-subtitle">
+                Click any champion card to load its dossier, switch its ranking lens, and compare its stagger profile.
+              </p>
+            </div>
+
+            <div class="standout-reward-grid" id="standoutPodiumGrid">
+              <!-- Card 1: Helgon -->
+              <article class="standout-card is-gold" data-standout-id="helgon" data-standout-mode="gauge" tabindex="0" role="button" aria-label="Inspect Helgon, Rank 1 Gauge Fill Speed">
+                <span class="standout-top-tag">#1 SOLO GAUGE SPEED</span>
+                <div class="standout-portrait-wrap">
+                  <img src="assets/creatures/helgon.webp" alt="Helgon" class="standout-portrait" width="108" height="108" />
+                </div>
+                <div class="standout-wave-copy">
+                  <div class="standout-award">
+                    <img src="assets/ui/stars.webp" alt="" width="14" height="14" />
+                    <span>Helgon (No.066)</span>
+                  </div>
+                  <div class="standout-desc-pill">
+                    100% Speed Benchmark | XL +50% BREAK
+                  </div>
+                </div>
+              </article>
+
+              <!-- Card 2: Minespine -->
+              <article class="standout-card" data-standout-id="minespine" data-standout-mode="composite" tabindex="0" role="button" aria-label="Inspect Minespine, Dual S-Tier Earth Juggernaut">
+                <span class="standout-top-tag">#1 CONSENSUS DUAL S-TIER</span>
+                <div class="standout-portrait-wrap">
+                  <img src="assets/creatures/minespine.webp" alt="Minespine" class="standout-portrait" width="108" height="108" />
+                </div>
+                <div class="standout-wave-copy">
+                  <div class="standout-award">
+                    <img src="assets/ui/stars.webp" alt="" width="14" height="14" />
+                    <span>Minespine (No.074)</span>
+                  </div>
+                  <div class="standout-desc-pill">
+                    90% Speed + 95 Meta Score | XL +50%
+                  </div>
+                </div>
+              </article>
+
+              <!-- Card 3: Magmarex -->
+              <article class="standout-card" data-standout-id="magmarex" data-standout-mode="metabot" tabindex="0" role="button" aria-label="Inspect Magmarex, Rank 1 MetaBot Leaderboard">
+                <span class="standout-top-tag">#1 METABOT SCORE (98)</span>
+                <div class="standout-portrait-wrap">
+                  <img src="assets/creatures/magmarex.webp" alt="Magmarex" class="standout-portrait" width="108" height="108" />
+                </div>
+                <div class="standout-wave-copy">
+                  <div class="standout-award">
+                    <img src="assets/ui/stars.webp" alt="" width="14" height="14" />
+                    <span>Magmarex (No.032)</span>
+                  </div>
+                  <div class="standout-desc-pill">
+                    107 BREAK | 561 BST | 6/20 Bosses
+                  </div>
+                </div>
+              </article>
+
+              <!-- Card 4: Inferlupa -->
+              <article class="standout-card" data-standout-id="inferlupa" data-standout-mode="raid" tabindex="0" role="button" aria-label="Inspect Inferlupa, Rank 1 Co-op Raid Amplifier">
+                <span class="standout-top-tag">#1 CO-OP RAID AMPLIFIER</span>
+                <div class="standout-portrait-wrap">
+                  <img src="assets/creatures/inferlupa.webp" alt="Inferlupa" class="standout-portrait" width="108" height="108" />
+                </div>
+                <div class="standout-wave-copy">
+                  <div class="standout-award">
+                    <img src="assets/ui/stars.webp" alt="" width="14" height="14" />
+                    <span>Inferlupa (No.004)</span>
+                  </div>
+                  <div class="standout-desc-pill">
+                    108 BREAK | +30% Team Break Taken
+                  </div>
+                </div>
+              </article>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <img src="assets/ui/gameplay-transition.webp" alt="" class="section-cloud-transition" aria-hidden="true" />
+
+    <!-- 3. Milestone Wave Section & Interactive Break Ranking Engine -->
+    <section id="rankings" class="milestone-ranking-section" aria-labelledby="rankingsHeading">
+      <div class="section-container">
+        <!-- Official Aniimo Milestone Wave Header Banner -->
+        <div class="milestone-banner">
+          <div class="milestone-top-row">
+            <div class="milestone-heading-block">
+              <div class="eyebrow-pill">
+                <img src="assets/ui/role-break.webp" alt="" width="15" height="15" />
+                <span>Multi-Methodology Ranking Engine</span>
+              </div>
+              <h2 id="rankingsHeading">Interactive Break Tier List &amp; Custom Weight Lab</h2>
+              <p id="activeModeDescription">
+                Composite Meta combines Lv.70 Break Gauge fill speed (35%), base BREAK stat (20%), body size bonus (15%), MetaBot boss score (15%), and raid utility/bulk (15%).
+              </p>
+            </div>
+            <div class="milestone-giant-counter">
+              <span class="count-num" id="visibleBreakerCount">28 / 28</span>
+              <span class="count-label" id="activeLensCounterLabel">Breakers Active in View</span>
+            </div>
+          </div>
+
+          <!-- Official Aniimo SVG Wave Progress Curve -->
+          <div class="milestone-wave-wrap" aria-hidden="true">
+            <svg class="milestone-wave-svg" viewBox="0 0 1200 64" preserveAspectRatio="none">
+              <defs>
+                <linearGradient id="aniimoWaveGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stop-color="#3586e2" />
+                  <stop offset="55%" stop-color="#48b2ef" />
+                  <stop offset="100%" stop-color="#76e1f8" />
+                </linearGradient>
+              </defs>
+              <path d="M 0 42 C 150 10, 300 58, 450 28 C 600 -2, 750 56, 900 26 C 1020 4, 1120 44, 1200 20" fill="none" stroke="rgba(88, 122, 154, 0.22)" stroke-width="6" stroke-linecap="round" />
+              <path id="milestoneWaveActivePath" d="M 0 42 C 150 10, 300 58, 450 28 C 600 -2, 750 56, 900 26 C 1020 4, 1120 44, 1200 20" fill="none" stroke="url(#aniimoWaveGrad)" stroke-width="6" stroke-linecap="round" />
+              <circle cx="140" cy="24" r="8" fill="#3586e2" stroke="#ffffff" stroke-width="3" />
+              <circle cx="450" cy="28" r="8" fill="#3f9be9" stroke="#ffffff" stroke-width="3" />
+              <circle cx="780" cy="36" r="8" fill="#58c4f3" stroke="#ffffff" stroke-width="3" />
+              <circle cx="1090" cy="27" r="9" fill="#76e1f8" stroke="#ffffff" stroke-width="3" />
+            </svg>
+          </div>
+
+          <div class="milestone-checkpoints">
+            <div class="checkpoint-item">
+              <span class="checkpoint-badge">+50%</span>
+              <div class="checkpoint-text">
+                <strong>Extra-Large Body Bonus</strong>
+                <span>Helgon, Minespine &amp; Lavazar</span>
+              </div>
+            </div>
+            <div class="checkpoint-item">
+              <span class="checkpoint-badge">100%</span>
+              <div class="checkpoint-text">
+                <strong>Lv.70 Speed Benchmark</strong>
+                <span>Helgon (100%) &amp; Minespine (90%)</span>
+              </div>
+            </div>
+            <div class="checkpoint-item">
+              <span class="checkpoint-badge">110</span>
+              <div class="checkpoint-text">
+                <strong>Peak Base BREAK Stat</strong>
+                <span>Wavwal (110) &amp; Squashel (108)</span>
+              </div>
+            </div>
+            <div class="checkpoint-item">
+              <span class="checkpoint-badge">7 / 20</span>
+              <div class="checkpoint-text">
+                <strong>widest Boss Coverage</strong>
+                <span>Shrubclaw (7) &amp; Magmarex (6)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Interactive Control Deck -->
+        <div class="control-deck" role="region" aria-label="Ranking controls and filters">
+          <div class="control-row">
+            <div>
+              <span class="control-group-label">1. Select Ranking Methodology</span>
+              <div class="segmented-modes" role="group" aria-label="Ranking methodology">
+                <button type="button" class="mode-btn" data-mode="composite" aria-pressed="true">Composite Meta</button>
+                <button type="button" class="mode-btn" data-mode="gauge" aria-pressed="false">Lv.70 Gauge Speed</button>
+                <button type="button" class="mode-btn" data-mode="metabot" aria-pressed="false">MetaBot Build 1.0</button>
+                <button type="button" class="mode-btn" data-mode="rawbreak" aria-pressed="false">Raw BREAK &amp; Size</button>
+                <button type="button" class="mode-btn" data-mode="raid" aria-pressed="false">Raid &amp; Boss Counters</button>
+              </div>
+            </div>
+
+            <div>
+              <span class="control-group-label">Display Layout</span>
+              <div class="view-switcher" role="group" aria-label="Ranking view layout">
+                <button type="button" class="view-btn" data-view="matrix" aria-pressed="true">Tier Matrix (S-D)</button>
+                <button type="button" class="view-btn" data-view="cards" aria-pressed="false">Detailed Cards</button>
+                <button type="button" class="view-btn" data-view="table" aria-pressed="false">Sortable Table</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Custom Weight Sliders Drawer -->
+          <div class="weights-drawer" id="weightsDrawer">
+            <div class="weights-header">
+              <div>
+                <span class="control-group-label" style="margin-bottom: 2px;">2. Fine-Tune Custom Scoring Weights (Live Recalculation)</span>
+                <small style="color: var(--ink-secondary); font-size: 0.8rem;">Drag any slider to customize the Composite score formula and watch tiers update immediately.</small>
+              </div>
+              <div class="weights-presets" role="group" aria-label="Weight presets">
+                <button type="button" class="preset-chip" data-preset="balanced" aria-pressed="true">Balanced Meta</button>
+                <button type="button" class="preset-chip" data-preset="speed" aria-pressed="false">Pure Gauge Speed</button>
+                <button type="button" class="preset-chip" data-preset="raid" aria-pressed="false">Co-op Raid Synergy</button>
+                <button type="button" class="preset-chip" data-preset="juggernaut" aria-pressed="false">XL Juggernaut</button>
+              </div>
+            </div>
+
+            <div class="sliders-grid">
+              <div class="weight-slider-card">
+                <div class="weight-slider-top">
+                  <label for="weightGauge">Gauge Fill Speed</label>
+                  <span class="weight-val" id="weightGaugeVal">35%</span>
+                </div>
+                <input type="range" id="weightGauge" min="0" max="100" step="5" value="35" />
+              </div>
+
+              <div class="weight-slider-card">
+                <div class="weight-slider-top">
+                  <label for="weightBreak">Base BREAK Stat</label>
+                  <span class="weight-val" id="weightBreakVal">20%</span>
+                </div>
+                <input type="range" id="weightBreak" min="0" max="100" step="5" value="20" />
+              </div>
+
+              <div class="weight-slider-card">
+                <div class="weight-slider-top">
+                  <label for="weightSize">Body Size Bonus</label>
+                  <span class="weight-val" id="weightSizeVal">15%</span>
+                </div>
+                <input type="range" id="weightSize" min="0" max="100" step="5" value="15" />
+              </div>
+
+              <div class="weight-slider-card">
+                <div class="weight-slider-top">
+                  <label for="weightMeta">Boss &amp; Meta Score</label>
+                  <span class="weight-val" id="weightMetaVal">15%</span>
+                </div>
+                <input type="range" id="weightMeta" min="0" max="100" step="5" value="15" />
+              </div>
+
+              <div class="weight-slider-card">
+                <div class="weight-slider-top">
+                  <label for="weightUtility">Team Buff &amp; Bulk</label>
+                  <span class="weight-val" id="weightUtilityVal">15%</span>
+                </div>
+                <input type="range" id="weightUtility" min="0" max="100" step="5" value="15" />
+              </div>
+            </div>
+          </div>
+
+          <!-- Element & Attribute Filters -->
+          <div class="filters-bar">
+            <div>
+              <span class="control-group-label">3. Filter by Element</span>
+              <div class="element-pills-wrap" role="group" aria-label="Filter by element">
+                <button type="button" class="el-filter-btn" data-element="all" aria-pressed="true">All Elements (28)</button>
+                <button type="button" class="el-filter-btn" data-element="earth" aria-pressed="false">
+                  <img src="assets/elements/earth.webp" alt="" width="16" height="16" /> Earth
+                </button>
+                <button type="button" class="el-filter-btn" data-element="fire" aria-pressed="false">
+                  <img src="assets/elements/fire.webp" alt="" width="16" height="16" /> Fire
+                </button>
+                <button type="button" class="el-filter-btn" data-element="water" aria-pressed="false">
+                  <img src="assets/elements/water.webp" alt="" width="16" height="16" /> Water
+                </button>
+                <button type="button" class="el-filter-btn" data-element="ice" aria-pressed="false">
+                  <img src="assets/elements/ice.webp" alt="" width="16" height="16" /> Ice
+                </button>
+                <button type="button" class="el-filter-btn" data-element="grass" aria-pressed="false">
+                  <img src="assets/elements/grass.webp" alt="" width="16" height="16" /> Grass
+                </button>
+                <button type="button" class="el-filter-btn" data-element="electric" aria-pressed="false">
+                  <img src="assets/elements/electric.webp" alt="" width="16" height="16" /> Electric
+                </button>
+                <button type="button" class="el-filter-btn" data-element="wind" aria-pressed="false">
+                  <img src="assets/elements/wind.webp" alt="" width="16" height="16" /> Wind
+                </button>
+                <button type="button" class="el-filter-btn" data-element="dark" aria-pressed="false">
+                  <img src="assets/elements/dark.webp" alt="" width="16" height="16" /> Dark
+                </button>
+              </div>
+            </div>
+
+            <button type="button" id="resetFiltersBtn" class="preset-chip" style="height: 38px;">
+              Reset All Filters
+            </button>
+          </div>
+
+          <div class="secondary-filters-row">
+            <div class="filter-select-group">
+              <label for="stageFilter" class="sr-only">Evolution Stage</label>
+              <select id="stageFilter" class="aniimo-select" aria-label="Filter by evolution stage">
+                <option value="all">All Stages (Lumin / Gamma / Nova)</option>
+                <option value="Nova">Nova (Final Form)</option>
+                <option value="Gamma">Gamma (Mid Form)</option>
+                <option value="Lumin">Lumin (Base Form)</option>
+              </select>
+
+              <label for="sizeFilter" class="sr-only">Body Size</label>
+              <select id="sizeFilter" class="aniimo-select" aria-label="Filter by body size">
+                <option value="all">All Body Sizes</option>
+                <option value="Extra-Large">Extra-Large (+50% BREAK)</option>
+                <option value="Large">Large (+20% BREAK)</option>
+                <option value="Medium">Medium (+0% BREAK)</option>
+                <option value="Small">Small (+0% BREAK)</option>
+              </select>
+
+              <label class="toggle-check-label" for="includeBetaToggle">
+                <input type="checkbox" id="includeBetaToggle" checked />
+                <span>Include Closed Beta Archive (Wavwal &amp; Cheekie)</span>
+              </label>
+            </div>
+
+            <div class="filter-select-group">
+              <label for="searchInput" class="sr-only">Search Break Aniimo</label>
+              <input type="search" id="searchInput" class="aniimo-search-input" placeholder="Search name, Dex #, skill, trait..." />
+            </div>
+          </div>
+        </div>
+
+        <!-- VIEW 1: Interactive Tier Matrix (S / A / B / C / D) -->
+        <div id="tierMatrixView" class="tier-matrix-container" role="region" aria-label="Tier Matrix S through D"></div>
+
+        <!-- VIEW 2: Detailed Breaker Cards Grid -->
+        <div id="cardsGridView" class="cards-grid-container" role="region" aria-label="Detailed Breaker Cards" hidden></div>
+
+        <!-- VIEW 3: Accessible Sortable Full Data Table -->
+        <div id="tableView" class="table-view-wrapper" role="region" aria-label="Sortable Break Aniimo Data Table" hidden>
+          <table class="aniimo-ranking-table">
+            <thead>
+              <tr>
+                <th scope="col" aria-sort="descending" data-sort-col="activeScore">
+                  <button type="button" class="sort-header-btn" data-sort="activeScore">Rank / Score <span aria-hidden="true">&darr;</span></button>
+                </th>
+                <th scope="col" aria-sort="none" data-sort-col="name">
+                  <button type="button" class="sort-header-btn" data-sort="name">Aniimo</button>
+                </th>
+                <th scope="col">Element &amp; Stage</th>
+                <th scope="col" aria-sort="none" data-sort-col="sizeBonus">
+                  <button type="button" class="sort-header-btn" data-sort="sizeBonus">Body Size</button>
+                </th>
+                <th scope="col" aria-sort="none" data-sort-col="gaugeSpeedPct">
+                  <button type="button" class="sort-header-btn" data-sort="gaugeSpeedPct">Lv.70 Speed</button>
+                </th>
+                <th scope="col" aria-sort="none" data-sort-col="metaScore">
+                  <button type="button" class="sort-header-btn" data-sort="metaScore">MetaBot</button>
+                </th>
+                <th scope="col" aria-sort="none" data-sort-col="break">
+                  <button type="button" class="sort-header-btn" data-sort="break">BREAK</button>
+                </th>
+                <th scope="col" aria-sort="none" data-sort-col="hp">
+                  <button type="button" class="sort-header-btn" data-sort="hp">HP</button>
+                </th>
+                <th scope="col" aria-sort="none" data-sort-col="regen">
+                  <button type="button" class="sort-header-btn" data-sort="regen">REGEN</button>
+                </th>
+                <th scope="col" aria-sort="none" data-sort-col="total">
+                  <button type="button" class="sort-header-btn" data-sort="total">BST</button>
+                </th>
+                <th scope="col" aria-sort="none" data-sort-col="bossCounters">
+                  <button type="button" class="sort-header-btn" data-sort="bossCounters">Bosses</button>
+                </th>
+                <th scope="col">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="rankingTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. Official aniimo.com/main Dark Creature Spotlight & Hexagonal Dock -->
+    <section id="spotlight" class="spotlight-section" aria-labelledby="spotlightName">
+      <div class="spotlight-backdrop" id="spotlightBackdrop"></div>
+      <div class="spotlight-container">
+        <div class="eyebrow-pill" style="background: rgba(118, 225, 248, 0.14); border-color: rgba(118, 225, 248, 0.35); color: #76e1f8; margin-bottom: 18px;">
+          <img src="assets/ui/role-break.webp" alt="" width="15" height="15" />
+          <span>Official Home Page Creature Showcase &amp; Combat Dossier</span>
+        </div>
+
+        <div class="spotlight-grid">
+          <!-- Left Info Panel -->
+          <div class="aniimo-info-panel" id="spotlightInfoPanel">
+            <div class="aniimo-number-row">
+              <span id="spotlightDex">No.066</span>
+              <span class="op-chip" id="spotlightStagePill">Nova Stage</span>
+              <span class="op-chip" id="spotlightSizePill" style="background: rgba(16, 167, 230, 0.25); color: #76e1f8;">Extra-Large (+50% BREAK)</span>
+              <span class="op-chip" id="spotlightReleasePill">Launch 1.0</span>
+            </div>
+
+            <div class="aniimo-name-row">
+              <h2 class="aniimo-spotlight-name" id="spotlightName">Helgon</h2>
+              <div class="aniimo-attr-badges" id="spotlightElements"></div>
+            </div>
+
+            <div class="aniimo-decoration-line" aria-hidden="true">
+              <span class="dot"></span>
+              <span id="spotlightRoleSub">BREAK CLASS | LV.70 GAUGE RANK #1</span>
+              <span class="rule"></span>
+            </div>
+
+            <p class="aniimo-spotlight-summary" id="spotlightSummary">
+              Fastest solo Break gauge shredder in Launch 1.0. Its Extra-Large body adds +50% BREAK to every hit, and Counter Strike boosts BREAK efficiency by another 25% after taking damage.
+            </p>
+
+            <!-- Interactive Skill / Trait Tabs -->
+            <div class="aniimo-operations-tabs" role="tablist" aria-label="Creature ability and lore tabs">
+              <button type="button" class="op-tab-btn" role="tab" data-sp-tab="trait" aria-selected="true">
+                <span class="bar-indicator"></span>
+                <span>Special Trait</span>
+              </button>
+              <button type="button" class="op-tab-btn" role="tab" data-sp-tab="skill" aria-selected="false">
+                <span class="bar-indicator"></span>
+                <span>Primary Skill</span>
+              </button>
+              <button type="button" class="op-tab-btn" role="tab" data-sp-tab="ultimate" aria-selected="false">
+                <span class="bar-indicator"></span>
+                <span>Ultimate Skill</span>
+              </button>
+              <button type="button" class="op-tab-btn" role="tab" data-sp-tab="lineage" aria-selected="false">
+                <span class="bar-indicator"></span>
+                <span>Evolution &amp; Horn</span>
+              </button>
+            </div>
+
+            <div class="op-detail-box" id="spotlightTabPanel" role="tabpanel" aria-live="polite">
+              <div class="op-detail-head">
+                <strong class="op-detail-title" id="spDetailTitle">Counter Strike</strong>
+                <div class="op-detail-chips" id="spDetailChips"></div>
+              </div>
+              <p id="spDetailDesc" style="font-size: 0.92rem; color: rgba(243, 245, 255, 0.88); line-height: 1.55;">
+                After being attacked, increases BREAK efficiency by 25% for 10 seconds.
+              </p>
+            </div>
+
+            <!-- Cross-Source Tier Strip & Quick Actions -->
+            <div style="display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between;">
+              <div style="display: flex; flex-wrap: wrap; gap: 8px;" id="spotlightCrossTiers"></div>
+              <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+                <button type="button" id="spAddCompareBtn" class="op-chip" style="cursor: pointer; background: rgba(53, 134, 226, 0.32); border: 1px solid #76e1f8; color: #ffffff; padding: 6px 12px;">
+                  + Pin to Radar Lab
+                </button>
+                <button type="button" id="spLoadSimBtn" class="op-chip" style="cursor: pointer; background: rgba(245, 158, 11, 0.28); border: 1px solid #fbbf24; color: #ffffff; padding: 6px 12px;">
+                  Test in Boss Simulator &rarr;
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Visual Stage & 6-Stat Bars -->
+          <div class="spotlight-visual-stage">
+            <div class="spotlight-figure-frame">
+              <img id="spotlightMainImg" src="assets/creatures/helgon.webp" alt="Helgon" class="spotlight-main-img" width="320" height="295" />
+            </div>
+
+            <div class="spotlight-stat-grid" id="spotlightStatGrid" aria-label="Base stats and gauge speed"></div>
+          </div>
+        </div>
+
+        <!-- Official Hexagonal Creature Selector Dock -->
+        <div class="hex-dock-wrapper">
+          <div class="hex-dock-header">
+            <div>
+              <strong style="font-family: var(--font-display); font-size: 1.05rem; color: #ffffff;">Select Any Break Aniimo (Ordered by Active Ranking)</strong>
+              <span style="font-size: 0.82rem; color: rgba(243, 245, 255, 0.65); margin-left: 10px;">Click any hexagonal portrait or use Prev / Next buttons</span>
+            </div>
+            <div style="display: flex; gap: 8px;">
+              <button type="button" id="spPrevBtn" class="op-chip" style="cursor: pointer; padding: 6px 12px;">&larr; Prev</button>
+              <button type="button" id="spNextBtn" class="op-chip" style="cursor: pointer; padding: 6px 12px;">Next &rarr;</button>
+            </div>
+          </div>
+          <div class="hex-dock-scroll" id="hexDockScroll" role="listbox" aria-label="Break Aniimo selector dock"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. Multi-Metric Visual Analytics & Radar Lab -->
+    <section id="analytics" class="analytics-section" aria-labelledby="analyticsHeading">
+      <div class="section-container">
+        <div class="eyebrow-pill">
+          <img src="assets/ui/stars.webp" alt="" width="14" height="14" />
+          <span>Multi-Dimensional Visual Analytics</span>
+        </div>
+        <h2 id="analyticsHeading" style="font-family: var(--font-display); font-size: clamp(1.8rem, 2.8vw, 2.5rem); margin-bottom: 6px;">
+          6-Axis Radar Comparator &amp; Break Efficiency Scatter Lab
+        </h2>
+        <p style="color: var(--ink-secondary); max-width: 72ch;">
+          Compare up to three Break Aniimo side by side on a 6-stat polygon radar, explore how Base BREAK and Body Size interact with Lv.70 Gauge Speed, and inspect Skill vs. Ultimate damage shares.
+        </p>
+
+        <div class="analytics-grid">
+          <!-- Card 1: 3-Slot 6-Axis Radar Comparator -->
+          <div class="analytics-card">
+            <div class="card-head-row">
+              <div>
+                <h3>6-Axis Base Stat Radar Comparator</h3>
+                <p>Select up to 3 Break Aniimo (or click "+ Pin to Radar Lab" on any dossier).</p>
+              </div>
+            </div>
+
+            <div class="compare-slots-row">
+              <div class="compare-slot-box">
+                <label for="compareSelect0">
+                  <span class="slot-swatch" style="background: #10a7e6;"></span>
+                  <span>Contender A</span>
+                </label>
+                <select id="compareSelect0" aria-label="Radar Contender A"></select>
+              </div>
+              <div class="compare-slot-box">
+                <label for="compareSelect1">
+                  <span class="slot-swatch" style="background: #f59e0b;"></span>
+                  <span>Contender B</span>
+                </label>
+                <select id="compareSelect1" aria-label="Radar Contender B"></select>
+              </div>
+              <div class="compare-slot-box">
+                <label for="compareSelect2">
+                  <span class="slot-swatch" style="background: #8b5cf6;"></span>
+                  <span>Contender C</span>
+                </label>
+                <select id="compareSelect2" aria-label="Radar Contender C"></select>
+              </div>
+            </div>
+
+            <div class="radar-svg-wrap" id="radarSvgContainer" role="img" aria-label="6-axis base stat comparison radar chart"></div>
+
+            <table class="radar-delta-table" aria-label="Side-by-side stat comparison table">
+              <thead>
+                <tr>
+                  <th>Metric</th>
+                  <th id="radarTh0" style="color: #0b7bb0;">Helgon</th>
+                  <th id="radarTh1" style="color: #d97706;">Minespine</th>
+                  <th id="radarTh2" style="color: #6d28d9;">Magmarex</th>
+                </tr>
+              </thead>
+              <tbody id="radarDeltaBody"></tbody>
+            </table>
+          </div>
+
+          <!-- Card 2: Interactive 2D Scatter & Bubble Explorer -->
+          <div class="analytics-card">
+            <div class="card-head-row">
+              <div>
+                <h3>2D Stat &amp; Speed Bubble Explorer</h3>
+                <p>Click any node on the chart to inspect that Aniimo in the Spotlight Dossier.</p>
+              </div>
+            </div>
+
+            <div class="scatter-controls">
+              <label style="font-size: 0.78rem; font-weight: 700; color: var(--ink-secondary);">
+                X-Axis:
+                <select id="scatterXSelect" class="aniimo-select" style="height: 34px; margin-left: 4px;">
+                  <option value="break" selected>Base BREAK Stat</option>
+                  <option value="total">Base Stat Total (BST)</option>
+                  <option value="hp">HP Bulk</option>
+                  <option value="regen">REGEN (EP Recovery)</option>
+                  <option value="bossCounters">Boss Counters (of 20)</option>
+                </select>
+              </label>
+
+              <label style="font-size: 0.78rem; font-weight: 700; color: var(--ink-secondary);">
+                Y-Axis:
+                <select id="scatterYSelect" class="aniimo-select" style="height: 34px; margin-left: 4px;">
+                  <option value="gaugeSpeedPct" selected>Lv.70 Gauge Fill Speed (%)</option>
+                  <option value="metaScore">MetaBot Score (Build 1.0)</option>
+                  <option value="activeScore">Active Ranking Score</option>
+                  <option value="skillPct">Primary Skill Share (%)</option>
+                </select>
+              </label>
+
+              <label style="font-size: 0.78rem; font-weight: 700; color: var(--ink-secondary);">
+                Bubble Size:
+                <select id="scatterSizeSelect" class="aniimo-select" style="height: 34px; margin-left: 4px;">
+                  <option value="sizeBonus" selected>Body Size Bonus (+0% to +50%)</option>
+                  <option value="bossCounters">Boss Counters</option>
+                  <option value="break">Base BREAK Stat</option>
+                </select>
+              </label>
+            </div>
+
+            <div class="scatter-svg-wrap">
+              <div id="scatterSvgContainer" role="img" aria-label="Interactive scatter plot of Break Aniimo"></div>
+              <div id="scatterHoverReadout" style="margin-top: 8px; padding: 8px 12px; border-radius: 8px; background: var(--surface-well); font-size: 0.82rem; display: flex; justify-content: space-between; align-items: center;">
+                <span>Hover or click any bubble node to inspect exact coordinates and open its dossier.</span>
+                <strong style="font-family: var(--font-num); color: var(--aniimo-cyan-deep);">28 Nodes Plotted</strong>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 3: Skill vs Ultimate Break Damage Source Stacked Bars -->
+          <div class="analytics-card full-span">
+            <div class="card-head-row">
+              <div>
+                <h3>Lv.70 Break Damage Source Decomposition (Primary Skill vs. Ultimate vs. Basic Attack)</h3>
+                <p>
+                  Reveals whether each Breaker relies on sustained low-cooldown Primary Skills (blue), high-EP Ultimate bursts (amber), or Basic Attacks during EP downtime (emerald).
+                </p>
+              </div>
+              <div style="display: flex; gap: 14px; align-items: center; font-size: 0.8rem; font-weight: 700;">
+                <span style="display: inline-flex; align-items: center; gap: 6px;"><i style="width: 12px; height: 12px; border-radius: 3px; background: #2563eb; display: inline-block;"></i> Primary Skill</span>
+                <span style="display: inline-flex; align-items: center; gap: 6px;"><i style="width: 12px; height: 12px; border-radius: 3px; background: #f59e0b; display: inline-block;"></i> Ultimate Skill</span>
+                <span style="display: inline-flex; align-items: center; gap: 6px;"><i style="width: 12px; height: 12px; border-radius: 3px; background: #10b981; display: inline-block;"></i> Basic Attack</span>
+              </div>
+            </div>
+
+            <div class="decomp-bars-list" id="decompBarsList"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. Boss Break Gauge Simulator & Rotation Sandbox -->
+    <section id="simulator" class="simulator-section" aria-labelledby="simulatorHeading">
+      <div class="sim-astrolabe-bg" aria-hidden="true"></div>
+      <div class="section-container">
+        <div class="eyebrow-pill">
+          <img src="assets/ui/role-break.webp" alt="" width="15" height="15" />
+          <span>Interactive Stagger Calculator</span>
+        </div>
+        <h2 id="simulatorHeading" style="font-family: var(--font-display); font-size: clamp(1.8rem, 2.8vw, 2.5rem); margin-bottom: 6px;">
+          Boss Shield Stagger Simulator &amp; Gargantuan Horn Lab
+        </h2>
+        <p style="color: var(--ink-secondary); max-width: 72ch; margin-bottom: 24px;">
+          Simulate how fast your chosen Break Aniimo depletes a Boss Shield Gauge when combined with the Homeland Gargantuan Horn weapon, Inferlupa's +30% co-op debuff, and Regen EP support.
+        </p>
+
+        <div class="simulator-board">
+          <div class="sim-config-col">
+            <div class="sim-field">
+              <label for="simBreakerSelect">1. Active Break Aniimo</label>
+              <select id="simBreakerSelect"></select>
+            </div>
+
+            <div class="sim-field">
+              <label for="simBossSelect">2. Target Boss Shield Tier</label>
+              <select id="simBossSelect">
+                <option value="1200">Field Alpha Boss (1,200 Shield Gauge)</option>
+                <option value="2400" selected>Apex Raid Boss (2,400 Shield Gauge)</option>
+                <option value="4000">Elder Calamity Boss (4,000 Shield Gauge)</option>
+                <option value="5800">Abyssal Tyrant (5,800 Shield Gauge)</option>
+              </select>
+            </div>
+
+            <div class="sim-field">
+              <label for="simHornSelect">3. Homeland Weapon (Gargantuan Horn)</label>
+              <select id="simHornSelect">
+                <option value="0">No Horn Equipped (+0% BREAK)</option>
+                <option value="12">Gargantuan Horn Tier I (+12% BREAK)</option>
+                <option value="24" selected>Gargantuan Horn Tier II (+24% BREAK)</option>
+                <option value="36">Gargantuan Horn Tier III Prismatic (+36% BREAK)</option>
+              </select>
+            </div>
+
+            <div class="sim-field">
+              <label>4. Team Synergy &amp; Combat Modifiers</label>
+              <div class="sim-buffs-stack">
+                <label class="toggle-check-label" for="simInferlupaBuff">
+                  <input type="checkbox" id="simInferlupaBuff" checked />
+                  <span>Inferlupa Co-op Debuff (+30% Break Taken)</span>
+                </label>
+                <label class="toggle-check-label" for="simTraitActive">
+                  <input type="checkbox" id="simTraitActive" checked />
+                  <span>Trigger Innate / Special Trait Bonus</span>
+                </label>
+                <label class="toggle-check-label" for="simElementMatch">
+                  <input type="checkbox" id="simElementMatch" />
+                  <span>Elemental Stagger Resonance (+20% Speed)</span>
+                </label>
+                <label class="toggle-check-label" for="simRegenSupport">
+                  <input type="checkbox" id="simRegenSupport" checked />
+                  <span>Regen EP Battery (Mitigates EP Downtime)</span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div class="sim-output-col" aria-live="polite">
+            <div class="sim-boss-bar-wrap">
+              <div class="sim-boss-header">
+                <div>
+                  <strong id="simBossTitle" style="font-family: var(--font-display); font-size: 1.15rem;">Helgon vs. Apex Raid Boss</strong>
+                  <span id="simSubtitleTag" style="display: block; font-size: 0.8rem; color: #93c5fd;">Extra-Large (+50% Size Bonus) | Overcharged Claw Strike + Skyfall</span>
+                </div>
+                <span id="simStaggerBadge" class="champ-rank-pill">STAGGER IN 6.2s</span>
+              </div>
+
+              <div class="sim-gauge-outer" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100" id="simProgressBar">
+                <div class="sim-gauge-fill" id="simGaugeFill" style="width: 100%;"></div>
+              </div>
+              <div style="display: flex; justify-content: space-between; font-family: var(--font-num); font-size: 0.76rem; color: #bae6fd; margin-top: 6px;">
+                <span id="simShieldshredNote">10-Second Rotation Shreds 100% of Boss Shield</span>
+                <span id="simVsHelgonNote">100% of Helgon Benchmark</span>
+              </div>
+            </div>
+
+            <div class="sim-kpi-grid">
+              <div class="sim-kpi-card">
+                <small>Time to Stagger</small>
+                <strong id="simKpiTime">6.2s</strong>
+              </div>
+              <div class="sim-kpi-card">
+                <small>Effective Break / s</small>
+                <strong id="simKpiDps">387 / s</strong>
+              </div>
+              <div class="sim-kpi-card">
+                <small>Total Multiplier</small>
+                <strong id="simKpiMult">2.91x</strong>
+              </div>
+              <div class="sim-kpi-card">
+                <small>10s Shield Shred</small>
+                <strong id="simKpiBurst">100%</strong>
+              </div>
+            </div>
+
+            <div style="background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 12px; padding: 14px 16px;">
+              <strong style="font-family: var(--font-display); font-size: 0.95rem; color: #76e1f8; display: block; margin-bottom: 4px;">
+                Optimal Combat Execution Sequence
+              </strong>
+              <p id="simRotationAdvice" style="font-size: 0.86rem; color: rgba(243, 245, 255, 0.88); line-height: 1.5;"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Official Aniimo Footer -->
+  <footer class="aniimo-footer" role="contentinfo">
+    <div class="footer-inner">
+      <img src="assets/ui/logo-light.webp" alt="Aniimo" width="136" height="48" style="object-fit: contain;" />
+      <ul class="footer-links">
+        <li><a href="#overview">Overview</a></li>
+        <li><a href="#rankings">Break Tier Matrix</a></li>
+        <li><a href="#spotlight">Creature Dossiers</a></li>
+        <li><a href="#analytics">Radar &amp; Scatter Lab</a></li>
+        <li><a href="#simulator">Boss Stagger Simulator</a></li>
+      </ul>
+      <p class="footer-copy">
+        Visual design inspired by the official Aniimo home page (aniimo.com). Break data synthesized from Aniidex Lv.70 Break Gauge simulations, MetaBot Build 1.0.3634150 leaderboards, and AniimoTools creature records.
+      </p>
+    </div>
+  </footer>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
