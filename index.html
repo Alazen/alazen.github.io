@@ -34,7 +34,6 @@
     .empty { padding: 38px 0; color: #999; line-height: 1.6; }
     .status { margin: 64px 0 0; color: #777; font-size: 12px; line-height: 1.7; }
     .status a { text-underline-offset: 3px; }
-    footer { padding-bottom: 38px; display: flex; justify-content: space-between; gap: 20px; font-size: 12px; color: #666; }
     .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
     @media (max-width: 640px) {
       .shell { width: min(100% - 40px, 1040px); }
@@ -46,7 +45,6 @@
       .entries { margin-top: 20px; }
       .entry a { grid-template-columns: 26px minmax(0,1fr) 20px; gap: 12px; padding: 22px 0; }
       .number { font-size: 12px; }
-      footer { flex-direction: column; }
     }
     @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { transition: none !important; } }
   </style>
@@ -69,10 +67,9 @@
           <li class="entry"><a href="/aniimo-break-atlas-6.1-sol-max-40m01s-30.1-percent/"><span class="number">02</span><span class="entry-title">Aniimo Break Atlas 6.1 Sol Max 40m01s 30.1 Percent</span><span class="arrow" aria-hidden="true">↗</span></a></li>
         </ol>
       </nav>
-      <p id="status" class="status" role="status" aria-live="polite">Checking the public GitHub repository for projects...</p>
+      <p id="status" class="status" role="status" aria-live="polite" hidden></p>
       <noscript><p class="status">Enable JavaScript to discover newly added folders automatically. Existing links above remain available.</p></noscript>
     </main>
-    <footer><span>Alazen</span><span>Published with GitHub Pages</span></footer>
   </div>
   <script>
     (() => {
@@ -165,8 +162,10 @@
           paths = [...new Set(discovered)];
           try { localStorage.setItem(cacheKey, JSON.stringify(paths)); } catch (_) {}
           render();
-          status.textContent = "Updated from GitHub. New folders containing index.html appear automatically when you reload.";
+          status.textContent = "";
+          status.hidden = true;
         } catch (_) {
+          status.hidden = false;
           status.textContent = "GitHub directory lookup is temporarily unavailable. Showing saved links. Browse all files on GitHub: ";
           const link = document.createElement("a");
           link.href = "https://github.com/Alazen/alazen.github.io/tree/main";
