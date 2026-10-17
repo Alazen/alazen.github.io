@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#000000">
+  <meta name="description" content="An automatically updated index of the projects, websites, and tools published by Alazen.">
+  <title>Alazen | Projects</title>
+  <style>
+    :root { color-scheme: dark; font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #000; color: #f2f2f2; }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; min-height: 100vh; }
+    a { color: inherit; }
+    a:focus-visible, input:focus-visible { outline: 2px solid #fafafa; outline-offset: 5px; }
+    .shell { width: min(100% - 64px, 1040px); margin: 0 auto; }
+    .top { display: flex; justify-content: space-between; align-items: center; padding-top: 42px; gap: 24px; }
+    .signature { text-decoration: none; font-size: 15px; font-weight: 700; letter-spacing: -.035em; }
+    .source { text-decoration: none; color: #a1a1a1; font-size: 13px; transition: color .2s; }
+    .source:hover { color: #fff; }
+    main { padding-top: clamp(110px, 17vw, 220px); padding-bottom: 180px; }
+    h1 { font-size: clamp(54px, 9vw, 116px); line-height: .99; font-weight: 550; letter-spacing: -.072em; margin: 0; max-width: 870px; }
+    .intro { color: #9d9d9d; font-size: clamp(16px, 2vw, 20px); line-height: 1.65; max-width: 570px; margin: 32px 0 0; }
+    .controls { display: flex; justify-content: space-between; align-items: end; gap: 24px; margin-top: clamp(90px, 13vw, 150px); }
+    .search { background: transparent; border: 0; border-bottom: 1px solid #3a3a3a; border-radius: 0; padding: 14px 0; min-width: 0; width: min(100%, 400px); color: #fff; font: inherit; font-size: 17px; transition: border-color .2s; appearance: none; }
+    .search:focus { border-color: #fff; outline: 0; }
+    .search::placeholder { color: #777; }
+    .count { white-space: nowrap; font-size: 13px; color: #838383; padding-bottom: 14px; }
+    .entries { list-style: none; margin: 38px 0 0; padding: 0; }
+    .entry { margin: 0; }
+    .entry a { display: grid; grid-template-columns: 40px minmax(0, 1fr) 24px; gap: 18px; align-items: baseline; padding: 24px 0; text-decoration: none; transition: color .2s, transform .2s; }
+    .entry a:hover { color: #b8b8b8; transform: translateX(4px); }
+    .number, .arrow { color: #777; font-size: 14px; font-weight: 400; }
+    .arrow { text-align: right; font-size: 20px; }
+    .entry-title { font-size: clamp(20px, 3.5vw, 37px); line-height: 1.3; font-weight: 460; letter-spacing: -.04em; overflow-wrap: anywhere; }
+    .empty { padding: 38px 0; color: #999; line-height: 1.6; }
+    .status { margin: 64px 0 0; color: #777; font-size: 12px; line-height: 1.7; }
+    .status a { text-underline-offset: 3px; }
+    footer { padding-bottom: 38px; display: flex; justify-content: space-between; gap: 20px; font-size: 12px; color: #666; }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+    @media (max-width: 640px) {
+      .shell { width: min(100% - 40px, 1040px); }
+      .top { padding-top: 26px; }
+      main { padding-top: 112px; padding-bottom: 100px; }
+      h1 { letter-spacing: -.067em; }
+      .intro { margin-top: 25px; }
+      .controls { margin-top: 96px; align-items: stretch; flex-direction: column; gap: 8px; }
+      .search { width: 100%; }
+      .count { padding: 0; }
+      .entries { margin-top: 20px; }
+      .entry a { grid-template-columns: 26px minmax(0,1fr) 20px; gap: 12px; padding: 22px 0; }
+      .number { font-size: 12px; }
+      footer { flex-direction: column; }
+    }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { transition: none !important; } }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <header class="top">
+      <a href="/" class="signature" aria-label="Alazen homepage">Alazen</a>
+      <a class="source" href="https://github.com/Alazen/alazen.github.io" target="_blank" rel="noopener noreferrer">View on GitHub ↗</a>
+    </header>
+    <main>
+      <h1>Everything,<br>in one place.</h1>
+      <p class="intro">A growing collection of experiments, interactive websites, and useful tools. Each new project appears here automatically.</p>
+      <div class="controls">
+        <label class="sr-only" for="filter">Search projects</label>
+        <input id="filter" class="search" type="search" placeholder="Find a project..." autocomplete="off" spellcheck="false">
+        <div id="count" class="count" role="status" aria-live="polite">2 projects</div>
+      </div>
+      <nav aria-label="Published projects">
+        <ol id="entries" class="entries">
+          <li class="entry"><a href="/aniimo-break-atlas-4-argon-high-43m00s/"><span class="number">01</span><span class="entry-title">Aniimo Break Atlas 4 Argon High 43m00s</span><span class="arrow" aria-hidden="true">↗</span></a></li>
+          <li class="entry"><a href="/aniimo-break-atlas-6.1-sol-max-40m01s-30.1-percent/"><span class="number">02</span><span class="entry-title">Aniimo Break Atlas 6.1 Sol Max 40m01s 30.1 Percent</span><span class="arrow" aria-hidden="true">↗</span></a></li>
+        </ol>
+      </nav>
+      <p id="status" class="status" role="status" aria-live="polite">Checking the public GitHub repository for projects...</p>
+      <noscript><p class="status">Enable JavaScript to discover newly added folders automatically. Existing links above remain available.</p></noscript>
+    </main>
+    <footer><span>Alazen</span><span>Published with GitHub Pages</span></footer>
+  </div>
+  <script>
+    (() => {
+      "use strict";
+      const api = "https://api.github.com/repos/Alazen/alazen.github.io/git/trees/main?recursive=1";
+      const cacheKey = "alazen-project-directory-v1";
+      const knownPaths = [
+        "aniimo-break-atlas-4-argon-high-43m00s",
+        "aniimo-break-atlas-6.1-sol-max-40m01s-30.1-percent"
+      ];
+      const list = document.getElementById("entries");
+      const input = document.getElementById("filter");
+      const count = document.getElementById("count");
+      const status = document.getElementById("status");
+      let paths = knownPaths;
+
+      function label(segment) {
+        return segment.replace(/[-_]+/g, " ").replace(/\s+/g, " ").trim()
+          .replace(/\b[a-z]/g, letter => letter.toUpperCase());
+      }
+
+      function projectUrl(path) {
+        return "/" + path.split("/").map(encodeURIComponent).join("/") + "/";
+      }
+
+      function render() {
+        const query = input.value.trim().toLocaleLowerCase();
+        const matches = paths.filter(path => path.toLocaleLowerCase().includes(query) ||
+          path.split("/").map(label).join(" ").toLocaleLowerCase().includes(query));
+        const fragment = document.createDocumentFragment();
+        matches.forEach((path, i) => {
+          const item = document.createElement("li");
+          item.className = "entry";
+          const link = document.createElement("a");
+          link.href = projectUrl(path);
+          const number = document.createElement("span");
+          number.className = "number";
+          number.textContent = String(i + 1).padStart(2, "0");
+          const title = document.createElement("span");
+          title.className = "entry-title";
+          title.textContent = path.split("/").map(label).join(" / ");
+          const arrow = document.createElement("span");
+          arrow.className = "arrow";
+          arrow.setAttribute("aria-hidden", "true");
+          arrow.textContent = "↗";
+          link.append(number, title, arrow);
+          item.append(link);
+          fragment.append(item);
+        });
+        if (!matches.length) {
+          const empty = document.createElement("li");
+          empty.className = "empty";
+          empty.textContent = "No projects match your search.";
+          fragment.append(empty);
+        }
+        list.replaceChildren(fragment);
+        count.textContent = query
+          ? matches.length + " of " + paths.length + " projects"
+          : paths.length + (paths.length === 1 ? " project" : " projects");
+      }
+
+      function readCache() {
+        try {
+          const cached = JSON.parse(localStorage.getItem(cacheKey) || "null");
+          if (Array.isArray(cached) && cached.every(path => typeof path === "string")) return cached;
+        } catch (_) {}
+        return null;
+      }
+
+      const cached = readCache();
+      if (cached) paths = cached;
+      render();
+      input.addEventListener("input", render);
+
+      async function refresh() {
+        try {
+          const response = await fetch(api, {
+            headers: { "Accept": "application/vnd.github+json" },
+            cache: "no-store",
+            credentials: "omit"
+          });
+          if (!response.ok) throw new Error("GitHub API returned " + response.status);
+          const result = await response.json();
+          if (!Array.isArray(result.tree) || result.truncated) throw new Error("Incomplete directory listing");
+          const discovered = result.tree
+            .filter(entry => entry.type === "blob" && entry.path.endsWith("/index.html"))
+            .map(entry => entry.path.slice(0, -"/index.html".length))
+            .filter(path => path.split("/").every(part => part && !part.startsWith(".")))
+            .sort((a, b) => a.localeCompare(b, undefined, { numeric: true, sensitivity: "base" }));
+          paths = [...new Set(discovered)];
+          try { localStorage.setItem(cacheKey, JSON.stringify(paths)); } catch (_) {}
+          render();
+          status.textContent = "Updated from GitHub. New folders containing index.html appear automatically when you reload.";
+        } catch (_) {
+          status.textContent = "GitHub directory lookup is temporarily unavailable. Showing saved links. Browse all files on GitHub: ";
+          const link = document.createElement("a");
+          link.href = "https://github.com/Alazen/alazen.github.io/tree/main";
+          link.textContent = "View repository ↗";
+          status.append(link);
+        }
+      }
+
+      refresh();
+    })();
+  </script>
+</body>
+</html>
