@@ -1,0 +1,6 @@
+{
+  "name": "Aniimo Break Ranker & Battle Visualizer",
+  "description": "Interactive visualization and tier ranking of the best Break Aniimo in battle, inspired by the official Aniimo website aesthetic with real-time break gauge simulator and stagger mechanics.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
