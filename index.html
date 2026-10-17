@@ -222,12 +222,15 @@
       function resize() {
         width = window.innerWidth;
         height = window.innerHeight;
-        // Render at native Retina density where practical, with a 10 MP buffer cap.
-        const ratio = Math.max(1, Math.min(window.devicePixelRatio || 1, 3,
-          Math.sqrt(10_000_000 / Math.max(1, width * height))));
+        // Supersample even on a standard 1920x1080 DPR=1 screen:
+        // 3840x2160 drawing buffer for fine, anti-aliased lines and circles.
+        // Limit larger viewports to 10 megapixels to protect performance.
+        const requestedRatio = Math.max(2, Math.min(window.devicePixelRatio || 1, 3));
+        const pixelBudgetRatio = Math.sqrt(10_000_000 / Math.max(1, width * height));
+        const ratio = Math.max(1, Math.min(requestedRatio, pixelBudgetRatio));
         canvas.width = Math.round(width * ratio);
         canvas.height = Math.round(height * ratio);
-        ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+        ctx.setTransform(canvas.width / width, 0, 0, canvas.height / height, 0, 0);
         if (!pointerMoved) target = { x: width / 2, y: height / 2 };
 
         const cols = Math.max(7, Math.min(19, Math.round(width / 85)));
@@ -293,11 +296,13 @@
         }
 
         ctx.strokeStyle = "#ffffff";
-        ctx.lineWidth = 0.9;
+        ctx.lineWidth = 1;
+        ctx.lineCap = "round";
+        ctx.lineJoin = "round";
         for (const [p, q] of edges) {
           const intensity = Math.max(p.intensity, q.intensity);
           if (intensity < 0.015) continue;
-          ctx.globalAlpha = intensity * 0.38;
+          ctx.globalAlpha = intensity * 0.48;
           ctx.beginPath();
           ctx.moveTo(p.x, p.y);
           ctx.lineTo(q.x, q.y);
@@ -306,7 +311,7 @@
         ctx.fillStyle = "#ffffff";
         for (const p of particles) {
           if (p.intensity < 0.015) continue;
-          ctx.globalAlpha = p.intensity * 0.65;
+          ctx.globalAlpha = p.intensity * 0.75;
           ctx.beginPath();
           ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
           ctx.fill();
