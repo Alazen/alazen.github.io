@@ -13,6 +13,9 @@
     body { margin: 0; min-height: 100vh; }
     a { color: inherit; }
     a:focus-visible, input:focus-visible { outline: 2px solid #fafafa; outline-offset: 5px; }
+    /* Decorative canvas sits behind all clickable content; the page stays solid black. */
+    #ambient-background { position: fixed; inset: 0; width: 100%; height: 100%; display: block; pointer-events: none; z-index: 0; }
+    .shell { position: relative; z-index: 1; }
     .shell { width: min(100% - 64px, 1040px); margin: 0 auto; }
     .top { display: flex; justify-content: space-between; align-items: center; padding-top: 42px; gap: 24px; }
     .signature { text-decoration: none; font-size: 15px; font-weight: 700; letter-spacing: -.035em; }
@@ -50,6 +53,7 @@
   </style>
 </head>
 <body>
+  <canvas id="ambient-background" aria-hidden="true"></canvas>
   <div class="shell">
     <header class="top">
       <a href="/" class="signature" aria-label="Alazen homepage">Alazen</a>
@@ -175,6 +179,170 @@
       }
 
       refresh();
+    })();
+  </script>
+  <script>
+    /*
+     * Adapted from "Animated Background" by Marco Guglielmelli:
+     * https://codepen.io/MarcoGuglielmelli/pen/ExGYae
+     *
+     * MIT License. Copyright (c) 2026 Marco Guglielmelli.
+     * Permission is hereby granted, free of charge, to any person obtaining a
+     * copy of this software and associated documentation files (the "Software"),
+     * to deal in the Software without restriction, including without limitation
+     * the rights to use, copy, modify, merge, publish, distribute, sublicense,
+     * and/or sell copies of the Software, and to permit persons to whom the
+     * Software is furnished to do so, subject to the following conditions:
+     * The above copyright notice and this permission notice shall be included
+     * in all copies or substantial portions of the Software.
+     * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+     * OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+     * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+     * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+     * CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+     * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+     * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+     */
+    (() => {
+      "use strict";
+      const canvas = document.getElementById("ambient-background");
+      const ctx = canvas && canvas.getContext("2d", { alpha: true });
+      if (!ctx) return;
+      const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const finePointer = window.matchMedia("(pointer: fine)").matches;
+      let width = 0, height = 0, particles = [], edges = [];
+      let target = { x: 0, y: 0 }, lastFrame = 0, frameHandle = 0;
+      let pointerMoved = false;
+
+      function squaredDistance(a, b) {
+        const dx = a.x - b.x, dy = a.y - b.y;
+        return dx * dx + dy * dy;
+      }
+
+      function resize() {
+        width = window.innerWidth;
+        height = window.innerHeight;
+        const ratio = Math.min(window.devicePixelRatio || 1, 1.5);
+        canvas.width = Math.round(width * ratio);
+        canvas.height = Math.round(height * ratio);
+        ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+        if (!pointerMoved) target = { x: width / 2, y: height / 2 };
+
+        const cols = Math.max(7, Math.min(19, Math.round(width / 85)));
+        const rows = Math.max(7, Math.min(13, Math.round(height / 85)));
+        particles = [];
+        const grid = Array.from({ length: rows }, () => []);
+        for (let row = 0; row < rows; row++) {
+          for (let col = 0; col < cols; col++) {
+            const originX = ((col + 0.5 + (Math.random() - 0.5) * 0.65) / cols) * width;
+            const originY = ((row + 0.5 + (Math.random() - 0.5) * 0.65) / rows) * height;
+            const p = {
+              x: originX, y: originY, originX, originY,
+              phase: Math.random() * Math.PI * 2,
+              speed: 0.65 + Math.random() * 0.7,
+              radius: 1.1 + Math.random() * 1.3,
+              intensity: 0
+            };
+            grid[row][col] = p;
+            particles.push(p);
+          }
+        }
+
+        const seen = new Set();
+        edges = [];
+        for (let row = 0; row < rows; row++) {
+          for (let col = 0; col < cols; col++) {
+            const p = grid[row][col];
+            const neighbors = [];
+            for (let dy = -1; dy <= 1; dy++) {
+              for (let dx = -1; dx <= 1; dx++) {
+                if (!dx && !dy) continue;
+                const q = grid[row + dy]?.[col + dx];
+                if (q) neighbors.push(q);
+              }
+            }
+            neighbors.sort((a, b) => squaredDistance(p, a) - squaredDistance(p, b));
+            for (const q of neighbors.slice(0, 5)) {
+              const a = particles.indexOf(p), b = particles.indexOf(q);
+              const key = Math.min(a, b) + ":" + Math.max(a, b);
+              if (seen.has(key)) continue;
+              seen.add(key);
+              edges.push([p, q]);
+            }
+          }
+        }
+        render(performance.now());
+      }
+
+      function render(time) {
+        ctx.clearRect(0, 0, width, height);
+        const t = time / 1600;
+        const reach = Math.max(220, Math.min(440, Math.min(width, height) * 0.62));
+        const reachSq = reach * reach;
+        for (const p of particles) {
+          if (!reduceMotion) {
+            p.x = p.originX + Math.sin(t * p.speed + p.phase) * 24;
+            p.y = p.originY + Math.cos(t * p.speed * 0.8 + p.phase) * 24;
+          }
+          const distanceSq = squaredDistance(target, p);
+          p.intensity = distanceSq < reachSq
+            ? Math.pow(1 - Math.sqrt(distanceSq) / reach, 1.25)
+            : 0;
+        }
+
+        ctx.strokeStyle = "#9cd9f9";
+        ctx.lineWidth = 0.75;
+        for (const [p, q] of edges) {
+          const intensity = Math.max(p.intensity, q.intensity);
+          if (intensity < 0.015) continue;
+          ctx.globalAlpha = intensity * 0.30;
+          ctx.beginPath();
+          ctx.moveTo(p.x, p.y);
+          ctx.lineTo(q.x, q.y);
+          ctx.stroke();
+        }
+        ctx.fillStyle = "#9cd9f9";
+        for (const p of particles) {
+          if (p.intensity < 0.015) continue;
+          ctx.globalAlpha = p.intensity * 0.55;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+          ctx.fill();
+        }
+        ctx.globalAlpha = 1;
+      }
+
+      function frame(now) {
+        frameHandle = 0;
+        if (document.hidden || reduceMotion) return;
+        if (now - lastFrame >= 1000 / 30) {
+          render(now);
+          lastFrame = now;
+        }
+        frameHandle = requestAnimationFrame(frame);
+      }
+
+      function restart() {
+        if (!document.hidden && !reduceMotion && !frameHandle) {
+          lastFrame = 0;
+          frameHandle = requestAnimationFrame(frame);
+        }
+      }
+
+      if (finePointer && !reduceMotion) {
+        window.addEventListener("pointermove", event => {
+          if (event.pointerType === "mouse" || event.pointerType === "pen") {
+            target.x = event.clientX;
+            target.y = event.clientY;
+            pointerMoved = true;
+          }
+        }, { passive: true });
+      }
+
+      window.addEventListener("resize", resize, { passive: true });
+      document.addEventListener("visibilitychange", restart);
+      resize();
+      restart();
     })();
   </script>
 </body>
