@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Your route through the USA and Michigan</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:wght@400;600&family=Public+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+  --paper:#eef1ec; --ink:#17201d; --lake:#1d5c6b; --marker:#d9822b; --muted:#5d6a64; --line:#c6cfc8; --card:#f8faf7;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){ --paper:#101815; --ink:#e6ece8; --lake:#6fb8c6; --marker:#f0a455; --muted:#9aa8a2; --line:#2c3a35; --card:#18221f; color-scheme:dark; }
+}
+:root[data-theme="dark"]{ --paper:#101815; --ink:#e6ece8; --lake:#6fb8c6; --marker:#f0a455; --muted:#9aa8a2; --line:#2c3a35; --card:#18221f; color-scheme:dark; }
+
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font:400 16px/1.6 "Public Sans",system-ui,-apple-system,"Segoe UI",sans-serif}
+.wrap{max-width:720px;margin:0 auto;padding:32px 18px 56px}
+h1,h2{font-family:Newsreader,Georgia,serif;font-weight:600;line-height:1.2}
+h1{font-size:clamp(1.8rem,4vw,2.4rem);margin:0 0 8px}
+h2{font-size:1.3rem;margin:0}
+.intro{color:var(--muted);margin:0 0 22px;max-width:56ch}
+.progress{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.bar{flex:1;height:6px;background:var(--line);border-radius:3px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--lake);transition:width .4s ease}
+.tally{font-size:.9rem;color:var(--muted);white-space:nowrap;font-variant-numeric:tabular-nums}
+.up{background:var(--card);border-left:4px solid var(--marker);padding:12px 14px;border-radius:6px;margin:0 0 28px;font-size:.95rem}
+.stages{position:relative;padding-left:40px}
+.stages::before{content:"";position:absolute;left:12px;top:0;bottom:0;width:2px;background:var(--line)}
+.route{position:absolute;left:12px;top:0;width:2px;height:var(--p,0%);background:var(--marker);transition:height .5s ease}
+.stop{position:relative;margin:0 0 16px}
+.stop::before{content:"";position:absolute;left:-34px;top:20px;width:14px;height:14px;border-radius:50%;box-sizing:border-box;border:2px solid var(--line);background:var(--paper);transition:background .3s,border-color .3s}
+.stop.complete::before{background:var(--lake);border-color:var(--lake)}
+details{background:var(--card);border:1px solid var(--line);border-radius:10px}
+summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:12px;padding:16px 18px}
+summary::-webkit-details-marker{display:none}
+.count{font-size:.85rem;color:var(--muted);white-space:nowrap;font-variant-numeric:tabular-nums}
+.body{padding:0 18px 18px}
+.goal{margin:0 0 4px;color:var(--muted)}
+ul{list-style:none;margin:0;padding:0}
+.item{display:grid;grid-template-columns:20px 1fr auto;gap:12px;padding:14px 0;border-top:1px solid var(--line);align-items:start}
+.item input{width:20px;height:20px;margin:3px 0 0;accent-color:var(--lake);cursor:pointer}
+.title{font-weight:600;cursor:pointer;display:block}
+.current .title::after{content:"Up next";margin-left:8px;font-size:.75rem;font-weight:700;color:var(--marker);vertical-align:middle}
+.chan{font-size:.85rem;color:var(--muted)}
+.item p{margin:4px 0 0;font-size:.95rem}
+.watch{font-size:.9rem;color:var(--lake);text-decoration:none;border-bottom:1px solid currentColor;white-space:nowrap;padding-top:2px}
+.done .title{color:var(--muted);text-decoration:line-through}
+.try{margin:12px 0 0;font-size:.95rem}
+.try b{color:var(--lake)}
+footer{margin-top:28px;display:flex;flex-wrap:wrap;gap:12px 20px;align-items:center;justify-content:space-between;font-size:.88rem;color:var(--muted)}
+footer p{margin:0;max-width:52ch}
+button{font:inherit;font-size:.9rem;background:none;color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:6px 12px;cursor:pointer}
+summary:focus-visible,a:focus-visible,input:focus-visible,button:focus-visible{outline:2px solid var(--marker);outline-offset:3px}
+@media (max-width:480px){
+  .stages{padding-left:32px}
+  .stages::before,.route{left:9px}
+  .stop::before{left:-26px}
+  .item{grid-template-columns:20px 1fr}
+  .watch{grid-column:2;justify-self:start;padding-top:0}
+}
+@media (prefers-reduced-motion:reduce){ .bar i,.route,.stop::before{transition:none} }
+</style>
+</head>
+<body>
+<main class="wrap">
+  <h1>Your route through the USA and Michigan</h1>
+  <p class="intro">Six stops and about twenty videos, in the order that builds best. Start with the map and finish with your own corner of Michigan. Check off what you watch; your place is saved on this device.</p>
+  <div class="progress"><div class="bar"><i id="fill"></i></div><span class="tally" id="tally"></span></div>
+  <p class="up" id="up"></p>
+  <div class="stages">
+    <div class="route" id="route"></div>
+    <div id="list"></div>
+  </div>
+  <footer>
+    <p>Links marked “Search YouTube” open a search for the title or channel, since I could not confirm every video page. Titles and channels change, so search by name if a link breaks.</p>
+    <button id="reset" type="button">Clear my checkmarks</button>
+  </footer>
+</main>
+
+<script>
+const yt = q => "https://www.youtube.com/results?search_query=" + encodeURIComponent(q);
+
+const STOPS = [
+  {
+    title: "The big picture: regions and land",
+    goal: "Build a mental map of the country: its regions, climate, and how land shapes where people live and work.",
+    tip: "Keep a blank US map open and label each region as you go.",
+    items: [
+      { t: "US Explained: one state at a time", c: "That Is Interesting (channel)", u: "https://www.youtube.com/@thatisinterestingtii", n: "A long-running series with an episode for every state, territory and the federal district. Each covers geography, culture and history. Start with a state you have never visited." },
+      { t: "80 percent of Americans live east of this line", c: "That Is Interesting", u: yt("80 percent of Americans live east of this line That Is Interesting"), n: "A map-based video on how the population is spread across the country. A good first lesson in how geography shapes daily life." },
+      { t: "Best and worst US cities, towns and states", c: "Geographyking (channel)", u: yt("Geographyking best and worst of the US"), n: "Ranking videos comparing cities, small towns, states and national parks. Useful for seeing how regions differ in cost, climate and lifestyle." }
+    ]
+  },
+  {
+    title: "How the country got here",
+    goal: "The big eras from colonial times to recent politics, so news and conversations make more sense.",
+    tip: "Watch in order if you can. Two episodes a week is a steady pace.",
+    items: [
+      { t: "Crash Course US History: full playlist", c: "Crash Course, hosted by John Green (playlist)", u: "https://www.youtube.com/playlist?list=PL8dPuuaLjXtMwmepBjTSG593eG7ObzO7s", n: "About 48 short episodes of roughly 10 minutes each. The best single starting point for a full overview." },
+      { t: "Colonizing America and The Natives and the English", c: "Crash Course, episodes 2 and 3", u: yt("Crash Course US History Colonizing America"), n: "How European colonies and Indigenous nations first met and shaped each other." },
+      { t: "Where US Politics Came From and Thomas Jefferson and His Democracy", c: "Crash Course, episodes 9 and 10", u: yt("Crash Course US History Where US Politics Came From"), n: "How the government and the political parties took shape in the early republic." },
+      { t: "Slavery and the Age of Jackson", c: "Crash Course, episodes 13 and 14", u: yt("Crash Course US History Slavery"), n: "Two forces that drove the 1800s and the conflicts they created." },
+      { t: "The Progressive Era and The New Deal", c: "Crash Course, episodes 27 and 34", u: yt("Crash Course US History The Progressive Era"), n: "Reform movements, the Great Depression, and the government’s larger role in everyday life." },
+      { t: "The 1960s in America", c: "Crash Course, episode 40", u: yt("Crash Course US History The 1960s in America"), n: "Civil rights, protest and cultural change that still shape US politics and identity." }
+    ]
+  },
+  {
+    title: "Everyday American life",
+    goal: "The habits, language and small details that make daily life in the US feel different.",
+    tip: "Write down one thing each week that surprised you, and ask someone local about it.",
+    items: [
+      { t: "Why everyday American things work the way they do", c: "SIMPLE WHY (channel)", u: yt("SIMPLE WHY American"), n: "Short explainers on roads, cars, common American phrases and daily habits, with the history behind them." },
+      { t: "A newcomer’s view of American food and lifestyle", c: "Shakilla In America (channel)", u: yt("Shakilla In America"), n: "A creator who moved to the US from India shares food, lifestyle and what surprised her. A personal, first-hand take." },
+      { t: "Foreigners react to America for the first time", c: "Seen By Others (channel)", u: yt("Seen By Others foreigners react to America"), n: "Visitors react to food, hospitality, size and everyday culture. A newer channel, so treat it as impressions rather than fact." }
+    ]
+  },
+  {
+    title: "Michigan’s land and lakes",
+    goal: "Where Michigan sits, how the Great Lakes shape it, and why the two peninsulas feel like different places.",
+    tip: "Find the Upper and Lower Peninsulas on a map first, and note the Mackinac Bridge between them.",
+    items: [
+      { t: "Aerial America: Michigan", c: "Smithsonian Channel, 51 minutes", u: "https://www.youtube.com/watch?v=XP78kFZsLVQ", n: "Covers the Great Lakes that shape the state and the people who built its industries, unions and history. Watch it once for the big picture." },
+      { t: "Michigan: An American Portrait", c: "WTTW (PBS station), one hour", u: yt("Michigan An American Portrait WTTW"), n: "Four seasons of footage from more than 80 locations, from the Mackinac Bridge to Copper Harbor and Lake Superior." },
+      { t: "Exploring Michigan: free lessons and videos", c: "Michigan Learning Channel", u: "https://www.michiganlearning.org/exploring-michigan", n: "Short, free videos and field trips about what makes the Great Lakes State distinctive. Easy to fit into a short session." }
+    ]
+  },
+  {
+    title: "Michigan’s history and cities",
+    goal: "How Michigan became a state, and what its cities, especially Detroit, have been through.",
+    tip: "After each video, find one place it mentions on a map.",
+    items: [
+      { t: "Why Michigan’s capital moved from Detroit to Lansing", c: "Michigan Learning Channel", u: "https://www.michiganlearning.org/learning-hub/shows/read-write-roar/educational-videos/why-michigans-capital-moved-from-detroit-to-lansing-mrs-mask-read-write-roar/", n: "A short, clear answer to a common question about the state capital." },
+      { t: "Detroit: Comeback City (preview)", c: "History Channel documentary, narrated by J.K. Simmons", u: "https://youtu.be/UtGTQSqLflU", n: "The city’s turnaround and the Michigan Central Station. This is the preview; the full film first aired on the History Channel in 2018." },
+      { t: "Detroit Historical Society videos", c: "Detroit Historical Society (museum channel)", u: yt("Detroit Historical Society"), n: "Stories about the city’s neighborhoods, industry, music and people, from the museum that tells its history." }
+    ]
+  },
+  {
+    title: "Bringing it together",
+    goal: "Connect Michigan to the rest of the country, then to your own neighborhood.",
+    tip: "Pick a Michigan county near you and find one fact about its history.",
+    items: [
+      { t: "US Explained: the Michigan episode", c: "That Is Interesting", u: yt("That Is Interesting US Explained Michigan"), n: "Pulls together the geography, culture and history from the earlier stops. Look for it in the series." },
+      { t: "Your own county", c: "Your research", u: yt("Michigan county history"), n: "Choose a Michigan county near you or one you are curious about. Search its name with history and pick one local source to read or watch." }
+    ]
+  }
+];
+
+const KEY = "route-usa-mi-v1";
+let done = new Set();
+try { done = new Set(JSON.parse(localStorage.getItem(KEY) || "[]")); } catch (e) {}
+function save() { try { localStorage.setItem(KEY, JSON.stringify([...done])); } catch (e) {} }
+
+const open = {};
+const flat = [];
+STOPS.forEach((s, si) => {
+  open[si] = true;
+  s.items.forEach((it, ii) => flat.push(Object.assign({}, it, { id: "s" + si + "-" + ii, si })));
+});
+
+function render() {
+  const total = flat.length;
+  const finished = flat.filter(x => done.has(x.id)).length;
+  const pct = (finished / total * 100) + "%";
+  const cur = flat.find(x => !done.has(x.id));
+
+  document.getElementById("fill").style.width = pct;
+  document.getElementById("route").style.setProperty("--p", pct);
+  document.getElementById("tally").textContent = finished + " of " + total + " done";
+  document.getElementById("up").innerHTML = cur
+    ? "Up next: <strong>" + cur.t + "</strong>, at stop " + (cur.si + 1) + " of " + STOPS.length + "."
+    : "<strong>Route complete.</strong> Revisit any stop, or write a short note on what surprised you most.";
+
+  document.getElementById("list").innerHTML = STOPS.map((s, si) => {
+    const its = flat.filter(x => x.si === si);
+    const n = its.filter(x => done.has(x.id)).length;
+    const items = its.map(x => {
+      const d = done.has(x.id);
+      const isCur = cur && cur.id === x.id;
+      const label = x.u.indexOf("results?search_query") > -1 ? "Search YouTube" : "Watch";
+      return '<li class="item' + (d ? " done" : "") + (isCur ? " current" : "") + '">'
+        + '<input type="checkbox" id="' + x.id + '"' + (d ? " checked" : "") + ">"
+        + '<div><label class="title" for="' + x.id + '">' + x.t + "</label>"
+        + '<div class="chan">' + x.c + "</div><p>" + x.n + "</p></div>"
+        + '<a class="watch" href="' + x.u + '" target="_blank" rel="noopener">' + label + "</a></li>";
+    }).join("");
+    return '<section class="stop' + (n === its.length ? " complete" : "") + '">'
+      + '<details data-si="' + si + '"' + (open[si] ? " open" : "") + ">"
+      + "<summary><h2>" + s.title + '</h2><span class="count">' + n + " of " + its.length + "</span></summary>"
+      + '<div class="body"><p class="goal">' + s.goal + "</p><ul>" + items + "</ul>"
+      + '<p class="try"><b>Try this:</b> ' + s.tip + "</p></div></details></section>";
+  }).join("");
+}
+
+const list = document.getElementById("list");
+list.addEventListener("change", e => {
+  if (e.target.type !== "checkbox") return;
+  const id = e.target.id;
+  if (e.target.checked) done.add(id); else done.delete(id);
+  save();
+  render();
+  const el = document.getElementById(id);
+  if (el) el.focus();
+});
+list.addEventListener("toggle", e => {
+  if (e.target.dataset && e.target.dataset.si !== undefined) open[e.target.dataset.si] = e.target.open;
+}, true);
+
+document.getElementById("reset").addEventListener("click", () => {
+  done = new Set();
+  save();
+  render();
+});
+
+render();
+</script>
+</body>
+</html>

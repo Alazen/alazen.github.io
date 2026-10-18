@@ -1,0 +1,1261 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>US & Michigan Geography Interactive Study Roadmap</title>
+  <!-- Load Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Load Google Font Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          }
+        }
+      }
+    };
+  </script>
+</head>
+<body class="bg-slate-950 text-slate-100 font-sans antialiased min-h-screen flex flex-col selection:bg-blue-500 selection:text-white">
+
+  <!-- Toast Notification Banner (Replaces alert) -->
+  <div id="toast-banner" class="fixed bottom-5 right-5 z-50 hidden transform transition-all duration-300 bg-emerald-600 text-white px-5 py-3 rounded-xl shadow-2xl flex items-center gap-3 border border-emerald-400/30">
+    <span id="toast-message" class="text-sm font-medium">Action completed</span>
+  </div>
+
+  <!-- Custom Reset Confirmation Modal (Replaces confirm) -->
+  <div id="reset-modal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-md w-full p-6 shadow-2xl">
+      <h3 class="text-lg font-semibold text-white mb-2">Reset study progress and notes?</h3>
+      <p class="text-sm text-slate-400 mb-6">This will clear all checked lessons, map sub-tasks, quiz answers, and saved notes from your browser storage.</p>
+      <div class="flex items-center justify-end gap-3">
+        <button id="cancel-reset-btn" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-sm font-medium transition">Cancel</button>
+        <button id="confirm-reset-btn" class="px-4 py-2 rounded-xl bg-red-600 hover:bg-red-500 text-white text-sm font-medium transition">Confirm Reset</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Top Navigation & Header -->
+  <header class="sticky top-0 z-30 bg-slate-950/90 backdrop-blur-md border-b border-slate-800/80">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+      <div>
+        <div class="flex items-center gap-2.5">
+          <span class="px-2.5 py-1 text-xs font-semibold rounded-lg bg-blue-500/15 text-blue-400 border border-blue-500/30">60% US National</span>
+          <span class="px-2.5 py-1 text-xs font-semibold rounded-lg bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">40% Michigan</span>
+          <span class="px-2.5 py-1 text-xs font-medium rounded-lg bg-slate-800 text-slate-300">4-Week Curriculum</span>
+        </div>
+        <h1 class="text-xl sm:text-2xl font-bold text-white mt-2">US & Michigan Geography Study Portal</h1>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="flex flex-wrap items-center gap-2.5">
+        <button id="export-notes-btn" class="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs sm:text-sm font-medium border border-slate-700 transition flex items-center gap-2">
+          <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"/></svg>
+          Copy Study Log
+        </button>
+        <button id="open-reset-btn" class="px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-red-950/50 text-slate-400 hover:text-red-300 text-xs sm:text-sm font-medium border border-slate-800 hover:border-red-800/50 transition">
+          Reset
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-6 space-y-8 flex-1">
+
+    <!-- Progress Metrics Grid -->
+    <section aria-label="Study Progress Metrics" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <!-- Metric 1: Overall Lessons -->
+      <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 shadow-lg">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-medium text-slate-400">Completed Lessons</span>
+          <span id="stat-lessons-pct" class="text-xs font-semibold text-blue-400">0%</span>
+        </div>
+        <div class="text-2xl font-bold text-white mt-1" id="stat-lessons-count">0 / 10</div>
+        <div class="w-full bg-slate-800 h-2 rounded-full mt-3 overflow-hidden">
+          <div id="bar-lessons" class="bg-blue-500 h-full rounded-full transition-all duration-500" style="width: 0%"></div>
+        </div>
+      </div>
+
+      <!-- Metric 2: Total Study Time -->
+      <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 shadow-lg">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-medium text-slate-400">Total Study Time</span>
+          <span class="text-xs font-medium text-slate-400">Video + Map Lab</span>
+        </div>
+        <div class="text-2xl font-bold text-white mt-1" id="stat-minutes-count">0 / 338 min</div>
+        <div class="w-full bg-slate-800 h-2 rounded-full mt-3 overflow-hidden">
+          <div id="bar-minutes" class="bg-indigo-500 h-full rounded-full transition-all duration-500" style="width: 0%"></div>
+        </div>
+      </div>
+
+      <!-- Metric 3: US National Track (60%) -->
+      <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 shadow-lg">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-medium text-slate-400">US National Track (Weeks 1-2)</span>
+          <span class="text-xs font-semibold text-blue-400" id="stat-us-count">0 / 6</span>
+        </div>
+        <div class="text-sm text-slate-300 mt-1.5">117 min video + 90 min map work</div>
+        <div class="w-full bg-slate-800 h-2 rounded-full mt-3.5 overflow-hidden">
+          <div id="bar-us" class="bg-blue-400 h-full rounded-full transition-all duration-500" style="width: 0%"></div>
+        </div>
+      </div>
+
+      <!-- Metric 4: Michigan Track (40%) -->
+      <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 shadow-lg">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-medium text-slate-400">Michigan Track (Weeks 3-4)</span>
+          <span class="text-xs font-semibold text-emerald-400" id="stat-mi-count">0 / 4</span>
+        </div>
+        <div class="text-sm text-slate-300 mt-1.5">71 min video + 60 min map work</div>
+        <div class="w-full bg-slate-800 h-2 rounded-full mt-3.5 overflow-hidden">
+          <div id="bar-mi" class="bg-emerald-400 h-full rounded-full transition-all duration-500" style="width: 0%"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Interactive Spatial Reference Map & Lab -->
+    <section class="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 sm:p-6 shadow-xl">
+      <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 pb-5 border-b border-slate-800">
+        <div>
+          <h2 class="text-lg sm:text-xl font-bold text-white">Interactive Spatial Reference Map</h2>
+          <p class="text-xs sm:text-sm text-slate-400 mt-1">Click any region, dividing line, or city on the schematic map to inspect how physical geography shapes culture and filter its corresponding video lessons.</p>
+        </div>
+        <div class="flex items-center gap-2 self-start">
+          <button id="map-tab-us" class="px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-blue-600 text-white transition">
+            US Macro-Regions & 98th Meridian
+          </button>
+          <button id="map-tab-mi" class="px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-slate-800 text-slate-300 hover:bg-slate-700 transition">
+            Michigan Peninsulas & Soil Divide
+          </button>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 pt-6 items-start">
+        <!-- SVG Map Canvas Container -->
+        <div class="lg:col-span-7 bg-slate-950 border border-slate-800 rounded-2xl p-4 flex flex-col justify-center">
+          
+          <!-- US SCHEMATIC SVG MAP -->
+          <svg id="svg-map-us" viewBox="0 0 680 380" class="w-full h-auto select-none" role="img" aria-label="Interactive schematic map of United States regions and the 98th meridian">
+            <rect width="680" height="380" rx="16" fill="#090d16"/>
+            
+            <!-- West Region -->
+            <path data-feature="us-west" class="map-hotspot cursor-pointer transition-opacity hover:opacity-90" d="M 35 40 L 260 40 L 260 320 L 35 320 Z" fill="#1e293b" stroke="#475569" stroke-width="2" rx="8"/>
+            <text x="115" y="160" fill="#94a3b8" font-size="15" font-weight="700" pointer-events="none">WEST</text>
+            <text x="75" y="182" fill="#64748b" font-size="11" pointer-events="none">Rockies, Basin & Pacific</text>
+
+            <!-- Rocky Mountains Ridge -->
+            <path data-feature="us-rockies" class="map-hotspot cursor-pointer" d="M 180 50 L 205 140 L 195 220 L 220 300" fill="none" stroke="#f59e0b" stroke-width="5" stroke-dasharray="8 6" stroke-linecap="round"/>
+            <text x="130" y="90" fill="#fbbf24" font-size="11" font-weight="600" pointer-events="none">Rocky Mts.</text>
+
+            <!-- Midwest Region -->
+            <path data-feature="us-midwest" class="map-hotspot cursor-pointer transition-opacity hover:opacity-90" d="M 264 40 L 490 40 L 490 190 L 264 190 Z" fill="#172554" stroke="#3b82f6" stroke-width="2"/>
+            <text x="335" y="110" fill="#93c5fd" font-size="15" font-weight="700" pointer-events="none">MIDWEST</text>
+            <text x="305" y="130" fill="#60a5fa" font-size="11" pointer-events="none">Great Lakes & Corn Belt</text>
+
+            <!-- Michigan Highlight inside Midwest -->
+            <g data-feature="us-michigan-spot" class="map-hotspot cursor-pointer">
+              <rect x="425" y="55" width="48" height="58" rx="6" fill="#065f46" stroke="#10b981" stroke-width="2"/>
+              <text x="436" y="88" fill="#a7f3d0" font-size="11" font-weight="700" pointer-events="none">MI</text>
+            </g>
+
+            <!-- Northeast Region -->
+            <path data-feature="us-northeast" class="map-hotspot cursor-pointer transition-opacity hover:opacity-90" d="M 494 40 L 645 40 L 645 165 L 494 165 Z" fill="#1e1b4b" stroke="#6366f1" stroke-width="2"/>
+            <text x="520" y="95" fill="#a5b4fc" font-size="14" font-weight="700" pointer-events="none">NORTHEAST</text>
+            <text x="515" y="115" fill="#818cf8" font-size="11" pointer-events="none">New England & Mid-Atl</text>
+
+            <!-- South Region -->
+            <path data-feature="us-south" class="map-hotspot cursor-pointer transition-opacity hover:opacity-90" d="M 264 194 L 645 194 L 645 335 L 264 335 Z" fill="#31102f" stroke="#ec4899" stroke-width="2"/>
+            <text x="435" y="275" fill="#f9a8d4" font-size="15" font-weight="700" pointer-events="none">SOUTH</text>
+            <text x="395" y="295" fill="#f472b6" font-size="11" pointer-events="none">Appalachia, Deep South & TX</text>
+
+            <!-- Appalachian Mountains -->
+            <path data-feature="us-appalachians" class="map-hotspot cursor-pointer" d="M 575 110 L 520 205 L 475 275" fill="none" stroke="#a855f7" stroke-width="5" stroke-dasharray="7 5" stroke-linecap="round"/>
+            <text x="530" y="220" fill="#d8b4fe" font-size="11" font-weight="600" pointer-events="none">Appalachians</text>
+
+            <!-- 98th Meridian Divide Line -->
+            <g data-feature="us-98meridian" class="map-hotspot cursor-pointer">
+              <line x1="315" y1="25" x2="315" y2="355" stroke="#ef4444" stroke-width="4" stroke-dasharray="10 6"/>
+              <rect x="255" y="16" width="125" height="22" rx="5" fill="#7f1d1d" stroke="#ef4444" stroke-width="1"/>
+              <text x="265" y="31" fill="#fecaca" font-size="11" font-weight="700">98th Meridian Line</text>
+            </g>
+
+            <!-- Border / Unregionable Cities -->
+            <g data-feature="us-border-cities" class="map-hotspot cursor-pointer">
+              <circle cx="385" cy="192" r="7" fill="#38bdf8" stroke="#ffffff" stroke-width="2"/>
+              <text x="340" y="212" fill="#e0f2fe" font-size="11" font-weight="600">St. Louis</text>
+              <circle cx="445" cy="192" r="7" fill="#38bdf8" stroke="#ffffff" stroke-width="2"/>
+              <text x="435" y="212" fill="#e0f2fe" font-size="11" font-weight="600">Cincinnati</text>
+              <circle cx="570" cy="178" r="7" fill="#38bdf8" stroke="#ffffff" stroke-width="2"/>
+              <text x="530" y="172" fill="#e0f2fe" font-size="11" font-weight="600">Wash. D.C.</text>
+            </g>
+          </svg>
+
+          <!-- MICHIGAN SCHEMATIC SVG MAP (Hidden by default) -->
+          <svg id="svg-map-mi" viewBox="0 0 680 380" class="w-full h-auto select-none hidden" role="img" aria-label="Interactive schematic map of Michigan Upper and Lower Peninsulas and Great Lakes">
+            <rect width="680" height="380" rx="16" fill="#07111e"/>
+
+            <!-- Great Lakes Water Labels -->
+            <g data-feature="mi-great-lakes" class="map-hotspot cursor-pointer">
+              <rect x="65" y="20" width="145" height="28" rx="6" fill="#0c4a6e" stroke="#38bdf8" stroke-width="1.5"/>
+              <text x="82" y="39" fill="#bae6fd" font-size="12" font-weight="700">LAKE SUPERIOR</text>
+
+              <rect x="210" y="195" width="135" height="28" rx="6" fill="#0c4a6e" stroke="#38bdf8" stroke-width="1.5"/>
+              <text x="225" y="214" fill="#bae6fd" font-size="12" font-weight="700">LAKE MICHIGAN</text>
+
+              <rect x="495" y="135" width="120" height="28" rx="6" fill="#0c4a6e" stroke="#38bdf8" stroke-width="1.5"/>
+              <text x="515" y="154" fill="#bae6fd" font-size="12" font-weight="700">LAKE HURON</text>
+
+              <rect x="505" y="325" width="110" height="26" rx="6" fill="#0c4a6e" stroke="#38bdf8" stroke-width="1.5"/>
+              <text x="525" y="342" fill="#bae6fd" font-size="12" font-weight="700">LAKE ERIE</text>
+            </g>
+
+            <!-- Upper Peninsula (Yooper Region) -->
+            <path data-feature="mi-up" class="map-hotspot cursor-pointer transition-opacity hover:opacity-90" d="M 85 95 L 165 55 L 220 80 L 385 85 L 405 115 L 295 125 L 220 150 L 85 120 Z" fill="#064e3b" stroke="#34d399" stroke-width="2.5"/>
+            <text x="175" y="106" fill="#a7f3d0" font-size="13" font-weight="700" pointer-events="none">UPPER PENINSULA ("Yoopers")</text>
+            <text x="125" y="75" fill="#fcd34d" font-size="11" font-weight="600" pointer-events="none">Porcupine Mts. & Keweenaw</text>
+
+            <!-- Straits of Mackinac -->
+            <g data-feature="mi-mackinac" class="map-hotspot cursor-pointer">
+              <circle cx="385" cy="122" r="8" fill="#f59e0b" stroke="#fff" stroke-width="2"/>
+              <text x="400" y="125" fill="#fde68a" font-size="11" font-weight="700">Straits of Mackinac</text>
+            </g>
+
+            <!-- Northern Lower Peninsula (Sandy Forests / Low Density) -->
+            <path data-feature="mi-north-lp" class="map-hotspot cursor-pointer transition-opacity hover:opacity-90" d="M 355 132 L 445 132 L 465 235 L 335 235 Z" fill="#1e3a8a" stroke="#60a5fa" stroke-width="2"/>
+            <text x="352" y="178" fill="#bfdbfe" font-size="12" font-weight="700" pointer-events="none">NORTHERN LOWER</text>
+            <text x="350" y="195" fill="#93c5fd" font-size="10" pointer-events="none">Sandy Soil & Pine Forests</text>
+
+            <!-- Southern Lower Peninsula (Clay Soil / 90% Population / Urban-Industrial) -->
+            <path data-feature="mi-south-lp" class="map-hotspot cursor-pointer transition-opacity hover:opacity-90" d="M 335 239 L 495 239 L 495 335 L 335 335 Z" fill="#312e81" stroke="#818cf8" stroke-width="2"/>
+            <text x="350" y="280" fill="#e0e7ff" font-size="12" font-weight="700" pointer-events="none">SOUTHERN MICHIGAN</text>
+            <text x="350" y="296" fill="#c7d2fe" font-size="10" pointer-events="none">90% Pop. | Clay Farmland & Industry</text>
+
+            <!-- Bay City to Muskegon Soil & Climate Divide Line -->
+            <g data-feature="mi-soil-line" class="map-hotspot cursor-pointer">
+              <line x1="315" y1="237" x2="505" y2="237" stroke="#f43f5e" stroke-width="4" stroke-dasharray="9 5"/>
+              <text x="200" y="254" fill="#fda4af" font-size="11" font-weight="700">Muskegon – Bay City Soil Divide</text>
+            </g>
+
+            <!-- Metro Detroit Hotspot -->
+            <g data-feature="mi-detroit" class="map-hotspot cursor-pointer">
+              <circle cx="485" cy="308" r="8" fill="#ec4899" stroke="#ffffff" stroke-width="2"/>
+              <text x="500" y="312" fill="#fbcfe8" font-size="12" font-weight="700">Detroit & 8 Mile</text>
+            </g>
+
+            <!-- Toledo Strip Border Dispute -->
+            <g data-feature="mi-toledo" class="map-hotspot cursor-pointer">
+              <rect x="385" y="336" width="110" height="18" rx="4" fill="#7c2d12" stroke="#fb923c" stroke-width="1.5"/>
+              <text x="395" y="349" fill="#fed7aa" font-size="10" font-weight="700">1835 Toledo Strip (OH)</text>
+            </g>
+          </svg>
+
+          <div class="flex flex-wrap items-center justify-between gap-2 mt-3 px-1 text-xs text-slate-400">
+            <span>Tip: Click any colored region, line, or marker above to inspect details.</span>
+            <button id="clear-map-filter-btn" class="text-blue-400 hover:text-blue-300 underline hidden">Show all 10 lessons</button>
+          </div>
+        </div>
+
+        <!-- Map Feature Inspector Panel -->
+        <div class="lg:col-span-5 bg-slate-950 border border-slate-800 rounded-2xl p-5 flex flex-col justify-between min-h-[280px]">
+          <div>
+            <div class="flex items-center justify-between gap-2 mb-2">
+              <span id="inspector-badge" class="px-2.5 py-1 text-xs font-semibold rounded-lg bg-blue-500/20 text-blue-300 border border-blue-500/30">US National Framework</span>
+              <span id="inspector-Coords" class="text-xs text-slate-400 font-mono">60/40 Curriculum</span>
+            </div>
+            <h3 id="inspector-title" class="text-lg font-bold text-white mt-2">98th Meridian & US Macro-Regions</h3>
+            <p id="inspector-desc" class="text-sm text-slate-300 mt-2 leading-relaxed">
+              The 98th meridian roughly follows the 51 cm (20-inch) annual rainfall line from North Dakota through Texas. East of this line, moist Gulf of Mexico air supports dense rain-fed agriculture, navigable rivers, and 80% of the US population. West of the line lies the arid rain shadow of the Rocky Mountains.
+            </p>
+            <div class="mt-4 p-3.5 rounded-xl bg-slate-900 border border-slate-800/90">
+              <div class="text-xs font-semibold text-slate-400 uppercase">Key Geographic Takeaway</div>
+              <p id="inspector-takeaway" class="text-xs sm:text-sm text-emerald-300 mt-1">
+                Understanding the Mississippi Basin, Great Lakes shipping corridor, and 98th meridian explains why industrial cities like Chicago and Detroit grew where they did.
+              </p>
+            </div>
+          </div>
+
+          <div class="mt-5 pt-4 border-t border-slate-800 flex items-center justify-between">
+            <span id="inspector-lessons-label" class="text-xs text-slate-400">Related Lessons: #1, #2, #3, #4</span>
+            <button id="filter-by-inspector-btn" class="px-3.5 py-2 rounded-xl bg-blue-600/20 hover:bg-blue-600/30 text-blue-300 border border-blue-500/30 text-xs font-semibold transition">
+              Filter Related Lessons Below
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Curriculum Filter Bar -->
+    <section class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-slate-900/80 border border-slate-800 p-4 rounded-2xl">
+      <div class="flex flex-wrap items-center gap-2" role="tablist" aria-label="Filter curriculum by scope">
+        <button data-filter="all" class="filter-btn px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-blue-600 text-white transition">All 10 Lessons</button>
+        <button data-filter="US" class="filter-btn px-3.5 py-2 rounded-xl text-xs sm:text-sm font-medium bg-slate-800 text-slate-300 hover:bg-slate-700 transition">US National (6)</button>
+        <button data-filter="MI" class="filter-btn px-3.5 py-2 rounded-xl text-xs sm:text-sm font-medium bg-slate-800 text-slate-300 hover:bg-slate-700 transition">Michigan (4)</button>
+        <button data-filter="pending" class="filter-btn px-3.5 py-2 rounded-xl text-xs sm:text-sm font-medium bg-slate-800 text-slate-300 hover:bg-slate-700 transition">Remaining</button>
+        <button data-filter="completed" class="filter-btn px-3.5 py-2 rounded-xl text-xs sm:text-sm font-medium bg-slate-800 text-slate-300 hover:bg-slate-700 transition">Completed</button>
+      </div>
+
+      <!-- Week Quick Jump -->
+      <div class="flex items-center gap-2">
+        <label for="week-select" class="text-xs font-medium text-slate-400">Week:</label>
+        <select id="week-select" class="bg-slate-950 border border-slate-700 text-slate-200 text-xs sm:text-sm rounded-xl px-3 py-2 focus:outline-none focus:border-blue-500">
+          <option value="all">All 4 Weeks</option>
+          <option value="1">Week 1: US Regions & Culture (116m)</option>
+          <option value="2">Week 2: US Terrain & 98th Meridian (91m)</option>
+          <option value="3">Week 3: Michigan & Northern Divide (71m)</option>
+          <option value="4">Week 4: Yooper vs. Troll & Detroit (60m)</option>
+        </select>
+      </div>
+    </section>
+
+    <!-- Dynamic Curriculum Container -->
+    <section id="curriculum-container" class="space-y-8" aria-live="polite"></section>
+
+  </main>
+
+  <!-- Footer with Primary Source Map Portals -->
+  <footer class="border-t border-slate-800/80 bg-slate-900/50 mt-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-xs text-slate-400">
+      <div>
+        <p class="font-semibold text-slate-200">Primary Map Portals for Active Lab Exercises</p>
+        <p class="mt-1">Pair every YouTube video with an active inspection of official cartographic archives.</p>
+      </div>
+      <div class="flex flex-wrap gap-3">
+        <a href="https://apps.nationalmap.gov/viewer/" target="_blank" rel="noopener noreferrer" class="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-medium transition">USGS National Map Viewer</a>
+        <a href="https://project.geo.msu.edu/geogmich/" target="_blank" rel="noopener noreferrer" class="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-medium transition">MSU Geography of Michigan Archive</a>
+        <a href="https://data.census.gov/map" target="_blank" rel="noopener noreferrer" class="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-medium transition">US Census Bureau Map Portal</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Spatial Inspector Dictionary for Interactive SVG Maps
+    const mapFeatures = {
+      "us-west": {
+        badge: "US Census Region",
+        coords: "13 States | Mountain & Pacific",
+        title: "The American West: Rain Shadows & Public Lands",
+        desc: "Stretching from the Front Range of the Rocky Mountains to the Pacific Coast, the West is defined by dramatic elevation changes, arid interior basins, and large federal land holdings.",
+        takeaway: "Water scarcity west of the 98th meridian concentrated populations into oasis metros like Phoenix, Denver, Salt Lake City, and coastal California.",
+        lessons: ["w1-1", "w2-1", "w2-3"]
+      },
+      "us-rockies": {
+        badge: "Physical Barrier",
+        coords: "Continental Divide",
+        title: "The Rocky Mountains & Rain Shadow Effect",
+        desc: "Rising over 4,300 meters (14,000+ ft), the Rockies block Pacific moisture from reaching the central Great Plains, creating the arid steppe west of the 98th meridian.",
+        takeaway: "Rivers east of the Continental Divide flow toward the Mississippi and Gulf of Mexico; rivers west flow toward the Pacific or Gulf of California.",
+        lessons: ["w2-1", "w2-3"]
+      },
+      "us-midwest": {
+        badge: "US Census Region",
+        coords: "12 States | Great Lakes & Plains",
+        title: "The Midwest: Industrial Heartland & Corn Belt",
+        desc: "Divided into the East North Central (MI, OH, IN, IL, WI) and West North Central states. Glaciation flattened the terrain and left deep fertile soils in the south and freshwater lakes in the north.",
+        takeaway: "Where the Great Lakes waterway meets the Mississippi River system, America built its heavy manufacturing, rail, and agricultural hubs.",
+        lessons: ["w1-1", "w1-2", "w1-3", "w3-1"]
+      },
+      "us-michigan-spot": {
+        badge: "Focus State",
+        coords: "Great Lakes Subregion",
+        title: "Michigan within the National Framework",
+        desc: "Unlike landlocked Midwestern states, Michigan consists of two peninsulas surrounded by four of the five Great Lakes, giving it 3,288 miles of freshwater coastline.",
+        takeaway: "Settled initially by French fur traders and New England Yankees via the Erie Canal, Michigan bridges the industrial Rust Belt and the forested Upper Midwest.",
+        lessons: ["w1-2", "w3-1", "w3-2", "w4-1", "w4-2"]
+      },
+      "us-northeast": {
+        badge: "US Census Region",
+        coords: "9 States | New England & Mid-Atlantic",
+        title: "The Northeast: Yankeedom & the Erie Canal Gateway",
+        desc: "The most densely populated US region, anchored by the Boston-to-Washington megalopolis. In 1825, the Erie Canal connected the Hudson River to Lake Erie, funneling Yankee settlers directly into Michigan.",
+        takeaway: "New England town-meeting governance, public universities, and abolitionist politics traveled west along the Great Lakes into southern Michigan.",
+        lessons: ["w1-1", "w1-2", "w1-3"]
+      },
+      "us-south": {
+        badge: "US Census Region",
+        coords: "16 States | South Atlantic & Gulf",
+        title: "The American South & Sun Belt Growth",
+        desc: "Encompassing the Tidewater, Deep South, and Appalachia. Warm winters, lower tax structures, and air conditioning drove massive post-1960 population migration from northern industrial states to the Sun Belt.",
+        takeaway: "During the 20th-century Great Migration, millions of Southern workers moved north to Detroit automotive factories, transforming Michigan's urban culture and music.",
+        lessons: ["w1-1", "w1-2", "w1-3", "w4-2"]
+      },
+      "us-appalachians": {
+        badge: "Physical & Cultural Region",
+        coords: "Eastern Mountain Chain",
+        title: "The Appalachian Mountains",
+        desc: "An ancient, eroded mountain system running from Alabama to Maine. For early colonial settlers, it was the primary barrier to westward expansion until the Cumberland Gap and Erie Canal opened.",
+        takeaway: "Upland Southern settlers from Appalachia moved into southern Ohio, Indiana, and Illinois, creating a distinct cultural boundary with Yankee-settled Michigan.",
+        lessons: ["w1-2", "w2-1", "w2-3"]
+      },
+      "us-98meridian": {
+        badge: "Climatic Divide",
+        coords: "98° West Longitude",
+        title: "The 98th Meridian: Why 80% of Americans Live East",
+        desc: "Identified by geologist John Wesley Powell in 1878, the 98th meridian marks where annual precipitation drops below the 20 inches (51 cm) needed for non-irrigated farming.",
+        takeaway: "Look at a night-time satellite map of the US: town density drops sharply along a vertical line running through the Dakotas, Nebraska, Kansas, Oklahoma, and Texas.",
+        lessons: ["w2-1"]
+      },
+      "us-border-cities": {
+        badge: "Regional Transition Zones",
+        coords: "Fault-Line Metros",
+        title: "Unregionable Cities: Where US Cultural Regions Collide",
+        desc: "Cities like St. Louis, Cincinnati, Louisville, and Washington D.C. sit directly on the fault lines between the Midwest, the South, and the Northeast, blending architecture, dialects, and economies.",
+        takeaway: "Border cities show that American cultural regions are gradients rather than hard state lines.",
+        lessons: ["w2-2", "w1-3"]
+      },
+      "mi-great-lakes": {
+        badge: "Freshwater System",
+        coords: "21% of World Surface Freshwater",
+        title: "Michigan's Four Great Lakes",
+        desc: "Michigan touches Lake Superior, Lake Michigan, Lake Huron, and Lake Erie (missing only Lake Ontario). Prevailing westerly winds cross Lake Michigan, moderating coastal temperatures and dumping lake-effect snow.",
+        takeaway: "The mild coastal microclimate along western Lower Michigan creates one of the nation's premier fruit belts for cherries, apples, blueberries, and wine grapes.",
+        lessons: ["w3-1", "w3-2"]
+      },
+      "mi-up": {
+        badge: "Upper Peninsula",
+        coords: "29% of Land Area | 3% of Population",
+        title: "The Upper Peninsula ('Yoopers') & Ancient Volcanism",
+        desc: "Formed by the 1.1-billion-year-old Midcontinent Rift, the western UP holds the Porcupine Mountains and pure native copper deposits on the Keweenaw Peninsula.",
+        takeaway: "Finnish, Cornish, and Italian miners settled the UP, creating a distinct rugged culture (saunas, pasties, 'Yooper' dialect) completely different from southern Michigan.",
+        lessons: ["w4-1", "w3-1"]
+      },
+      "mi-mackinac": {
+        badge: "Maritime Chokepoint",
+        coords: "5-Mile Suspension Bridge",
+        title: "The Straits of Mackinac",
+        desc: "Connecting Lake Michigan and Lake Huron, the Straits separated Michigan's two peninsulas until the Mackinac Bridge opened in 1957.",
+        takeaway: "Historically a vital Anishinaabe gathering place and French fur-trading fort, it links 'Yoopers' (north) with 'Trolls' (those living 'under the bridge' to the south).",
+        lessons: ["w3-1", "w4-1"]
+      },
+      "mi-north-lp": {
+        badge: "Northern Lower Michigan",
+        coords: "North of Bay City-Muskegon Line",
+        title: "Northern Lower Peninsula: Glacial Sand & Pine Forests",
+        desc: "When Ice Age glaciers retreated, they left coarse, acidic, sandy outwash soils across northern Michigan. After 19th-century loggers clear-cut the white pine forests, farms failed on the sandy soil.",
+        takeaway: "Much of the land reverted to state and national forests, making Northern Michigan a low-density tourism, resort, and cherry-growing region today.",
+        lessons: ["w3-2", "w3-1"]
+      },
+      "mi-south-lp": {
+        badge: "Southern Lower Michigan",
+        coords: "90% of Michigan's 10 Million Residents",
+        title: "Southern Michigan: Fertile Clay & Industrial Corridor",
+        desc: "South of the Bay City-Muskegon line, ancient glacial lake beds and moraines left rich clay-loam soils and a longer growing season, supporting dense agricultural settlement that later industrialized.",
+        takeaway: "Contains Michigan's major urban hubs: Metro Detroit, Ann Arbor, Lansing (state capital), Grand Rapids, Kalamazoo, and Flint.",
+        lessons: ["w3-2", "w4-2"]
+      },
+      "mi-soil-line": {
+        badge: "Ecological & Demographic Boundary",
+        coords: "Bay City (Saginaw Bay) to Muskegon",
+        title: "The Bay City – Muskegon Transition Line",
+        desc: "The single most important internal boundary in Michigan. It marks the climatic transition zone where southern broadleaf forests and fertile soils give way to northern conifers and sandy soils.",
+        takeaway: "Draw a straight line from Saginaw Bay to Muskegon: almost every major university, interstate loop, and metro area in Michigan sits south of this line.",
+        lessons: ["w3-2"]
+      },
+      "mi-detroit": {
+        badge: "Urban Geography",
+        coords: "Detroit River International Border",
+        title: "Metro Detroit: Radial Avenues & 8 Mile Road",
+        desc: "Founded by the French in 1701 along the narrow strait ('le détroit') between Lake Huron and Lake Erie, directly north of Windsor, Canada. Laid out after 1805 with grand spoke avenues (Woodward, Gratiot, Grand River, Michigan, Jefferson).",
+        takeaway: "Detroit put the world on wheels in the 20th century, pioneered Motown music, and exemplifies American suburbanization across the 8 Mile Road county baseline.",
+        lessons: ["w4-2"]
+      },
+      "mi-toledo": {
+        badge: "Border History",
+        coords: "1835-1836 Michigan-Ohio Dispute",
+        title: "The Toledo Strip & How Michigan Got the UP",
+        desc: "In 1835, Michigan Territory and Ohio mobilized militias over a 468-square-mile strip of land containing the port of Toledo at the mouth of the Maumee River.",
+        takeaway: "To gain statehood in 1837, Congress forced Michigan to surrender the Toledo Strip to Ohio in exchange for the western three-quarters of the Upper Peninsula—which soon yielded massive copper and iron wealth.",
+        lessons: ["w4-1", "w3-1"]
+      }
+    };
+
+    const lessonsData = [
+      {
+        id: "w1-1",
+        num: 1,
+        week: 1,
+        weekTitle: "Week 1: US Macro-Regions & Cultural Settlement Streams",
+        scope: "US",
+        title: "Subregions of the U.S. Defined",
+        channel: "Geography King",
+        url: "https://www.youtube.com/watch?v=mGge_d1BOZU",
+        videoId: "mGge_d1BOZU",
+        videoMin: 13,
+        taskMin: 15,
+        summary: "Breaks down the official 4 US Census Regions and 9 Divisions alongside vernacular subregions like the Rust Belt, Sun Belt, and Upper Midwest.",
+        mapPortalUrl: "https://data.census.gov/map",
+        mapPortalName: "US Census Map Portal",
+        subtasks: [
+          "Locate the 4 official Census regions: Northeast, Midwest, South, and West.",
+          "Find the East North Central division and verify its 5 states (MI, OH, IN, IL, WI).",
+          "Compare how the Great Lakes subregion overlaps both the Midwest and Northeast."
+        ],
+        quiz: {
+          question: "Which official US Census division includes Michigan alongside Ohio, Indiana, Illinois, and Wisconsin?",
+          options: ["Middle Atlantic", "East North Central", "West North Central"],
+          correctIndex: 1,
+          explanation: "The US Census Bureau divides the 12-state Midwest into East North Central (bordering the Great Lakes) and West North Central (Great Plains states west of the Mississippi)."
+        }
+      },
+      {
+        id: "w1-2",
+        num: 2,
+        week: 1,
+        weekTitle: "Week 1: US Macro-Regions & Cultural Settlement Streams",
+        scope: "US",
+        title: "Every Cultural Region Of The United States Explained",
+        channel: "Monsieur Z",
+        url: "https://www.youtube.com/watch?v=y9qJ2JD-vH0",
+        videoId: "y9qJ2JD-vH0",
+        videoMin: 12,
+        taskMin: 15,
+        summary: "Traces how colonial settlement streams from New England (Yankeedom), the Mid-Atlantic (Midlands), Virginia (Tidewater), and Appalachia migrated west to form distinct American cultural zones.",
+        mapPortalUrl: "https://apps.nationalmap.gov/viewer/",
+        mapPortalName: "USGS National Map",
+        subtasks: [
+          "Trace the Mohawk River Valley and Erie Canal corridor across upstate New York to Lake Erie.",
+          "Observe why New England Yankee settlers bypassed Ohio/Indiana to settle southern Michigan.",
+          "Contrast the Yankee emphasis on town halls and public colleges with Upland Southern county governance."
+        ],
+        quiz: {
+          question: "Which 1825 infrastructure project funneled New England ('Yankee') settlers directly into Michigan?",
+          options: ["The Erie Canal", "The National Road (Route 40)", "The Oregon Trail"],
+          correctIndex: 0,
+          explanation: "The Erie Canal linked the Hudson River to Lake Erie at Buffalo, creating a direct water highway from New England and New York to Detroit and southern Michigan."
+        }
+      },
+      {
+        id: "w1-3",
+        num: 3,
+        week: 1,
+        weekTitle: "Week 1: US Macro-Regions & Cultural Settlement Streams",
+        scope: "US",
+        title: "Cultural Regions of United States Map",
+        channel: "Geography King",
+        url: "https://www.youtube.com/watch?v=nMRBzUUi_B8",
+        videoId: "nMRBzUUi_B8",
+        videoMin: 46,
+        taskMin: 15,
+        summary: "A deep-dive cartographic tour comparing American dialect regions (Inland North vs. Midland), religious belts, agricultural zones, and economic shifts.",
+        mapPortalUrl: "https://apps.nationalmap.gov/viewer/",
+        mapPortalName: "USGS National Map",
+        subtasks: [
+          "Map the Inland North dialect belt stretching from Rochester and Buffalo through Detroit to Chicago.",
+          "Identify the boundaries of the Corn Belt versus the Northern Dairy and Forest belt.",
+          "Note 3 reasons why manufacturing shifted from the northern Rust Belt toward the southern Sun Belt."
+        ],
+        quiz: {
+          question: "Detroit, Chicago, Cleveland, and Buffalo share which linguistic feature studied by US dialect geographers?",
+          options: ["The Southern Vowel Drawl", "The Inland North (Northern Cities) Vowel Shift", "The Pacific Northwest Merger"],
+          correctIndex: 1,
+          explanation: "Cities settled along the Erie Canal and Great Lakes trade route share the Inland North accent pattern."
+        }
+      },
+      {
+        id: "w2-1",
+        num: 4,
+        week: 2,
+        weekTitle: "Week 2: US Physical Terrain & The 98th Meridian Divide",
+        scope: "US",
+        title: "Why 80% of Americans Live East of This Line",
+        channel: "RealLifeLore",
+        url: "https://www.youtube.com/watch?v=wwJABxjcvUc",
+        videoId: "wwJABxjcvUc",
+        videoMin: 20,
+        taskMin: 15,
+        summary: "Explains the atmospheric and topographic forces behind the 98th meridian, where the humid eastern United States transitions into the arid rain shadow of the Rocky Mountains.",
+        mapPortalUrl: "https://apps.nationalmap.gov/viewer/",
+        mapPortalName: "USGS National Map",
+        subtasks: [
+          "Locate the 98th meridian running vertically through North Dakota, South Dakota, Nebraska, Kansas, Oklahoma, and Texas.",
+          "Enable the imagery layer on the USGS map to see green rain-fed farmland turn into brown irrigated circles west of 98°W.",
+          "Trace the Mississippi-Missouri-Ohio river network that drains the humid East into the Gulf of Mexico."
+        ],
+        quiz: {
+          question: "What critical environmental threshold aligns closely with the 98th meridian in the United States?",
+          options: ["The 20-inch (51 cm) annual rainfall line required for non-irrigated farming", "The southern limit of winter snowfall", "The boundary between Pacific and Central time zones"],
+          correctIndex: 0,
+          explanation: "West of the 98th meridian, the Rocky Mountain rain shadow reduces annual rainfall below 20 inches, historically limiting dense agricultural settlement."
+        }
+      },
+      {
+        id: "w2-2",
+        num: 5,
+        week: 2,
+        weekTitle: "Week 2: US Physical Terrain & The 98th Meridian Divide",
+        scope: "US",
+        title: "Unregionable Cities: Cities Located Where Two Regions Meet",
+        channel: "Geography King",
+        url: "https://www.youtube.com/watch?v=xs8FSy6XNL8",
+        videoId: "xs8FSy6XNL8",
+        videoMin: 16,
+        taskMin: 15,
+        summary: "Investigates major American cities that sit on the fault lines between two or more geographic regions, examining how topography and rivers create cultural hybrids.",
+        mapPortalUrl: "https://apps.nationalmap.gov/viewer/",
+        mapPortalName: "USGS National Map",
+        subtasks: [
+          "Locate Cincinnati and Louisville along the Ohio River boundary between the Midwest and the Upland South.",
+          "Locate St. Louis at the confluence of the Mississippi and Missouri rivers.",
+          "Locate Denver where the Great Plains meet the Front Range of the Rocky Mountains."
+        ],
+        quiz: {
+          question: "Which river forms the historic geographic and cultural boundary separating Midwestern states (Ohio, Indiana, Illinois) from Upland Southern states (Kentucky, West Virginia)?",
+          options: ["The Ohio River", "The Platte River", "The Hudson River"],
+          correctIndex: 0,
+          explanation: "The Ohio River served as both a transportation artery and the dividing line between free Northwest Territory states and slaveholding border states."
+        }
+      },
+      {
+        id: "w2-3",
+        num: 6,
+        week: 2,
+        weekTitle: "Week 2: US Physical Terrain & The 98th Meridian Divide",
+        scope: "US",
+        title: "10 Most Scenic Drives in the U.S.",
+        channel: "Geography King",
+        url: "https://www.youtube.com/watch?v=MwFx80N-FlM",
+        videoId: "MwFx80N-FlM",
+        videoMin: 10,
+        taskMin: 15,
+        summary: "Uses 10 iconic American highways to visually contrast the physiographic provinces of the United States, from the Appalachian Blue Ridge to the Rocky Mountains, Colorado Plateau, and Pacific Coast.",
+        mapPortalUrl: "https://apps.nationalmap.gov/viewer/",
+        mapPortalName: "USGS National Map",
+        subtasks: [
+          "Locate the Blue Ridge Parkway in Virginia and North Carolina to inspect older, rounded Appalachian ridges.",
+          "Locate Going-to-the-Sun Road in Glacier National Park (Montana) to see jagged glaciated Rocky Mountain peaks.",
+          "Locate M-22 or US-2 in Michigan to compare Great Lakes coastal dunes with ocean coastlines."
+        ],
+        quiz: {
+          question: "Why are the Appalachian Mountains in the eastern US much lower and more rounded than the Rocky Mountains in the west?",
+          options: ["The Appalachians are hundreds of millions of years older and have undergone prolonged erosion", "The Appalachians were formed by ocean waves", "The Rockies were built by human mining"],
+          correctIndex: 0,
+          explanation: "Formed roughly 480 million years ago, the Appalachians have eroded over geologic time, whereas the Rockies uplifted much more recently during the Laramide orogeny."
+        }
+      },
+      {
+        id: "w3-1",
+        num: 7,
+        week: 3,
+        weekTitle: "Week 3: Michigan Physical Geography & The Northern Soil Divide",
+        scope: "MI",
+        title: "Michigan: State Profile",
+        channel: "Geography King",
+        url: "https://www.youtube.com/watch?v=Jg7VMn2h9Fk",
+        videoId: "Jg7VMn2h9Fk",
+        videoMin: 28,
+        taskMin: 15,
+        summary: "Comprehensive profile of Michigan's physical landforms, four bordering Great Lakes, lake-effect climate, major metropolitan areas, and economic evolution.",
+        mapPortalUrl: "https://project.geo.msu.edu/geogmich/",
+        mapPortalName: "MSU Geography of Michigan",
+        subtasks: [
+          "Identify Lake Superior, Lake Michigan, Lake Huron, and Lake Erie on the state map.",
+          "Locate Michigan's highest point (Mount Arvon, 1,979 ft) in the Upper Peninsula's Huron Mountains.",
+          "Pinpoint Detroit, Grand Rapids, Warren, Sterling Heights, Ann Arbor, and Lansing."
+        ],
+        quiz: {
+          question: "Which is the ONLY one of the five Great Lakes that does NOT touch the state of Michigan?",
+          options: ["Lake Erie", "Lake Ontario", "Lake Huron"],
+          correctIndex: 1,
+          explanation: "Michigan borders Superior, Michigan, Huron, and Erie. Lake Ontario lies further east, separated from Lake Erie by Niagara Falls."
+        }
+      },
+      {
+        id: "w3-2",
+        num: 8,
+        week: 3,
+        weekTitle: "Week 3: Michigan Physical Geography & The Northern Soil Divide",
+        scope: "MI",
+        title: "Why So Few People Live In The Northern Part Of Michigan",
+        channel: "Geography By Geoff",
+        url: "https://www.youtube.com/watch?v=howa5dKACBA",
+        videoId: "howa5dKACBA",
+        videoMin: 13,
+        taskMin: 15,
+        summary: "Explains why 90% of Michigan residents live south of a diagonal line running from Bay City to Muskegon, examining glacial soil chemistry, growing seasons, and the 19th-century logging boom.",
+        mapPortalUrl: "https://project.geo.msu.edu/geogmich/",
+        mapPortalName: "MSU Geography of Michigan",
+        subtasks: [
+          "Draw the line connecting Bay City (on Saginaw Bay) to Muskegon (on Lake Michigan).",
+          "Compare the fertile clay-loam soils south of the line with the sandy spodosol soils north of the line.",
+          "Trace how Interstate 75 and US-131 transition from multi-lane commuter corridors in the south to forest highways in the north."
+        ],
+        quiz: {
+          question: "What happened when 19th-century settlers tried to establish conventional grain farms in Northern Michigan after the white pine forests were logged?",
+          options: ["The sandy, acidic glacial outwash soils and short growing season caused widespread farm failures", "The federal government banned all farming north of Lansing", "Gold was discovered and replaced farming"],
+          correctIndex: 0,
+          explanation: "Northern Michigan's sandy soils quickly lost nutrients after clear-cutting; tax-delinquent lands reverted to the state, forming today's vast state and national forests."
+        }
+      },
+      {
+        id: "w4-1",
+        num: 9,
+        week: 4,
+        weekTitle: "Week 4: Yooper vs. Troll Identity & Urban Detroit",
+        scope: "MI",
+        title: "Michigan's Lower and Upper Peninsulas Compared",
+        channel: "Mr. Beat",
+        url: "https://www.youtube.com/watch?v=0NjEtQwUiMQ",
+        videoId: "0NjEtQwUiMQ",
+        videoMin: 16,
+        taskMin: 15,
+        summary: "Compares the history, demographics, economy, and cultural traditions of Upper Peninsula residents ('Yoopers') and Lower Peninsula residents ('Trolls').",
+        mapPortalUrl: "https://project.geo.msu.edu/geogmich/",
+        mapPortalName: "MSU Geography of Michigan",
+        subtasks: [
+          "Map the 1835 Toledo Strip along the Michigan-Ohio border and see why Michigan traded it for the Upper Peninsula.",
+          "Locate the Keweenaw Peninsula copper district (Houghton, Calumet) and the Marquette Iron Range.",
+          "Note the Finnish and Cornish immigrant heritage in the UP (saunas, Cornish pasties, Saint Urho)."
+        ],
+        quiz: {
+          question: "Why are residents of Michigan's Lower Peninsula jokingly called 'Trolls' by Upper Peninsula residents ('Yoopers')?",
+          options: ["Because the Lower Peninsula lies geographically 'under' (south of) the Mackinac Bridge", "After a 19th-century lumber company", "Because of Dutch folklore in West Michigan"],
+          correctIndex: 0,
+          explanation: "Since the 5-mile Mackinac Bridge connects the two peninsulas, anyone living south of the bridge lives 'under the bridge'—like the troll in the Billy Goats Gruff fable."
+        }
+      },
+      {
+        id: "w4-2",
+        num: 10,
+        week: 4,
+        weekTitle: "Week 4: Yooper vs. Troll Identity & Urban Detroit",
+        scope: "MI",
+        title: "Detroit: City Profile",
+        channel: "Geography King",
+        url: "https://www.youtube.com/watch?v=zYUJTtAXvR4",
+        videoId: "zYUJTtAXvR4",
+        videoMin: 14,
+        taskMin: 15,
+        summary: "Examines Metro Detroit's riverfront geography, Augustus Woodward's radial street plan, the rise of the Big Three automakers, Motown cultural history, and city-suburb dynamics across 8 Mile Road.",
+        mapPortalUrl: "https://apps.nationalmap.gov/viewer/",
+        mapPortalName: "USGS National Map",
+        subtasks: [
+          "Inspect the Detroit River international border: verify that Windsor, Ontario (Canada) sits directly SOUTH of downtown Detroit.",
+          "Trace the 5 radial spoke avenues radiating from Campus Martius: Woodward, Gratiot, Grand River, Michigan, and Jefferson.",
+          "Locate 8 Mile Road (Baseline Road) separating Wayne County (Detroit) from Oakland and Macomb counties."
+        ],
+        quiz: {
+          question: "If you stand in downtown Detroit and cross the Ambassador Bridge or Detroit-Windsor Tunnel into Windsor, Canada, which compass direction are you traveling?",
+          options: ["South", "North", "West"],
+          correctIndex: 0,
+          explanation: "Due to the bend in the Detroit River connecting Lake St. Clair to Lake Erie, Windsor, Ontario lies directly south of downtown Detroit—making it the only major US crossing where you travel south into Canada."
+        }
+      }
+    ];
+
+    const STORAGE_KEY = "us_mi_interactive_roadmap_v1";
+    let appState = {
+      completedLessons: {},
+      completedSubtasks: {},
+      quizAnswers: {},
+      notes: {},
+      activeFilter: "all",
+      activeWeek: "all",
+      inspectorFilterIds: null
+    };
+
+    function loadState() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          appState.completedLessons = parsed.completedLessons || {};
+          appState.completedSubtasks = parsed.completedSubtasks || {};
+          appState.quizAnswers = parsed.quizAnswers || {};
+          appState.notes = parsed.notes || {};
+        }
+      } catch (err) {
+        console.error("Failed to read state from localStorage:", err);
+      }
+    }
+
+    function saveState() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify({
+          completedLessons: appState.completedLessons,
+          completedSubtasks: appState.completedSubtasks,
+          quizAnswers: appState.quizAnswers,
+          notes: appState.notes
+        }));
+      } catch (err) {
+        console.error("Failed to save state to localStorage:", err);
+      }
+    }
+
+    function showToast(message) {
+      const banner = document.getElementById("toast-banner");
+      const msgEl = document.getElementById("toast-message");
+      msgEl.textContent = message;
+      banner.classList.remove("hidden");
+      setTimeout(() => {
+        banner.classList.add("hidden");
+      }, 2800);
+    }
+
+    function updateDashboardMetrics() {
+      let totalCompleted = 0;
+      let totalMinutesDone = 0;
+      let usCompleted = 0;
+      let miCompleted = 0;
+
+      lessonsData.forEach(lesson => {
+        if (appState.completedLessons[lesson.id]) {
+          totalCompleted++;
+          totalMinutesDone += (lesson.videoMin + lesson.taskMin);
+          if (lesson.scope === "US") usCompleted++;
+          if (lesson.scope === "MI") miCompleted++;
+        }
+      });
+
+      const pctLessons = Math.round((totalCompleted / lessonsData.length) * 100);
+      const pctMinutes = Math.round((totalMinutesDone / 338) * 100);
+      const pctUs = Math.round((usCompleted / 6) * 100);
+      const pctMi = Math.round((miCompleted / 4) * 100);
+
+      document.getElementById("stat-lessons-count").textContent = `${totalCompleted} / 10`;
+      document.getElementById("stat-lessons-pct").textContent = `${pctLessons}%`;
+      document.getElementById("bar-lessons").style.width = `${pctLessons}%`;
+
+      document.getElementById("stat-minutes-count").textContent = `${totalMinutesDone} / 338 min`;
+      document.getElementById("bar-minutes").style.width = `${pctMinutes}%`;
+
+      document.getElementById("stat-us-count").textContent = `${usCompleted} / 6`;
+      document.getElementById("bar-us").style.width = `${pctUs}%`;
+
+      document.getElementById("stat-mi-count").textContent = `${miCompleted} / 4`;
+      document.getElementById("bar-mi").style.width = `${pctMi}%`;
+    }
+
+    function renderCurriculum() {
+      const container = document.getElementById("curriculum-container");
+      container.innerHTML = "";
+
+      // Filter lessons
+      const filtered = lessonsData.filter(lesson => {
+        if (appState.inspectorFilterIds && !appState.inspectorFilterIds.includes(lesson.id)) {
+          return false;
+        }
+        if (appState.activeWeek !== "all" && String(lesson.week) !== String(appState.activeWeek)) {
+          return false;
+        }
+        if (appState.activeFilter === "US" && lesson.scope !== "US") return false;
+        if (appState.activeFilter === "MI" && lesson.scope !== "MI") return false;
+        if (appState.activeFilter === "completed" && !appState.completedLessons[lesson.id]) return false;
+        if (appState.activeFilter === "pending" && appState.completedLessons[lesson.id]) return false;
+        return true;
+      });
+
+      if (filtered.length === 0) {
+        container.innerHTML = `
+          <div class="bg-slate-900/60 border border-slate-800 rounded-2xl p-8 text-center">
+            <p class="text-slate-300 font-medium">No lessons match your current filter selection.</p>
+            <button id="reset-filters-inline" class="mt-4 px-4 py-2 rounded-xl bg-blue-600 text-white text-xs font-semibold">Show All 10 Lessons</button>
+          </div>
+        `;
+        const btn = document.getElementById("reset-filters-inline");
+        if (btn) {
+          btn.addEventListener("click", () => {
+            appState.activeFilter = "all";
+            appState.activeWeek = "all";
+            appState.inspectorFilterIds = null;
+            document.getElementById("week-select").value = "all";
+            document.getElementById("clear-map-filter-btn").classList.add("hidden");
+            syncFilterButtons();
+            renderCurriculum();
+          });
+        }
+        return;
+      }
+
+      // Group by week
+      let currentWeek = null;
+      let weekGroupEl = null;
+
+      filtered.forEach(lesson => {
+        if (lesson.week !== currentWeek) {
+          currentWeek = lesson.week;
+          const weekWrapper = document.createElement("div");
+          weekWrapper.className = "space-y-4";
+
+          const weekHeader = document.createElement("div");
+          weekHeader.className = "flex items-center justify-between border-b border-slate-800 pb-2";
+          weekHeader.innerHTML = `
+            <h2 class="text-base sm:text-lg font-bold text-white">${lesson.weekTitle}</h2>
+            <span class="text-xs text-slate-400 font-medium">${lesson.scope === 'US' ? 'National Context (60%)' : 'Michigan Regional (40%)'}</span>
+          `;
+          weekWrapper.appendChild(weekHeader);
+
+          weekGroupEl = document.createElement("div");
+          weekGroupEl.className = "grid grid-cols-1 gap-5";
+          weekWrapper.appendChild(weekGroupEl);
+          container.appendChild(weekWrapper);
+        }
+
+        const isDone = Boolean(appState.completedLessons[lesson.id]);
+        const scopeBadge = lesson.scope === "US"
+          ? `<span class="px-2.5 py-0.5 text-xs font-semibold rounded-lg bg-blue-500/15 text-blue-400 border border-blue-500/30">US National</span>`
+          : `<span class="px-2.5 py-0.5 text-xs font-semibold rounded-lg bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">Michigan State</span>`;
+
+        const card = document.createElement("article");
+        card.className = `bg-slate-900/90 border ${isDone ? 'border-emerald-500/40 bg-slate-900/50' : 'border-slate-800'} rounded-2xl p-5 sm:p-6 shadow-lg transition`;
+
+        // Build subtasks HTML
+        const subtasksHtml = lesson.subtasks.map((st, idx) => {
+          const stKey = `${lesson.id}-st-${idx}`;
+          const stChecked = Boolean(appState.completedSubtasks[stKey]);
+          return `
+            <label class="flex items-start gap-3 cursor-pointer group">
+              <input type="checkbox" data-subtask-key="${stKey}" data-lesson-id="${lesson.id}"
+                class="subtask-checkbox mt-1 w-4 h-4 rounded border-slate-600 bg-slate-950 text-blue-500 focus:ring-0 cursor-pointer"
+                ${stChecked ? "checked" : ""}>
+              <span class="text-xs sm:text-sm ${stChecked ? 'line-through text-slate-500' : 'text-slate-300 group-hover:text-white'} transition">${st}</span>
+            </label>
+          `;
+        }).join("");
+
+        // Build quiz options HTML
+        const savedAnswer = appState.quizAnswers[lesson.id];
+        const quizOptionsHtml = lesson.quiz.options.map((opt, idx) => {
+          let btnStyle = "bg-slate-950 border-slate-800 text-slate-300 hover:border-slate-600";
+          if (savedAnswer !== undefined) {
+            if (idx === lesson.quiz.correctIndex) {
+              btnStyle = "bg-emerald-950/70 border-emerald-500/60 text-emerald-200 font-medium";
+            } else if (idx === savedAnswer && savedAnswer !== lesson.quiz.correctIndex) {
+              btnStyle = "bg-red-950/60 border-red-500/50 text-red-300";
+            }
+          }
+          return `
+            <button type="button" data-quiz-lesson="${lesson.id}" data-quiz-idx="${idx}"
+              class="quiz-opt-btn w-full text-left px-3.5 py-2.5 rounded-xl border text-xs sm:text-sm transition ${btnStyle}">
+              ${opt}
+            </button>
+          `;
+        }).join("");
+
+        const quizFeedbackHtml = savedAnswer !== undefined
+          ? `<div class="mt-3 p-3 rounded-xl text-xs sm:text-sm ${savedAnswer === lesson.quiz.correctIndex ? 'bg-emerald-950/50 text-emerald-300 border border-emerald-700/40' : 'bg-amber-950/50 text-amber-200 border border-amber-700/40'}">
+               <strong>${savedAnswer === lesson.quiz.correctIndex ? 'Correct:' : 'Review:'}</strong> ${lesson.quiz.explanation}
+             </div>`
+          : "";
+
+        card.innerHTML = `
+          <div class="flex flex-col lg:flex-row lg:items-start justify-between gap-4">
+            <div class="flex items-start gap-3.5 flex-1">
+              <input type="checkbox" data-lesson-toggle="${lesson.id}"
+                aria-label="Mark ${lesson.title} completed"
+                class="lesson-checkbox mt-1.5 w-5 h-5 rounded-lg border-slate-600 bg-slate-950 text-emerald-500 focus:ring-0 cursor-pointer"
+                ${isDone ? "checked" : ""}>
+              <div class="flex-1">
+                <div class="flex flex-wrap items-center gap-2">
+                  <span class="text-xs font-mono text-slate-400">Lesson #${lesson.num}</span>
+                  ${scopeBadge}
+                  <span class="text-xs text-slate-400 font-medium">${lesson.channel}</span>
+                  <span class="px-2 py-0.5 text-xs rounded-lg bg-slate-800 text-slate-300">${lesson.videoMin}m video + ${lesson.taskMin}m map lab</span>
+                </div>
+                <h3 class="text-base sm:text-lg font-bold mt-1.5 ${isDone ? 'line-through text-slate-400' : 'text-white'}">
+                  ${lesson.title}
+                </h3>
+                <p class="text-xs sm:text-sm text-slate-300 mt-1 leading-relaxed">${lesson.summary}</p>
+              </div>
+            </div>
+
+            <!-- Video & Map Launch Buttons -->
+            <div class="flex flex-wrap items-center gap-2 sm:self-start lg:justify-end shrink-0">
+              <button type="button" data-embed-toggle="${lesson.id}"
+                class="embed-toggle-btn px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold border border-slate-700 transition">
+                Preview Video Player
+              </button>
+              <a href="${lesson.url}" target="_blank" rel="noopener noreferrer"
+                class="px-3.5 py-2 rounded-xl bg-red-600 hover:bg-red-500 text-white text-xs font-semibold transition flex items-center gap-1.5">
+                <span>Watch on YouTube</span>
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+              </a>
+            </div>
+          </div>
+
+          <!-- Collapsible Embedded YouTube Player -->
+          <div id="embed-box-${lesson.id}" class="hidden mt-4 pt-4 border-t border-slate-800">
+            <div class="aspect-video w-full max-w-2xl rounded-2xl overflow-hidden bg-black border border-slate-800">
+              <iframe id="iframe-${lesson.id}" class="w-full h-full" title="${lesson.title}"
+                frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+          </div>
+
+          <!-- Two-Column Active Learning Lab: 15-Min Map Exercise + Concept Check Quiz -->
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-5 pt-5 border-t border-slate-800/80">
+            
+            <!-- Left Column: 15-Minute Active Map Lab -->
+            <div class="bg-slate-950/90 border border-slate-800/90 rounded-xl p-4 flex flex-col justify-between">
+              <div>
+                <div class="flex items-center justify-between gap-2 mb-3">
+                  <span class="text-xs font-bold uppercase tracking-wider text-blue-400">15-Minute Active Map Exercise</span>
+                  <a href="${lesson.mapPortalUrl}" target="_blank" rel="noopener noreferrer" class="text-xs text-slate-300 hover:text-white underline">
+                    Open ${lesson.mapPortalName}
+                  </a>
+                </div>
+                <div class="space-y-2.5">
+                  ${subtasksHtml}
+                </div>
+              </div>
+              <div class="mt-4 pt-3 border-t border-slate-900">
+                <label class="block text-xs font-medium text-slate-400 mb-1.5" for="note-${lesson.id}">Personal Map & Video Notes (Auto-saved):</label>
+                <textarea id="note-${lesson.id}" data-note-lesson="${lesson.id}" rows="2"
+                  placeholder="Jot down key cities, rivers, or cultural observations..."
+                  class="lesson-note w-full rounded-xl bg-slate-900 border border-slate-800 px-3 py-2 text-xs sm:text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:border-blue-500">${appState.notes[lesson.id] || ""}</textarea>
+              </div>
+            </div>
+
+            <!-- Right Column: Spatial Concept Check Quiz -->
+            <div class="bg-slate-950/90 border border-slate-800/90 rounded-xl p-4 flex flex-col justify-between">
+              <div>
+                <span class="text-xs font-bold uppercase tracking-wider text-emerald-400">Spatial Retention Check</span>
+                <p class="text-xs sm:text-sm font-medium text-white mt-2 mb-3">${lesson.quiz.question}</p>
+                <div class="space-y-2">
+                  ${quizOptionsHtml}
+                </div>
+                ${quizFeedbackHtml}
+              </div>
+            </div>
+
+          </div>
+        `;
+
+        weekGroupEl.appendChild(card);
+      });
+
+      attachCardListeners();
+    }
+
+    function attachCardListeners() {
+      // Main lesson completion checkboxes
+      document.querySelectorAll(".lesson-checkbox").forEach(cb => {
+        cb.addEventListener("change", (e) => {
+          const id = e.target.getAttribute("data-lesson-toggle");
+          appState.completedLessons[id] = e.target.checked;
+          saveState();
+          updateDashboardMetrics();
+          renderCurriculum();
+        });
+      });
+
+      // Map exercise subtask checkboxes
+      document.querySelectorAll(".subtask-checkbox").forEach(cb => {
+        cb.addEventListener("change", (e) => {
+          const stKey = e.target.getAttribute("data-subtask-key");
+          const lessonId = e.target.getAttribute("data-lesson-id");
+          appState.completedSubtasks[stKey] = e.target.checked;
+
+          // Auto-check parent lesson if all 3 subtasks are checked
+          const lesson = lessonsData.find(l => l.id === lessonId);
+          if (lesson) {
+            const allDone = lesson.subtasks.every((_, idx) => Boolean(appState.completedSubtasks[`${lessonId}-st-${idx}`]));
+            if (allDone && !appState.completedLessons[lessonId]) {
+              appState.completedLessons[lessonId] = true;
+              showToast(`Completed all map tasks for Lesson #${lesson.num}!`);
+            }
+          }
+          saveState();
+          updateDashboardMetrics();
+          renderCurriculum();
+        });
+      });
+
+      // Quiz option buttons
+      document.querySelectorAll(".quiz-opt-btn").forEach(btn => {
+        btn.addEventListener("click", (e) => {
+          const lessonId = e.currentTarget.getAttribute("data-quiz-lesson");
+          const idx = parseInt(e.currentTarget.getAttribute("data-quiz-idx"), 10);
+          appState.quizAnswers[lessonId] = idx;
+          saveState();
+          renderCurriculum();
+        });
+      });
+
+      // Personal study notes auto-save
+      document.querySelectorAll(".lesson-note").forEach(area => {
+        area.addEventListener("input", (e) => {
+          const lessonId = e.target.getAttribute("data-note-lesson");
+          appState.notes[lessonId] = e.target.value;
+          saveState();
+        });
+      });
+
+      // Embedded YouTube player toggle
+      document.querySelectorAll(".embed-toggle-btn").forEach(btn => {
+        btn.addEventListener("click", (e) => {
+          const lessonId = e.currentTarget.getAttribute("data-embed-toggle");
+          const box = document.getElementById(`embed-box-${lessonId}`);
+          const iframe = document.getElementById(`iframe-${lessonId}`);
+          const lesson = lessonsData.find(l => l.id === lessonId);
+          if (!box || !iframe || !lesson) return;
+
+          if (box.classList.contains("hidden")) {
+            box.classList.remove("hidden");
+            if (!iframe.src) {
+              iframe.src = `https://www.youtube.com/embed/${lesson.videoId}`;
+            }
+            e.currentTarget.textContent = "Hide Video Player";
+          } else {
+            box.classList.add("hidden");
+            iframe.src = "";
+            e.currentTarget.textContent = "Preview Video Player";
+          }
+        });
+      });
+    }
+
+    function syncFilterButtons() {
+      document.querySelectorAll(".filter-btn").forEach(btn => {
+        const val = btn.getAttribute("data-filter");
+        if (val === appState.activeFilter) {
+          btn.className = "filter-btn px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-blue-600 text-white transition";
+        } else {
+          btn.className = "filter-btn px-3.5 py-2 rounded-xl text-xs sm:text-sm font-medium bg-slate-800 text-slate-300 hover:bg-slate-700 transition";
+        }
+      });
+    }
+
+    function initMapAndControls() {
+      // Map Tab Switching (US vs Michigan)
+      const tabUs = document.getElementById("map-tab-us");
+      const tabMi = document.getElementById("map-tab-mi");
+      const svgUs = document.getElementById("svg-map-us");
+      const svgMi = document.getElementById("svg-map-mi");
+
+      tabUs.addEventListener("click", () => {
+        svgUs.classList.remove("hidden");
+        svgMi.classList.add("hidden");
+        tabUs.className = "px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-blue-600 text-white transition";
+        tabMi.className = "px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-slate-800 text-slate-300 hover:bg-slate-700 transition";
+        selectMapFeature("us-98meridian");
+      });
+
+      tabMi.addEventListener("click", () => {
+        svgMi.classList.remove("hidden");
+        svgUs.classList.add("hidden");
+        tabMi.className = "px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-emerald-600 text-white transition";
+        tabUs.className = "px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-slate-800 text-slate-300 hover:bg-slate-700 transition";
+        selectMapFeature("mi-soil-line");
+      });
+
+      // Map Hotspots Click Handler
+      let currentSelectedFeatureKey = "us-98meridian";
+
+      function selectMapFeature(key) {
+        const data = mapFeatures[key];
+        if (!data) return;
+        currentSelectedFeatureKey = key;
+
+        document.getElementById("inspector-badge").textContent = data.badge;
+        document.getElementById("inspector-Coords").textContent = data.coords;
+        document.getElementById("inspector-title").textContent = data.title;
+        document.getElementById("inspector-desc").textContent = data.desc;
+        document.getElementById("inspector-takeaway").textContent = data.takeaway;
+
+        const nums = data.lessons.map(id => {
+          const found = lessonsData.find(l => l.id === id);
+          return found ? `#${found.num}` : id;
+        }).join(", ");
+        document.getElementById("inspector-lessons-label").textContent = `Related Lessons: ${nums}`;
+      }
+
+      document.querySelectorAll(".map-hotspot").forEach(el => {
+        el.addEventListener("click", () => {
+          const key = el.getAttribute("data-feature");
+          selectMapFeature(key);
+        });
+      });
+
+      // Filter by currently inspected map feature
+      document.getElementById("filter-by-inspector-btn").addEventListener("click", () => {
+        const data = mapFeatures[currentSelectedFeatureKey];
+        if (!data) return;
+        appState.inspectorFilterIds = data.lessons;
+        document.getElementById("clear-map-filter-btn").classList.remove("hidden");
+        renderCurriculum();
+        showToast(`Filtered to lessons for: ${data.title}`);
+      });
+
+      document.getElementById("clear-map-filter-btn").addEventListener("click", (e) => {
+        appState.inspectorFilterIds = null;
+        e.currentTarget.classList.add("hidden");
+        renderCurriculum();
+      });
+
+      // Filter bar buttons
+      document.querySelectorAll(".filter-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          appState.activeFilter = btn.getAttribute("data-filter");
+          syncFilterButtons();
+          renderCurriculum();
+        });
+      });
+
+      // Week dropdown
+      document.getElementById("week-select").addEventListener("change", (e) => {
+        appState.activeWeek = e.target.value;
+        renderCurriculum();
+      });
+
+      // Copy Study Log to Clipboard (using document.execCommand('copy') for iframe compatibility)
+      document.getElementById("export-notes-btn").addEventListener("click", () => {
+        const lines = ["US & MICHIGAN GEOGRAPHY STUDY LOG (60% US / 40% MI)"];
+        lines.push("====================================================");
+        lessonsData.forEach(l => {
+          const status = appState.completedLessons[l.id] ? "[COMPLETED]" : "[PENDING]";
+          const note = (appState.notes[l.id] || "").trim();
+          lines.push(`${status} Lesson #${l.num}: ${l.title} (${l.videoMin}m video + ${l.taskMin}m map lab)`);
+          if (note) {
+            lines.push(`   Notes: ${note}`);
+          }
+        });
+
+        const tempArea = document.createElement("textarea");
+        tempArea.value = lines.join("\n");
+        document.body.appendChild(tempArea);
+        tempArea.select();
+        try {
+          document.execCommand("copy");
+          showToast("Study log and notes copied to clipboard!");
+        } catch (err) {
+          showToast("Unable to copy automatically.");
+        }
+        document.body.removeChild(tempArea);
+      });
+
+      // Reset Confirmation Modal Controls
+      const resetModal = document.getElementById("reset-modal");
+      document.getElementById("open-reset-btn").addEventListener("click", () => {
+        resetModal.classList.remove("hidden");
+      });
+      document.getElementById("cancel-reset-btn").addEventListener("click", () => {
+        resetModal.classList.add("hidden");
+      });
+      document.getElementById("confirm-reset-btn").addEventListener("click", () => {
+        appState.completedLessons = {};
+        appState.completedSubtasks = {};
+        appState.quizAnswers = {};
+        appState.notes = {};
+        saveState();
+        updateDashboardMetrics();
+        renderCurriculum();
+        resetModal.classList.add("hidden");
+        showToast("Study progress has been reset.");
+      });
+    }
+
+    // Initialize Application on Load
+    window.onload = function () {
+      loadState();
+      updateDashboardMetrics();
+      renderCurriculum();
+      initMapAndControls();
+    };
+  </script>
+</body>
+</html>
