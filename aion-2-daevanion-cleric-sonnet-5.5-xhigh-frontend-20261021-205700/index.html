@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Cleric Daevanion, 149-point healer route</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,200..800&display=swap" rel="stylesheet">
+<style>
+:root{--bg1:#c4d6ea;--bg2:#eef1f8;--ink:#172640;--mut:#52617c;--gold:#b98a2c;--panel:rgba(255,255,255,.58);--line:rgba(23,38,64,.15);--ring:#5a78a6;--track:rgba(23,38,64,.14);--h:#138a6b;--x:#c4442c;--u:#5b4bc4;--o:#c99a2e;--d:#6f88ad;--m:#3fa0cf;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg1:#1d2f55;--bg2:#0f1a33;--ink:#e8eef9;--mut:#a3b3d1;--panel:rgba(255,255,255,.07);--line:rgba(232,238,249,.17);--ring:#8fb0e6;--track:rgba(232,238,249,.18)}}
+:root[data-theme="dark"]{--bg1:#1d2f55;--bg2:#0f1a33;--ink:#e8eef9;--mut:#a3b3d1;--panel:rgba(255,255,255,.07);--line:rgba(232,238,249,.17);--ring:#8fb0e6;--track:rgba(232,238,249,.18)}
+html{scroll-padding-top:env(safe-area-inset-top,0px);height:100%}
+body{margin:0;height:100%;overflow:hidden;color:var(--ink);background:radial-gradient(120% 90% at 20% 0%,var(--bg1),var(--bg2));font:400 14px/1.4 "Bricolage Grotesque",system-ui,-apple-system,"Segoe UI",sans-serif}
+.rings{position:absolute;left:50%;top:50%;width:min(150vw,150vh);aspect-ratio:1;transform:translate(-50%,-50%);pointer-events:none;opacity:.34;z-index:0}
+.rings g{fill:none;stroke:var(--ring);transform-box:view-box;transform-origin:center}
+.r1{animation:spin 160s linear infinite}.r2{animation:spin 110s linear infinite reverse}
+.app{position:relative;z-index:1;height:100%;display:grid;grid-template-columns:clamp(250px,24vw,310px) 1fr;gap:18px;padding:16px 18px;box-sizing:border-box}
+.rail{display:flex;flex-direction:column;gap:14px;min-height:0;min-width:0}
+h1{margin:0;font-weight:800;font-stretch:75%;font-size:clamp(38px,4.6vw,60px);line-height:.9;letter-spacing:-.025em}
+.lead{margin:0;color:var(--mut);max-width:30ch}
+button{font:inherit;color:inherit;background:transparent;border:1px solid var(--ink);border-radius:4px 14px 4px 14px;padding:7px 14px;cursor:pointer}
+button:hover{background:var(--ink);color:var(--bg2)}
+:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.tot{display:flex;align-items:baseline;gap:8px}.tot b{font-size:34px;font-weight:800;font-stretch:80%}
+.split{display:flex;height:8px;border-radius:2px;overflow:hidden;gap:2px}.split i{background:var(--gold)}.split i:nth-child(2){opacity:.75}.split i:nth-child(3){opacity:.55}.split i:nth-child(4){opacity:.4}
+.split+small{display:block;color:var(--mut);margin-top:4px;font-size:12px}
+.skills{list-style:none;margin:0;padding:0;display:grid;gap:5px}
+.skills li{display:grid;grid-template-columns:30px 1fr 70px 34px;align-items:center;gap:8px;font-size:12.5px;padding:1px 0;cursor:default}
+.sw{display:grid;place-items:center;height:17px;border-radius:3px 8px 3px 8px;color:#fff;font-size:9.5px;font-weight:700}
+.bar{position:relative;height:6px;background:var(--track);border-radius:3px;overflow:hidden}.bar b,.bar em{position:absolute;top:0;bottom:0}.bar b{left:0;background:var(--mut);opacity:.7}
+.skills strong{font-weight:800;text-align:right}.skills strong small{font-weight:400;color:var(--mut)}
+.stats{display:grid;gap:3px;font-size:12.5px}.stats div{display:flex;align-items:center;gap:8px}.stats i{width:9px;height:9px;border-radius:50%}.stats b{margin-left:auto;font-weight:700}
+.route{display:grid;grid-template-columns:auto 1fr auto;gap:8px;align-items:center;font-size:12px;color:var(--mut)}
+.route i{height:5px;border-radius:3px;background:linear-gradient(90deg,hsl(42 62% 46%),hsl(100 62% 46%),hsl(170 62% 46%),hsl(210 62% 46%),hsl(250 62% 46%))}
+.src{margin-top:auto;font-size:11.5px;color:var(--mut)}
+.tabs{display:none;gap:6px}.tabs button{padding:5px 10px;font-size:12px}.tabs button.on{background:var(--ink);color:var(--bg2)}
+.grid{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:12px;min-height:0;min-width:0}
+.panel{display:flex;flex-direction:column;min-height:0;min-width:0;padding:10px 12px 6px;background:var(--panel);border:1px solid var(--line);border-radius:26px 6px 26px 6px;backdrop-filter:blur(6px)}
+.panel header{display:flex;justify-content:space-between;align-items:flex-end;gap:10px}
+.panel h2{margin:0;font-size:24px;font-weight:800;font-stretch:78%;letter-spacing:-.01em;line-height:1}
+.lv{font-size:12px;color:var(--mut)}
+.pt{text-align:right;font-size:12px;color:var(--mut)}.pt b{color:var(--ink);font-size:16px}
+.pt i{display:block;width:84px;height:4px;margin:3px 0 0 auto;background:var(--track);border-radius:2px;overflow:hidden}.pt u{display:block;height:100%;background:var(--gold)}
+.panel svg{flex:1;min-height:0;width:100%}
+svg text{text-anchor:middle;dominant-baseline:central;font-family:inherit;pointer-events:none}
+.ab{fill:#fff;font-size:8.5px;font-weight:800}.bn{fill:var(--ink);font-size:6.6px;font-weight:800}.bn2{fill:#fff;font-size:7.6px;font-weight:700}
+.bd{fill:var(--bg2);stroke-width:1.4}
+.e{fill:none;stroke-width:2.3;stroke-linecap:round;animation:draw .35s var(--d) backwards}
+.pop{transform-box:fill-box;transform-origin:center;animation:pop .42s var(--d) backwards cubic-bezier(.3,1.5,.5,1)}
+.n{transition:opacity .2s}.n.dim{opacity:.16}.n:hover circle:first-child,.n:hover rect{stroke:var(--ink);stroke-width:2}
+.halo{fill:var(--gold);transform-box:fill-box;transform-origin:center;animation:halo 3.2s ease-out infinite}
+@keyframes draw{from{stroke-dasharray:1 1;stroke-dashoffset:1}to{stroke-dasharray:1 1;stroke-dashoffset:0}}
+@keyframes pop{from{opacity:0;transform:scale(.3)}}
+@keyframes halo{0%,100%{transform:scale(1);opacity:.6}60%{transform:scale(2.2);opacity:0}}
+@keyframes spin{to{transform:rotate(360deg)}}
+.calm *,.calm *::before{animation:none!important}
+#mo{position:fixed;right:calc(14px + env(safe-area-inset-right,0px));bottom:calc(6px + env(safe-area-inset-bottom,0px));z-index:5;font-size:11px;padding:3px 9px;border-color:var(--line);color:var(--mut);background:var(--panel)}
+@media(max-height:790px){.stats{display:none}}
+@media(max-height:660px){.skills,.route{display:none}}
+@media(max-width:860px){.app{grid-template-columns:1fr;grid-template-rows:auto 1fr;gap:10px}.skills,.stats,.route,.lead,.split,.split+small,.src{display:none}.tabs{display:flex}h1{font-size:34px}h1 br{display:none}.tot b{font-size:24px}.grid{display:block}.panel{display:none;height:100%;box-sizing:border-box}.panel.on{display:flex}}
+</style></head>
+<body>
+<svg class="rings" viewBox="0 0 800 800" aria-hidden="true"><g class="r1"><circle cx="400" cy="400" r="390" stroke-width="1.5"/><circle cx="400" cy="400" r="340" stroke-width="9" stroke-dasharray="1.5 17"/><circle cx="400" cy="400" r="250" stroke-width="1" stroke-dasharray="6 10"/></g><g class="r2"><circle cx="400" cy="400" r="365" stroke-width="1" stroke-dasharray="40 14"/><circle cx="400" cy="400" r="300" stroke-width="1.5"/><circle cx="400" cy="400" r="190" stroke-width="7" stroke-dasharray="1.5 12"/></g></svg>
+<main class="app">
+<aside class="rail">
+<h1>Cleric<br>Daevanion</h1>
+<p class="lead">The 149-point PvE healer route. Each number is a click, and every click touches a node you already own.</p>
+<div><button id="rp">Replay the route</button></div>
+<div class="tabs" id="tabs"></div>
+<div><div class="tot"><b>149</b><span>points spent across four boards</span></div><div class="split" id="split"></div><small id="splitl"></small></div>
+<ul class="skills" id="sk" aria-label="Skill levels reached"></ul>
+<div class="stats" id="st"></div>
+<div class="route"><span>First click</span><i></i><span>Last click</span></div>
+<div class="src">Data from Aion 2 Companion by Grimvane. Unofficial fan tool, not affiliated with NCSOFT.</div>
+</aside>
+<section class="grid" id="grid"></section>
+</main>
+<button id="mo" aria-pressed="false">Pause motion</button>
+<script>
+const K={HL:['Healing Light',3,'h'],RR:['Radiant Recovery',3,'h'],LR:['Light of Regeneration',3,'h'],CN:['Condemnation',3,'x'],CT:['Chain of Torment',3,'x'],HE:['Healing Enhancement',2,'h'],WB:['Warm Benediction',2,'h'],RB:['Radiant Benediction',2,'h'],PC:['Prayer of Concentration',2,'h'],IV:['Immortal Veil',2,'u'],EG:['Earth’s Grace',2,'u']};
+const Cn={CDR:['Cooldown Reduction +1.5%','CD'],DT:['Damage Tolerance +1.5%','DT']};
+const S={A:['Attack Bonus +3','o'],C:['Critical Hit +5','o'],R:['Critical Hit Resist +5','d'],D:['Defense Bonus +30','d'],H:['HP +100','d'],M:['MP +50','m']};
+const B=[
+{n:'Nezekan',lv:12,cap:134,d:'0,1,D -1,1,C -2,1,HE -3,1,H -3,2,D -3,3,HL 0,-1,A 1,-1,R 1,-2,D 1,-3,H 1,-4,M 1,-5,RR 2,-1,IV 3,-1,M 3,-2,A 3,-3,CN 4,-3,H 5,-3,HE 1,1,H 1,2,C 1,3,R 1,4,A 1,5,WB 2,4,H 3,4,LR 5,-4,M 5,-5,CDR'},
+{n:'Zikel',lv:20,cap:134,d:'1,0,A 1,1,R 1,2,RB 1,3,D 0,3,H -1,3,HL 2,2,C 3,2,H 3,1,RR 1,-1,M 2,-1,PC 3,3,A 4,3,M 5,3,LR -2,3,C -3,3,H -4,3,PC 5,4,D 5,5,DT -5,3,D -5,2,C -5,1,CN'},
+{n:'Vaizel',lv:30,cap:134,d:'0,-1,A 1,-1,R 2,-1,D 2,0,H 2,1,RB 3,1,A 4,1,H 4,2,C 4,3,HL 1,-2,EG 1,-3,M 0,-3,C -1,-3,RR 2,-3,H 3,-3,CN -1,-4,M -2,-4,C -3,-4,A -3,-5,WB'},
+{n:'Triniel',lv:40,cap:168,d:'0,1,A 1,1,H 2,1,CT 2,0,A 2,-1,M 2,-2,H 2,-3,HL 3,-3,C 4,-3,H 5,-3,M 6,-3,HE -1,1,C -2,1,H -3,1,R -4,1,IV -5,1,A -6,1,H -6,0,RR -2,0,D -2,-1,CN -2,2,M -2,3,LR 3,1,D 4,1,M 4,2,A 4,3,H 3,3,WB 4,0,A 4,-1,PC'}];
+const LV=[['HL',14],['RR',14],['CN',14],['LR',13],['WB',13],['HE',13],['PC',13],['IV',12],['RB',12],['CT',11],['EG',11]];
+const ST=[['Attack Bonus','+39','o'],['Critical Hit','+50','o'],['Critical Hit Resist','+25','d'],['Defense Bonus','+270','d'],['HP','+1,700','d'],['MP','+550','m'],['Cooldown Reduction','+1.5%','gold'],['Damage Tolerance','+1.5%','gold']];
+const U=30,v=t=>`var(--${t})`,$=id=>document.getElementById(id);
+const pts=[];
+function draw(){
+ $('grid').innerHTML=B.map((b,bi)=>{
+  const P=b.d.split(' ').map((s,i)=>{const a=s.split(',');return{i:i+1,x:+a[0],y:+a[1],c:a[2]}});
+  const own=new Map([['0,0',0]]);let e='',n='',sum=0;
+  const xs=P.map(p=>p.x).concat(0),ys=P.map(p=>p.y).concat(0);
+  const x0=Math.min(...xs)-1,x1=Math.max(...xs)+1,y0=Math.min(...ys)-1,y1=Math.max(...ys)+1;
+  P.forEach(p=>{
+   let pk='0,0',best=-1;
+   [[1,0],[-1,0],[0,1],[0,-1]].forEach(([a,c])=>{const k=(p.x+a)+','+(p.y+c);if(own.has(k)&&own.get(k)>best){best=own.get(k);pk=k}});
+   own.set(p.x+','+p.y,p.i);
+   const [qx,qy]=pk.split(',').map(Number),t=p.i/P.length;
+   e+=`<path class="e" pathLength="1" d="M${qx*U} ${qy*U}L${p.x*U} ${p.y*U}" stroke="hsl(${42+208*t} 62% 46%)" style="--d:${p.i*60}ms"/>`;
+   const k=K[p.c],cn=Cn[p.c],st=S[p.c],name=(k||cn||st)[0],cost=k?k[1]:cn?4:1;sum+=cost;
+   const col=k?v(k[2]):cn?'var(--gold)':v(st[1]);
+   const badge=`<g transform="translate(9.5 -9.5)"><circle class="bd" r="5.6" stroke="${col}"/><text class="bn">${p.i}</text></g>`;
+   const sh=k?`<circle r="12" fill="${col}"/><text class="ab">${p.c}</text>${badge}`:cn?`<rect x="-8.5" y="-8.5" width="17" height="17" transform="rotate(45)" fill="${col}"/><text class="ab" style="font-size:7.5px">${cn[1]}</text>${badge}`:`<circle r="7.6" fill="${col}"/><text class="bn2">${p.i}</text>`;
+   n+=`<g class="n${k?' k-'+p.c:''}" transform="translate(${p.x*U} ${p.y*U})" style="--d:${p.i*60+150}ms"><title>#${p.i} ${name}, ${cost} point${cost>1?'s':''}, ${sum} spent</title><g class="pop">${sh}</g></g>`;
+  });
+  pts[bi]=sum;
+  return `<section class="panel${bi?'':' on'}" data-i="${bi}"><header><div><h2>${b.n}</h2><span class="lv">Opens at level ${b.lv}, ${P.length} clicks</span></div><div class="pt"><b>${sum}</b> of ${b.cap} points<i><u style="width:${sum/b.cap*100}%"></u></i></div></header><svg viewBox="${x0*U} ${y0*U} ${(x1-x0)*U} ${(y1-y0)*U}" role="img" aria-label="${b.n} board, ${P.length} clicks in order">${e}<g><circle class="halo" r="13"/><rect x="-9" y="-9" width="18" height="18" transform="rotate(45)" fill="var(--gold)" stroke="var(--bg2)" stroke-width="2"/></g>${n}</svg></section>`}).join('');
+}
+function hl(c){document.querySelectorAll('.n').forEach(n=>n.classList.toggle('dim',!!c&&!n.classList.contains('k-'+c)))}
+draw();
+$('split').innerHTML=pts.map(p=>`<i style="flex:${p}"></i>`).join('');
+$('splitl').textContent=B.map((b,i)=>`${b.n} ${pts[i]}`).join(', ');
+$('sk').innerHTML=LV.map(([c,l])=>{const k=K[c];return `<li tabindex="0" data-k="${c}"><span class="sw" style="background:${v(k[2])}">${c}</span><span>${k[0]}</span><span class="bar"><b style="width:${10/14*100}%"></b><em style="left:${10/14*100}%;width:${(l-10)/14*100}%;background:${v(k[2])}"></em></span><strong>${l} <small>+${l-10}</small></strong></li>`}).join('');
+$('st').innerHTML=ST.map(([a,b,c])=>`<div><i style="background:${v(c)}"></i>${a}<b>${b}</b></div>`).join('');
+$('tabs').innerHTML=B.map((b,i)=>`<button class="${i?'':'on'}" data-i="${i}">${b.n}</button>`).join('');
+$('tabs').onclick=e=>{const i=e.target.dataset.i;if(i==null)return;document.querySelectorAll('.tabs button,.panel').forEach(x=>x.classList.toggle('on',x.dataset.i===i))};
+document.querySelectorAll('.skills li').forEach(li=>{const c=li.dataset.k;li.onmouseenter=li.onfocus=()=>hl(c);li.onmouseleave=li.onblur=()=>hl(null)});
+$('rp').onclick=()=>{const on=document.querySelector('.panel.on')?.dataset.i;draw();if(on){document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('on',p.dataset.i===on))}};
+$('mo').onclick=function(){const c=document.body.classList.toggle('calm');this.setAttribute('aria-pressed',c);this.textContent=c?'Resume motion':'Pause motion'};
+</script>
+</body></html>

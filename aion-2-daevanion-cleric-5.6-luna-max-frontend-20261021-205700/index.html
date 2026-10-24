@@ -1,0 +1,1218 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#080b12">
+  <title>Cleric / Daevanion board atlas</title>
+  <style>
+    :root {
+      --ink: #080b12;
+      --ink-deep: #05070c;
+      --panel: #101721;
+      --panel-soft: #131d29;
+      --line: rgba(219, 198, 143, .22);
+      --line-soft: rgba(151, 184, 199, .16);
+      --text: #e9e5d9;
+      --muted: #9a9fa6;
+      --gold: #d6b56a;
+      --gold-bright: #f1d58d;
+      --ice: #9dd2d0;
+      --blue: #719bc7;
+      --blue-deep: #1c3856;
+      --red: #b76b64;
+      --void: #0c121b;
+      --shadow: rgba(0, 0, 0, .34);
+      --display: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+      --body: "Avenir Next", "Segoe UI", sans-serif;
+      --mono: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; }
+    body {
+      color: var(--text);
+      background:
+        radial-gradient(circle at 72% 18%, rgba(53, 85, 115, .18), transparent 34%),
+        radial-gradient(circle at 18% 82%, rgba(161, 110, 58, .09), transparent 28%),
+        var(--ink);
+      font-family: var(--body);
+      font-size: 13px;
+      letter-spacing: .005em;
+    }
+    button, input { font: inherit; }
+    button {
+      color: inherit;
+      border: 0;
+      background: transparent;
+      cursor: pointer;
+    }
+    button:focus-visible, input:focus-visible {
+      outline: 2px solid var(--gold-bright);
+      outline-offset: 3px;
+    }
+
+    .app-shell {
+      height: 100svh;
+      min-height: 520px;
+      display: grid;
+      grid-template-rows: 68px minmax(0, 1fr) 30px;
+      position: relative;
+      isolation: isolate;
+    }
+    .app-shell::before,
+    .app-shell::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: -1;
+    }
+    .app-shell::before {
+      opacity: .14;
+      background-image:
+        linear-gradient(90deg, rgba(255,255,255,.035) 1px, transparent 1px),
+        linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px);
+      background-size: 64px 64px;
+      mask-image: linear-gradient(to bottom, black, transparent 76%);
+    }
+    .app-shell::after {
+      background: radial-gradient(circle at 52% 48%, transparent 0 42%, rgba(0, 0, 0, .22) 100%);
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 0 28px;
+      border-bottom: 1px solid var(--line-soft);
+      background: rgba(5, 7, 12, .52);
+      backdrop-filter: blur(14px);
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      min-width: 0;
+    }
+    .sigil {
+      width: 30px;
+      height: 30px;
+      border: 1px solid var(--gold);
+      transform: rotate(45deg);
+      position: relative;
+      flex: 0 0 auto;
+      box-shadow: 0 0 24px rgba(214, 181, 106, .17);
+    }
+    .sigil::before, .sigil::after {
+      content: "";
+      position: absolute;
+      inset: 6px;
+      border: 1px solid var(--ice);
+    }
+    .sigil::after {
+      inset: 11px;
+      border-color: var(--gold-bright);
+    }
+    .brand h1 {
+      margin: 0;
+      font: 600 19px/1 var(--display);
+      letter-spacing: .015em;
+      white-space: nowrap;
+    }
+    .brand p {
+      margin: 5px 0 0;
+      color: var(--muted);
+      font-size: 10px;
+      letter-spacing: .08em;
+    }
+    .source-note {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: var(--muted);
+      font-size: 11px;
+      text-align: right;
+      white-space: nowrap;
+    }
+    .source-note a {
+      color: var(--gold-bright);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(241, 213, 141, .38);
+    }
+
+    .app-main {
+      min-height: 0;
+      display: grid;
+      grid-template-columns: 218px minmax(0, 1fr);
+      gap: 18px;
+      padding: 18px 24px 14px;
+    }
+    .rail {
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      border-right: 1px solid var(--line-soft);
+      padding-right: 18px;
+    }
+    .rail-title {
+      margin: 0 0 12px;
+      color: var(--gold);
+      font: 600 12px/1.2 var(--display);
+      letter-spacing: .04em;
+    }
+    .rail-subtitle {
+      margin: 0 0 14px;
+      color: var(--muted);
+      font-size: 10px;
+      line-height: 1.5;
+    }
+    .build-list { display: grid; gap: 2px; }
+    .build-button {
+      position: relative;
+      display: grid;
+      grid-template-columns: 32px 1fr auto;
+      gap: 9px;
+      align-items: center;
+      width: 100%;
+      min-height: 50px;
+      padding: 7px 8px 7px 0;
+      text-align: left;
+      border-top: 1px solid transparent;
+      border-bottom: 1px solid transparent;
+      color: var(--muted);
+      transition: color .2s ease, border-color .2s ease, background .2s ease;
+    }
+    .build-button::before {
+      content: "";
+      position: absolute;
+      left: -19px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: transparent;
+      transition: background .2s ease;
+    }
+    .build-button:hover, .build-button.is-active {
+      color: var(--text);
+      border-color: var(--line-soft);
+      background: linear-gradient(90deg, rgba(113,155,199,.11), transparent);
+    }
+    .build-button.is-active::before { background: var(--gold); }
+    .build-index {
+      color: var(--blue);
+      font: 11px/1 var(--mono);
+    }
+    .build-name { font-size: 12px; line-height: 1.25; }
+    .build-budget {
+      color: var(--gold);
+      font: 10px/1 var(--mono);
+    }
+    .rail-foot {
+      margin-top: auto;
+      padding-top: 14px;
+      border-top: 1px solid var(--line-soft);
+      color: var(--muted);
+      font-size: 10px;
+      line-height: 1.45;
+    }
+    .rail-foot strong { color: var(--text); font-weight: 500; }
+
+    .workspace {
+      min-width: 0;
+      min-height: 0;
+      display: grid;
+      grid-template-rows: 102px minmax(0, 1fr);
+      gap: 14px;
+    }
+    .overview {
+      min-width: 0;
+      display: grid;
+      grid-template-columns: minmax(240px, 1.15fr) minmax(380px, 1fr);
+      gap: 24px;
+      align-items: end;
+      border-bottom: 1px solid var(--line-soft);
+      padding: 0 4px 14px;
+    }
+    .overview h2 {
+      margin: 0;
+      font: 600 clamp(24px, 3vw, 39px)/.96 var(--display);
+      letter-spacing: -.025em;
+    }
+    .overview p {
+      max-width: 650px;
+      margin: 8px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+    .metric-strip {
+      min-width: 0;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 0;
+    }
+    .metric {
+      min-width: 0;
+      padding: 0 14px;
+      border-left: 1px solid var(--line-soft);
+    }
+    .metric:first-child { border-left: 0; }
+    .metric-label {
+      display: block;
+      color: var(--muted);
+      font-size: 10px;
+      line-height: 1.1;
+      margin-bottom: 5px;
+    }
+    .metric-value {
+      color: var(--gold-bright);
+      font: 600 20px/1 var(--display);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .content-grid {
+      min-height: 0;
+      display: grid;
+      grid-template-columns: minmax(0, 1.12fr) minmax(330px, .88fr);
+      gap: 14px;
+    }
+    .visual-panel, .detail-panel {
+      min-height: 0;
+      background: linear-gradient(135deg, rgba(18, 29, 42, .86), rgba(8, 12, 19, .9));
+      border: 1px solid var(--line-soft);
+      box-shadow: 0 20px 60px var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+    .visual-panel::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      opacity: .25;
+      background: repeating-linear-gradient(135deg, transparent 0 28px, rgba(255,255,255,.018) 29px 30px);
+      mix-blend-mode: screen;
+    }
+    .panel-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 13px 16px 11px;
+      border-bottom: 1px solid var(--line-soft);
+      position: relative;
+      z-index: 2;
+    }
+    .panel-head h3 {
+      margin: 0;
+      font: 600 16px/1.1 var(--display);
+    }
+    .panel-head span {
+      color: var(--muted);
+      font-size: 10px;
+    }
+    .visual-body {
+      min-height: 0;
+      height: calc(100% - 48px);
+      display: grid;
+      grid-template-rows: minmax(0, 1fr) 92px;
+      position: relative;
+      z-index: 1;
+    }
+    .board-stage {
+      min-height: 0;
+      display: grid;
+      place-items: center;
+      padding: 10px 16px 4px;
+      position: relative;
+    }
+    .board-stage::before {
+      content: "";
+      position: absolute;
+      width: min(42vw, 430px);
+      height: min(42vw, 430px);
+      border: 1px solid rgba(214, 181, 106, .11);
+      border-radius: 50%;
+      box-shadow: 0 0 0 16px rgba(214, 181, 106, .025), 0 0 0 34px rgba(113, 155, 199, .025);
+      animation: orbit 18s linear infinite;
+    }
+    .board-stage::after {
+      content: "";
+      position: absolute;
+      width: min(34vw, 350px);
+      height: min(34vw, 350px);
+      border: 1px dashed rgba(157, 210, 208, .12);
+      border-radius: 50%;
+      transform: rotate(34deg);
+      animation: orbit-reverse 26s linear infinite;
+    }
+    @keyframes orbit {
+      to { transform: rotate(360deg); }
+    }
+    @keyframes orbit-reverse {
+      to { transform: rotate(-360deg); }
+    }
+    .board-map {
+      width: min(100%, 520px);
+      aspect-ratio: 1 / 1;
+      max-height: 100%;
+      display: grid;
+      position: relative;
+      z-index: 1;
+      padding: clamp(14px, 2.6vw, 28px);
+      border: 1px solid rgba(214, 181, 106, .24);
+      background: radial-gradient(circle at 50% 50%, rgba(113, 155, 199, .16), transparent 52%), rgba(5, 8, 13, .64);
+      clip-path: polygon(50% 0, 94% 25%, 94% 75%, 50% 100%, 6% 75%, 6% 25%);
+    }
+    .board-map::before {
+      content: "";
+      position: absolute;
+      inset: 10%;
+      border: 1px solid rgba(157, 210, 208, .16);
+      transform: rotate(45deg);
+      pointer-events: none;
+    }
+    .map-wire {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
+    .map-wire polyline {
+      fill: none;
+      stroke: rgba(214, 181, 106, .42);
+      stroke-width: .08;
+      vector-effect: non-scaling-stroke;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .map-wire polyline.is-selected { stroke: var(--gold-bright); stroke-width: .16; }
+    .map-cell {
+      min-width: 0;
+      min-height: 0;
+      display: grid;
+      place-items: center;
+      position: relative;
+      z-index: 1;
+    }
+    .map-cell::before {
+      content: "";
+      width: 3px;
+      height: 3px;
+      background: rgba(157, 210, 208, .22);
+      border-radius: 50%;
+    }
+    .map-cell.is-empty::before { opacity: .46; }
+    .map-node {
+      display: grid;
+      place-items: center;
+      width: clamp(18px, 3vw, 27px);
+      height: clamp(18px, 3vw, 27px);
+      padding: 0;
+      border: 1px solid rgba(214, 181, 106, .56);
+      border-radius: 50%;
+      background: rgba(11, 18, 28, .9);
+      color: var(--gold-bright);
+      font: 10px/1 var(--mono);
+      box-shadow: 0 0 0 3px rgba(214, 181, 106, .045);
+      transition: background .2s ease, color .2s ease, transform .2s ease, border-color .2s ease;
+    }
+    .map-node:hover, .map-node.is-selected {
+      transform: scale(1.22);
+      color: var(--ink);
+      background: var(--gold-bright);
+      border-color: var(--gold-bright);
+      box-shadow: 0 0 20px rgba(241, 213, 141, .36), 0 0 0 5px rgba(214,181,106,.08);
+      position: relative;
+      z-index: 4;
+    }
+    .map-start {
+      width: clamp(23px, 3.6vw, 34px);
+      height: clamp(23px, 3.6vw, 34px);
+      border: 1px solid var(--ice);
+      color: var(--ice);
+      background: rgba(24, 59, 77, .75);
+      box-shadow: 0 0 18px rgba(157, 210, 208, .23);
+    }
+    .map-start::after { content: "S"; }
+    .board-legend {
+      position: absolute;
+      left: 18px;
+      bottom: 8px;
+      color: var(--muted);
+      font-size: 10px;
+      z-index: 2;
+    }
+    .board-legend span { color: var(--gold); }
+
+    .sequence-strip {
+      min-width: 0;
+      display: grid;
+      grid-template-columns: minmax(112px, .55fr) minmax(0, 1.45fr);
+      align-items: center;
+      gap: 14px;
+      padding: 12px 16px;
+      border-top: 1px solid var(--line-soft);
+      background: rgba(4, 7, 12, .35);
+    }
+    .sequence-selected strong {
+      display: block;
+      color: var(--gold-bright);
+      font: 600 13px/1.18 var(--display);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .sequence-selected small {
+      display: block;
+      color: var(--muted);
+      margin-top: 4px;
+      font-size: 10px;
+    }
+    .sequence-control { min-width: 0; }
+    .sequence-range {
+      width: 100%;
+      accent-color: var(--gold);
+      display: block;
+    }
+    .sequence-ticks {
+      display: flex;
+      justify-content: space-between;
+      gap: 6px;
+      margin-top: 6px;
+      color: var(--muted);
+      font: 9px/1 var(--mono);
+    }
+
+    .detail-panel {
+      display: grid;
+      grid-template-rows: auto minmax(0, 1fr) auto;
+    }
+    .detail-head {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 14px;
+      align-items: start;
+      padding: 16px 18px 13px;
+      border-bottom: 1px solid var(--line-soft);
+    }
+    .detail-head h3 {
+      margin: 0;
+      font: 600 22px/1 var(--display);
+    }
+    .detail-head p {
+      max-width: 370px;
+      margin: 7px 0 0;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.45;
+    }
+    .board-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 4px 10px;
+      max-width: 190px;
+    }
+    .board-tab {
+      padding: 4px 0;
+      color: var(--muted);
+      border-bottom: 1px solid transparent;
+      font-size: 10px;
+      transition: color .2s ease, border-color .2s ease;
+    }
+    .board-tab:hover, .board-tab.is-active { color: var(--gold-bright); border-color: var(--gold); }
+    .detail-body {
+      min-height: 0;
+      overflow: hidden;
+      padding: 14px 18px;
+    }
+    .detail-scroll {
+      height: 100%;
+      min-height: 0;
+      overflow: hidden;
+    }
+    .detail-section + .detail-section { margin-top: 13px; }
+    .detail-section h4 {
+      margin: 0 0 8px;
+      color: var(--gold);
+      font: 600 12px/1.1 var(--display);
+    }
+    .skill-lines {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 5px 16px;
+    }
+    .skill-line {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      padding-bottom: 4px;
+      border-bottom: 1px solid rgba(151,184,199,.10);
+      min-width: 0;
+    }
+    .skill-line span:first-child {
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      color: var(--text);
+      font-size: 10px;
+    }
+    .skill-line span:last-child {
+      flex: 0 0 auto;
+      color: var(--ice);
+      font: 10px/1 var(--mono);
+    }
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 7px;
+    }
+    .stat-item {
+      min-width: 0;
+      padding: 8px 8px 7px;
+      border-left: 2px solid var(--blue-deep);
+      background: rgba(16, 31, 49, .48);
+    }
+    .stat-item span { display: block; color: var(--muted); font-size: 9px; line-height: 1.2; }
+    .stat-item strong { display: block; color: var(--text); margin-top: 4px; font: 600 13px/1 var(--display); }
+    .board-bars { display: grid; gap: 7px; }
+    .bar-row {
+      display: grid;
+      grid-template-columns: 64px minmax(0, 1fr) 32px;
+      align-items: center;
+      gap: 8px;
+      color: var(--muted);
+      font-size: 10px;
+    }
+    .bar-track { height: 7px; background: rgba(157, 210, 208, .10); position: relative; }
+    .bar-fill { height: 100%; background: linear-gradient(90deg, var(--blue), var(--gold)); transform-origin: left; }
+    .bar-row strong { color: var(--gold-bright); font: 10px/1 var(--mono); text-align: right; }
+    .detail-foot {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 18px;
+      border-top: 1px solid var(--line-soft);
+      color: var(--muted);
+      font-size: 10px;
+    }
+    .detail-foot strong { color: var(--gold-bright); font-weight: 500; }
+
+    .reference-view { min-height: 0; display: grid; grid-template-rows: auto minmax(0, 1fr); gap: 12px; }
+    .reference-tabs { display: flex; gap: 18px; border-bottom: 1px solid var(--line-soft); }
+    .reference-tab { padding: 0 0 8px; color: var(--muted); border-bottom: 1px solid transparent; font-size: 11px; }
+    .reference-tab.is-active { color: var(--gold-bright); border-color: var(--gold); }
+    .reference-pane { min-height: 0; overflow: hidden; }
+    .ref-table-wrap { height: 100%; min-height: 0; overflow: hidden; border-top: 1px solid var(--line-soft); }
+    .ref-table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+      font-size: 10px;
+    }
+    .ref-table th, .ref-table td { padding: 6px 7px; border-bottom: 1px solid rgba(151,184,199,.11); text-align: left; vertical-align: top; }
+    .ref-table th { color: var(--gold); font-weight: 500; background: rgba(214,181,106,.05); }
+    .ref-table td { color: var(--text); line-height: 1.3; }
+    .ref-table td.muted { color: var(--muted); }
+    .ref-table .kind { color: var(--ice); }
+    .weight-grid { height: 100%; min-height: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .weight-panel { min-height: 0; overflow: hidden; border-top: 1px solid var(--line-soft); }
+    .weight-panel h4 { margin: 8px 0 5px; color: var(--gold); font: 600 12px/1.1 var(--display); }
+    .weight-table { width: 100%; border-collapse: collapse; table-layout: fixed; font-size: 9px; }
+    .weight-table th, .weight-table td { padding: 4px 5px; border-bottom: 1px solid rgba(151,184,199,.09); text-align: left; }
+    .weight-table th { color: var(--muted); font-weight: 500; }
+    .weight-table td { color: var(--text); }
+    .weight-table td:not(:first-child), .weight-table th:not(:first-child) { text-align: right; }
+    .weight-table td:first-child { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .full-grid { min-height: 0; display: grid; grid-template-columns: .8fr 1.2fr; gap: 14px; }
+    .profile-list { display: grid; gap: 8px; }
+    .profile-row { padding: 9px 10px; border-left: 2px solid var(--gold); background: rgba(16,31,49,.42); }
+    .profile-row h4 { display: flex; justify-content: space-between; gap: 8px; margin: 0 0 6px; color: var(--text); font: 600 13px/1.1 var(--display); }
+    .profile-row h4 span { color: var(--gold); font: 10px/1 var(--mono); }
+    .profile-row p { margin: 0; color: var(--muted); font-size: 10px; line-height: 1.35; }
+    .profile-row .profile-stats { margin-top: 4px; color: var(--ice); font-size: 9px; }
+    .profile-row .board-bars { margin-top: 8px; gap: 4px; }
+    .profile-row .bar-row { grid-template-columns: 53px minmax(0, 1fr) 25px; font-size: 9px; }
+    .profile-row .bar-track { height: 5px; }
+    .full-skills { min-height: 0; padding-left: 4px; }
+    .full-skills h4 { margin: 0 0 8px; color: var(--gold); font: 600 12px/1.1 var(--display); }
+    .level-grid { display: grid; grid-template-columns: minmax(120px, 1.2fr) repeat(4, 1fr); border-top: 1px solid var(--line-soft); border-left: 1px solid var(--line-soft); }
+    .level-grid > div { min-width: 0; padding: 5px 6px; border-right: 1px solid var(--line-soft); border-bottom: 1px solid var(--line-soft); font-size: 9px; }
+    .level-grid .head { color: var(--gold); background: rgba(214,181,106,.05); }
+    .level-grid .skill-name { color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .level-grid .level { color: var(--ice); font: 10px/1 var(--mono); text-align: center; }
+    .level-note { margin: 10px 0 0; color: var(--muted); font-size: 10px; line-height: 1.4; }
+
+    .footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding: 0 24px;
+      border-top: 1px solid var(--line-soft);
+      color: var(--muted);
+      font-size: 10px;
+    }
+    .footer a { color: var(--gold); text-decoration: none; }
+    .motion-toggle { display: inline-flex; align-items: center; gap: 7px; color: var(--muted); }
+    .motion-toggle input { accent-color: var(--gold); }
+
+    .enter { animation: enter .65s cubic-bezier(.2,.8,.2,1) both; }
+    .enter.delay-1 { animation-delay: .08s; }
+    .enter.delay-2 { animation-delay: .16s; }
+    .enter.delay-3 { animation-delay: .24s; }
+    @keyframes enter { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+    .reduced-motion *, .reduced-motion *::before, .reduced-motion *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; scroll-behavior: auto !important; }
+
+    @media (max-width: 1100px) {
+      .app-main { grid-template-columns: 184px minmax(0, 1fr); gap: 14px; padding-inline: 18px; }
+      .rail { padding-right: 14px; }
+      .build-button { grid-template-columns: 26px 1fr; }
+      .build-budget { display: none; }
+      .overview { grid-template-columns: 1fr; gap: 10px; align-items: start; }
+      .workspace { grid-template-rows: 132px minmax(0, 1fr); }
+      .metric-strip { max-width: 620px; }
+    }
+    @media (max-width: 820px) {
+      html, body { overflow: hidden; }
+      .app-shell { min-height: 0; height: 100svh; grid-template-rows: auto minmax(0, 1fr) 32px; }
+      .topbar { min-height: 68px; padding: 12px 16px; align-items: flex-start; }
+      .source-note { display: none; }
+      .app-main { grid-template-columns: 1fr; min-height: 0; overflow: hidden; padding: 14px 14px 10px; }
+      .rail { border-right: 0; border-bottom: 1px solid var(--line-soft); padding: 0 0 10px; }
+      .rail-title, .rail-subtitle, .rail-foot { display: none; }
+      .build-list { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 4px; }
+      .build-button { min-height: 42px; grid-template-columns: 1fr; gap: 3px; padding: 6px 7px; border: 1px solid transparent; }
+      .build-button::before { display: none; }
+      .build-index { font-size: 9px; }
+      .build-name { font-size: 10px; }
+      .workspace { grid-template-rows: 112px minmax(0, 1fr); min-height: 0; }
+      .overview { padding-inline: 0; }
+      .overview h2 { font-size: 27px; }
+      .metric-strip { max-width: none; }
+      .content-grid { grid-template-columns: 1fr; grid-template-rows: minmax(220px, .92fr) minmax(250px, 1.08fr); min-height: 0; }
+      .detail-panel { min-height: 0; }
+      .footer { padding-inline: 14px; }
+      .full-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 520px) {
+      .build-list { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .build-button:nth-child(4), .build-button:nth-child(5) { grid-column: span 1; }
+      .metric { padding-inline: 7px; }
+      .metric-label { font-size: 8px; }
+      .metric-value { font-size: 16px; }
+      .detail-head { grid-template-columns: 1fr; }
+      .board-tabs { justify-content: flex-start; max-width: none; }
+      .skill-lines { grid-template-columns: 1fr; }
+      .stat-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .sequence-strip { grid-template-columns: 1fr; gap: 8px; }
+      .visual-body { grid-template-rows: minmax(0, 1fr) 110px; }
+      .content-grid { grid-template-rows: minmax(210px, .9fr) minmax(260px, 1.1fr); }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell" id="app">
+    <header class="topbar enter">
+      <div class="brand">
+        <div class="sigil" aria-hidden="true"></div>
+        <div>
+          <h1>Cleric / Daevanion board atlas</h1>
+          <p>Click order, board geometry, and weighted priorities</p>
+        </div>
+      </div>
+      <div class="source-note">
+        <span>Unofficial fan reference</span>
+        <a href="https://aion2.grimvane.app/companion/wiki/daevanion-cleric/" target="_blank" rel="noreferrer">Open source page</a>
+      </div>
+    </header>
+
+    <main class="app-main">
+      <aside class="rail enter delay-1">
+        <h2 class="rail-title">Build atlas</h2>
+        <p class="rail-subtitle">Choose a budget. The constellation shows the order in which each node is bought from the free center.</p>
+        <nav class="build-list" id="buildList" aria-label="Builds"></nav>
+        <div class="rail-foot"><strong>Read the map</strong><br>Gold numbers are click order. The blue start node is free. Scrub the route to inspect any step.</div>
+      </aside>
+
+      <section class="workspace enter delay-2" aria-live="polite">
+        <section class="overview">
+          <div>
+            <h2 id="overviewTitle">149-point PvE healer</h2>
+            <p id="overviewDescription">The healing route prioritizes Healing Light and Radiant Recovery, then builds the defensive spine around the four stat boards.</p>
+          </div>
+          <div class="metric-strip" id="metricStrip"></div>
+        </section>
+
+        <div class="content-grid" id="contentGrid">
+          <section class="visual-panel enter delay-3" id="visualPanel">
+            <div class="panel-head">
+              <h3 id="visualTitle">Nezekan</h3>
+              <span id="visualMeta">42 points · 27 clicks</span>
+            </div>
+            <div class="visual-body" id="visualBody"></div>
+          </section>
+
+          <section class="detail-panel enter delay-3" id="detailPanel">
+            <div class="detail-head">
+              <div>
+                <h3 id="detailTitle">Healer route</h3>
+                <p id="detailDescription">A compact visual of the source table. Choose a board above to move through its route.</p>
+              </div>
+              <div class="board-tabs" id="boardTabs" aria-label="Boards"></div>
+            </div>
+            <div class="detail-body" id="detailBody"></div>
+            <div class="detail-foot" id="detailFoot"></div>
+          </section>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <span>Data transformed from <a href="https://aion2.grimvane.app/companion/wiki/daevanion-cleric/" target="_blank" rel="noreferrer">Aion 2 Companion</a>.</span>
+      <label class="motion-toggle"><input id="motionToggle" type="checkbox"> Reduce motion</label>
+    </footer>
+  </div>
+
+  <script>
+    const sourceUrl = "https://aion2.grimvane.app/companion/wiki/daevanion-cleric/";
+    const activeNames = new Set([
+      "Earth's Retribution", "Judgment Thunder", "Debilitating Mark", "Divine Aura", "Chain of Torment",
+      "Lightning Strike Scattershot", "Light of Regeneration", "Condemnation", "Healing Light", "Radiant Recovery",
+      "Bolt", "Defiance"
+    ]);
+    const passiveNames = new Set([
+      "Warm Benediction", "Empyrean Lords' Benediction", "Empyrean Lord's Benediction", "Empyrean Lord's Grace",
+      "Healing Enhancement", "Immortal Veil", "Heal Block", "Prayer of Concentration", "Earth's Grace",
+      "Survival Willpower", "Radiant Benediction"
+    ]);
+
+    const healerBoards = {
+      Nezekan: {
+        points: 42,
+        clicks: [
+          ["Defense Bonus +30", 1, "1 down"], ["Critical Hit +5", 1, "1 down 1 left"], ["Healing Enhancement +1", 2, "1 down 2 left"],
+          ["HP +100", 1, "1 down 3 left"], ["Defense Bonus +30", 1, "2 down 3 left"], ["Healing Light +1", 3, "3 down 3 left"],
+          ["Attack Bonus +3", 1, "1 up"], ["Critical Hit Resist +5", 1, "1 up 1 right"], ["Defense Bonus +30", 1, "2 up 1 right"],
+          ["HP +100", 1, "3 up 1 right"], ["MP +50", 1, "4 up 1 right"], ["Radiant Recovery +1", 3, "5 up 1 right"],
+          ["Immortal Veil +1", 2, "1 up 2 right"], ["MP +50", 1, "1 up 3 right"], ["Attack Bonus +3", 1, "2 up 3 right"],
+          ["Condemnation +1", 3, "3 up 3 right"], ["HP +100", 1, "3 up 4 right"], ["Healing Enhancement +1", 2, "3 up 5 right"],
+          ["HP +100", 1, "1 down 1 right"], ["Critical Hit +5", 1, "2 down 1 right"], ["Critical Hit Resist +5", 1, "3 down 1 right"],
+          ["Attack Bonus +3", 1, "4 down 1 right"], ["Warm Benediction +1", 2, "5 down 1 right"], ["HP +100", 1, "4 down 2 right"],
+          ["Light of Regeneration +1", 3, "4 down 3 right"], ["MP +50", 1, "4 up 5 right"], ["Cooldown Reduction +1.5%", 4, "5 up 5 right"]
+        ]
+      },
+      Zikel: {
+        points: 36,
+        clicks: [
+          ["Attack Bonus +3", 1, "1 right"], ["Critical Hit Resist +5", 1, "1 down 1 right"], ["Radiant Benediction +1", 2, "2 down 1 right"],
+          ["Defense Bonus +30", 1, "3 down 1 right"], ["HP +100", 1, "3 down"], ["Healing Light +1", 3, "3 down 1 left"],
+          ["Critical Hit +5", 1, "2 down 2 right"], ["HP +100", 1, "2 down 3 right"], ["Radiant Recovery +1", 3, "1 down 3 right"],
+          ["MP +50", 1, "1 up 1 right"], ["Prayer of Concentration +1", 2, "1 up 2 right"], ["Attack Bonus +3", 1, "3 down 3 right"],
+          ["MP +50", 1, "3 down 4 right"], ["Light of Regeneration +1", 3, "3 down 5 right"], ["Critical Hit +5", 1, "3 down 2 left"],
+          ["HP +100", 1, "3 down 3 left"], ["Prayer of Concentration +1", 2, "3 down 4 left"], ["Defense Bonus +30", 1, "4 down 5 right"],
+          ["Damage Tolerance +1.5%", 4, "5 down 5 right"], ["Defense Bonus +30", 1, "3 down 5 left"], ["Critical Hit +5", 1, "2 down 5 left"],
+          ["Condemnation +1", 3, "1 down 5 left"]
+        ]
+      },
+      Vaizel: {
+        points: 28,
+        clicks: [
+          ["Attack Bonus +3", 1, "1 up"], ["Critical Hit Resist +5", 1, "1 up 1 right"], ["Defense Bonus +30", 1, "1 up 2 right"],
+          ["HP +100", 1, "2 right"], ["Radiant Benediction +1", 2, "1 down 2 right"], ["Attack Bonus +3", 1, "1 down 3 right"],
+          ["HP +100", 1, "1 down 4 right"], ["Critical Hit +5", 1, "2 down 4 right"], ["Healing Light +1", 3, "3 down 4 right"],
+          ["Earth's Grace +1", 2, "2 up 1 right"], ["MP +50", 1, "3 up 1 right"], ["Critical Hit +5", 1, "3 up"],
+          ["Radiant Recovery +1", 3, "3 up 1 left"], ["HP +100", 1, "3 up 2 right"], ["Condemnation +1", 3, "3 up 3 right"],
+          ["MP +50", 1, "4 up 1 left"], ["Critical Hit +5", 1, "4 up 2 left"], ["Attack Bonus +3", 1, "4 up 3 left"],
+          ["Warm Benediction +1", 2, "5 up 3 left"]
+        ]
+      },
+      Triniel: {
+        points: 43,
+        clicks: [
+          ["Attack Bonus +3", 1, "1 down"], ["HP +100", 1, "1 down 1 right"], ["Chain of Torment +1", 3, "1 down 2 right"],
+          ["Attack Bonus +3", 1, "2 right"], ["MP +50", 1, "1 up 2 right"], ["HP +100", 1, "2 up 2 right"],
+          ["Healing Light +1", 3, "3 up 2 right"], ["Critical Hit +5", 1, "3 up 3 right"], ["HP +100", 1, "3 up 4 right"],
+          ["MP +50", 1, "3 up 5 right"], ["Healing Enhancement +1", 2, "3 up 6 right"], ["Critical Hit +5", 1, "1 down 1 left"],
+          ["HP +100", 1, "1 down 2 left"], ["Critical Hit Resist +5", 1, "1 down 3 left"], ["Immortal Veil +1", 2, "1 down 4 left"],
+          ["Attack Bonus +3", 1, "1 down 5 left"], ["HP +100", 1, "1 down 6 left"], ["Radiant Recovery +1", 3, "6 left"],
+          ["Defense Bonus +30", 1, "2 left"], ["Condemnation +1", 3, "1 up 2 left"], ["MP +50", 1, "2 down 2 left"],
+          ["Light of Regeneration +1", 3, "3 down 2 left"], ["Defense Bonus +30", 1, "1 down 3 right"], ["MP +50", 1, "1 down 4 right"],
+          ["Attack Bonus +3", 1, "2 down 4 right"], ["HP +100", 1, "3 down 4 right"], ["Warm Benediction +1", 2, "3 down 3 right"],
+          ["Attack Bonus +3", 1, "4 right"], ["Prayer of Concentration +1", 2, "1 up 4 right"]
+        ]
+      }
+    };
+
+    const damageBoards = {
+      Nezekan: "Attack +3; MP +50; HP +100; Judgment Thunder; Attack +3; HP +100; Defense +30; HP +100; Chain of Torment; Defense +30; HP +100; MP +50; Attack +3; Immortal Veil; MP +50; Attack +3; Condemnation; Earth's Retribution; Crit Resist +5; Empyrean Lord's Grace; Crit +5; Cooldown Reduction +1.5%; Crit Resist +5; Attack +3; Combat Speed +1.5%; Crit +5; Attack +3; MP +50; Divine Aura; HP +100; Bolt; Attack +3; Crit +5; Empyrean Lord's Grace; Crit Resist +5; Cooldown Reduction +1.5%.",
+      Zikel: "Defense +30; Crit +5; Earth's Grace; Crit Resist +5; MP +50; Divine Aura; HP +100; Attack +3; Defense +30; Condemnation; Crit +5; Defense +30; Crit Resist +5; Damage Boost +1.5%; Attack +3; Chain of Torment; Attack +3; MP +50; Debilitating Mark; Crit Resist +5; MP +50; Attack +3; Bolt; Defense +30; Damage Boost +1.5%; Crit +5; Attack +3; Crit Resist +5; Judgment Thunder.",
+      Vaizel: "Attack +3; Crit Resist +5; Defense +30; Chain of Torment; HP +100; Crit Resist +5; Attack +3; Condemnation; Earth's Grace; Defense +30; Crit +5; Attack +3; Bolt; MP +50; Crit +5; Defense +30; Judgment Thunder; Crit +5; Earth's Retribution.",
+      Triniel: "Defense +30; MP +50; Condemnation; Attack +3; HP +100; Chain of Torment; Attack +3."
+    };
+
+    const pvpBoards = {
+      Nezekan: "Attack +3; Crit Resist +5; Immortal Veil; MP +50; Attack +3; Condemnation; Crit Resist +5; Empyrean Lord's Grace; HP +100; Healing Enhancement; Defense +30; Crit +5; Healing Enhancement; HP +100; Crit Resist +5; Crit +5; Defiance; Attack +3; Immortal Veil; Defense +30; Healing Light; Crit +5; Empyrean Lord's Grace; Attack +3; HP +100; Bolt; Crit +5; Warm Benediction.",
+      Zikel: "Defense +30; HP +100; Survival Willpower; Crit Resist +5; Healing Light; Attack +3; MP +50; Prayer of Concentration; HP +100; Crit +5; MP +50; Survival Willpower; HP +100; Defense +30; MP +50; Defiance; Crit +5; HP +100; Crit Resist +5; Damage Tolerance +1.5%.",
+      Vaizel: "Attack +3; HP +100; Survival Willpower; Defense +30; MP +50; Crit Resist +5; Divine Aura; HP +100; Crit +5; Defiance; Defense +30; Healing Enhancement; Crit Resist +5; Defense +30; Chain of Torment; HP +100; Crit Resist +5; Attack +3; Condemnation; Defense +30; Crit Resist +5; Empyrean Lord's Grace; Immortal Veil; HP +100; Critical Damage Tolerance +1.5%.",
+      Triniel: "Attack +3; HP +100; Chain of Torment; Crit Resist +5; Crit +5; Warm Benediction; HP +100; Crit +5; Defiance; Defense +30; Attack +3; Survival Willpower; Crit +5; HP +100; Defense +30; Condemnation; Crit Resist +5; Immortal Veil; Attack +3; Crit +5; HP +100; Empyrean Lord's Grace; HP +100; Radiant Recovery."
+    };
+
+    const azphelClicks = "HP +100; PvP Attack +3; Status Effect Resist +1%; MP +50; PvP Attack +3; Status Effect Resist +1%; PvP Accuracy +5; PvP Attack +3, PvP Defense +30; PvP Crit Resist +5; PvP Evasion +3; PvP Defense +30; HP +100; PvP Evasion +3; PvP Damage Tolerance +1.5%; PvP Evasion +3; PvP Defense +30; Status Effect Resist +1%; PvP Crit Resist +5; PvP Accuracy +5, PvP Evasion +3; PvP Defense +30; PvP Crit Resist +5; Status Effect Resist +1%; PvP Attack +3; PvP Damage Boost +1.5%.";
+
+    const builds = {
+      healer149: {
+        label: "PvE healer",
+        nav: "Healer 149",
+        budget: "149",
+        title: "149-point PvE healer",
+        description: "The healing route prioritizes Healing Light and Radiant Recovery, then builds the defensive spine around the four stat boards.",
+        value: "299.8",
+        signature: "Healing Light 14",
+        distribution: { Nezekan: 42, Zikel: 36, Vaizel: 28, Triniel: 43 },
+        stats: [["Attack bonus", "+39"], ["Critical hit", "+50"], ["Critical hit resist", "+25"], ["Defense bonus", "+270"], ["HP", "+1700"], ["MP", "+550"], ["Cooldown reduction", "+1.5%"], ["Damage tolerance", "+1.5%"]],
+        skills: [["Chain of Torment", "11 +1"], ["Light of Regeneration", "13 +3"], ["Condemnation", "14 +4"], ["Healing Light", "14 +4"], ["Radiant Recovery", "14 +4"], ["Warm Benediction", "13 +3"], ["Healing Enhancement", "13 +3"], ["Immortal Veil", "12 +2"], ["Prayer of Concentration", "13 +3"], ["Earth's Grace", "11 +1"], ["Radiant Benediction", "12 +2"]],
+        boards: healerBoards,
+        detailTitle: "Healer route",
+        detailDescription: "Gold numbers preserve source click order. Select a node or scrub the route to inspect the next purchase.",
+        foot: "149 points spent · 4 boards · 97 total clicks"
+      },
+      damage149: {
+        label: "PvE damage",
+        nav: "Damage 149",
+        budget: "149",
+        title: "149-point PvE damage",
+        description: "Damage trades the early heal route for Chain of Torment, Condemnation, and the offensive corners that reward a longer fight.",
+        value: "263.5",
+        signature: "Chain of Torment 14",
+        distribution: { Nezekan: 60, Zikel: 48, Vaizel: 30, Triniel: 11 },
+        stats: [["Attack bonus", "+51"], ["Critical hit", "+45"], ["Critical hit resist", "+45"], ["Defense bonus", "+300"], ["HP", "+800"], ["MP", "+450"], ["Combat speed", "+1.5%"], ["Cooldown reduction", "+3%"], ["Damage boost", "+3%"]],
+        skills: [["Earth's Retribution", "12 +2"], ["Judgment Thunder", "13 +3"], ["Debilitating Mark", "11 +1"], ["Divine Aura", "12 +2"], ["Chain of Torment", "14 +4"], ["Condemnation", "14 +4"], ["Bolt", "13 +3"], ["Empyrean Lord's Grace", "12 +2"], ["Immortal Veil", "11 +1"], ["Earth's Grace", "12 +2"]],
+        boards: Object.fromEntries(Object.entries(damageBoards).map(([name, sequence]) => [name, { points: { Nezekan: 60, Zikel: 48, Vaizel: 30, Triniel: 11 }[name], clicks: parseSequence(sequence) }])),
+        detailTitle: "Damage route",
+        detailDescription: "The source gives these boards as ordered click lists. The atlas turns each list into a navigable route.",
+        foot: "149 points spent · Chain of Torment and Condemnation reach 14"
+      },
+      pvp149: {
+        label: "PvP",
+        nav: "PvP 149",
+        budget: "149",
+        title: "149-point PvP page",
+        description: "The PvP route shifts value into Defiance, Empyrean Lord's Grace, Immortal Veil, and Survival Willpower.",
+        value: "280.9",
+        signature: "Defiance 14",
+        distribution: { Nezekan: 43, Zikel: 30, Vaizel: 40, Triniel: 36 },
+        stats: [["Attack bonus", "+30"], ["Critical hit", "+55"], ["Critical hit resist", "+55"], ["Defense bonus", "+300"], ["HP", "+1600"], ["MP", "+250"], ["Damage tolerance", "+1.5%"], ["Critical damage tolerance", "+1.5%"]],
+        skills: [["Divine Aura", "11 +1"], ["Chain of Torment", "12 +2"], ["Condemnation", "13 +3"], ["Healing Light", "12 +2"], ["Radiant Recovery", "11 +1"], ["Bolt", "11 +1"], ["Defiance", "14 +4"], ["Warm Benediction", "12 +2"], ["Empyrean Lord's Grace", "14 +4"], ["Healing Enhancement", "13 +3"], ["Immortal Veil", "14 +4"], ["Prayer of Concentration", "11 +1"], ["Survival Willpower", "14 +4"]],
+        boards: Object.fromEntries(Object.entries(pvpBoards).map(([name, sequence]) => [name, { points: { Nezekan: 43, Zikel: 30, Vaizel: 40, Triniel: 36 }[name], clicks: parseSequence(sequence) }])),
+        detailTitle: "PvP route",
+        detailDescription: "The survival path is still a board route. Scrub each board to see where the defensive value enters.",
+        foot: "149 points spent · 13 skill priorities"
+      },
+      azphel40: {
+        label: "Azphel sample",
+        nav: "Azphel 40",
+        budget: "40",
+        title: "Azphel at 40 points",
+        description: "Azphel spends its own crystals on PvP stats. This sample route includes no skill nodes and is independent of the four stat boards.",
+        value: "40.2",
+        signature: "PvP stats",
+        distribution: { Azphel: 40 },
+        stats: [["HP", "+200"], ["MP", "+50"], ["PvP attack", "+12"], ["PvP defense", "+120"], ["Status resist", "+4%"], ["PvP tolerance", "+1.5%"]],
+        skills: [["Skill nodes", "none"], ["PvP attack", "+12"], ["PvP defense", "+120"], ["PvP accuracy", "+10"], ["PvP evasion", "+12"], ["Status effect resist", "+4%"], ["PvP damage boost", "+1.5%"], ["PvP damage tolerance", "+1.5%"]],
+        boards: { Azphel: { points: 40, clicks: parseSequence(azphelClicks) } },
+        detailTitle: "Azphel route",
+        detailDescription: "A separate PvP crystal pool. The route is rendered as a constellation so the stat sequence can be read without a raw table.",
+        foot: "40 sample points · 24 clicks · no skill nodes"
+      },
+      full316: {
+        label: "Full Season 1",
+        nav: "Full 316",
+        budget: "316",
+        title: "Full Season 1 budget",
+        description: "At 316 points, every priority skill reaches 14 in the healer, damage, and PvP profiles where the source lists a full run.",
+        value: "533.7",
+        signature: "All priority skills",
+        distribution: { Nezekan: 87, Zikel: 88, Vaizel: 73, Triniel: 68 },
+        stats: [["Attack bonus", "+120"], ["Critical hit", "+60"], ["Critical hit resist", "+95"], ["Defense bonus", "+750"], ["HP", "+3900"], ["MP", "+700"], ["Combat speed", "+3%"], ["Cooldown reduction", "+3%"], ["Damage boost", "+3%"], ["Damage tolerance", "+3%"]],
+        profiles: [
+          { name: "PvE healer", value: "503.5", distribution: { Nezekan: 87, Zikel: 88, Vaizel: 73, Triniel: 68 }, note: "Healing Light, Radiant Recovery, and the defensive corners reach their full route.", stats: "Attack +120 · Crit +60 · Defense +750 · HP +3900 · MP +700" },
+          { name: "PvE damage", value: "431.1", distribution: { Nezekan: 79, Zikel: 68, Vaizel: 76, Triniel: 93 }, note: "Attack and critical scaling replace the early heal-heavy path.", stats: "Attack +126 · Crit +175 · Defense +570 · HP +2000 · MP +1050" },
+          { name: "PvP", value: "533.7", distribution: { Nezekan: 94, Zikel: 84, Vaizel: 71, Triniel: 67 }, note: "Defiance, Immortal Veil, and Survival Willpower dominate the finished profile.", stats: "Attack +66 · Crit +115 · Defense +330 · HP +2400 · MP +900" },
+          { name: "Azphel 100", value: "97.4", distribution: { Azphel: 100 }, note: "A separate PvP-stat pool with no skill nodes.", stats: "HP +400 · MP +150 · PvP Attack +21 · PvP Defense +210 · Resist +8%" }
+        ],
+        fullSkills: [
+          ["Earth's Retribution", "11", "14", "14"], ["Judgment Thunder", "13", "14", "14"], ["Debilitating Mark", "11", "14", "12"], ["Divine Aura", "0", "14", "14"],
+          ["Chain of Torment", "14", "14", "14"], ["Light of Regeneration", "14", "12", "0"], ["Condemnation", "14", "14", "14"], ["Healing Light", "14", "12", "13"],
+          ["Radiant Recovery", "14", "12", "14"], ["Warm Benediction", "14", "0", "14"], ["Empyrean Lord's Grace", "14", "14", "14"], ["Healing Enhancement", "14", "0", "14"],
+          ["Immortal Veil", "14", "0", "14"], ["Prayer of Concentration", "14", "0", "14"], ["Earth's Grace", "14", "14", "13"], ["Survival Willpower", "12", "0", "14"]
+        ],
+        detailTitle: "Full budget profiles",
+        detailDescription: "The source publishes full 316-point summaries rather than click-by-click routes. Compare their board splits and skill caps here.",
+        foot: "316 points spent · same weights and method as the 149-point pages"
+      }
+    };
+
+    const boardOverview = [
+      ["Nezekan", "12", "66 stat, 22 skill, start", "134", "2 Combat Speed, 2 Cooldown Reduction", "Daevanion Crystal"],
+      ["Zikel", "20", "66 stat, 22 skill, start", "134", "2 Damage Boost, 2 Damage Tolerance", "Daevanion Crystal"],
+      ["Vaizel", "30", "66 stat, 22 skill, start", "134", "2 Critical Damage Boost, 2 Critical Damage Tolerance", "Daevanion Crystal"],
+      ["Triniel", "40", "94 stat, 22 skill, start", "168", "3 Multi-Hit Chance, 3 Multi-Hit Resist", "Daevanion Crystal"],
+      ["Azphel", "45", "152 stat, start", "232", "4 PvP Damage Boost, 4 PvP Damage Tolerance", "Azphel crystals"]
+    ];
+    const skillPositions = [
+      ["Earth's Retribution", "active", "1 down 3 right", "3 up 5 left", "5 right", "5 down 4 right"],
+      ["Judgment Thunder", "active", "1 up 3 left", "1 up 5 right", "3 down 3 left", "5 up 4 right"],
+      ["Debilitating Mark", "active", "3 up", "3 up 1 right", "3 up 4 left", "5 down 4 left"],
+      ["Divine Aura", "active", "3 down", "1 up 3 left", "3 down 1 right", "5 up 4 left"],
+      ["Chain of Torment", "active", "4 up 3 left", "5 down 3 left", "1 up 3 right", "1 down 2 right"],
+      ["Lightning Strike Scattershot", "active", "5 right", "5 up 1 left", "5 up", "3 up 6 left"],
+      ["Light of Regeneration", "active", "4 down 3 right", "3 down 5 right", "5 left", "3 down 2 left"],
+      ["Condemnation", "active", "3 up 3 right", "1 down 5 left", "3 up 3 right", "1 up 2 left"],
+      ["Healing Light", "active", "3 down 3 left", "3 down 1 left", "3 down 4 right", "3 up 2 right"],
+      ["Radiant Recovery", "active", "5 up 1 right", "1 down 3 right", "3 up 1 left", "6 left"],
+      ["Bolt", "active", "5 down 1 left", "5 up 3 right", "1 down 3 left", "6 right"],
+      ["Defiance", "active", "5 left", "5 down 1 right", "5 down", "3 down 6 right"],
+      ["Warm Benediction", "passive", "3 up 5 left; 5 down 1 right", "none", "5 up 3 left", "3 down 3 right"],
+      ["Empyrean Lords' Benediction", "passive", "5 up 1 left; 3 down 5 right", "none", "5 down 3 right", "3 up 3 left"],
+      ["Empyrean Lord's Grace", "passive", "5 up 3 right; 5 down 3 left", "none", "5 up 2 right", "3 down 6 left"],
+      ["Healing Enhancement", "passive", "3 up 5 right; 1 down 2 left", "none", "5 down 2 left", "3 up 6 right"],
+      ["Immortal Veil", "passive", "1 up 2 right; 3 down 5 left", "none", "3 up 5 right", "1 down 4 left"]
+    ];
+    const skillWeights = [
+      ["Earth's Retribution", "2", "5", "6"], ["Judgment Thunder", "2", "9", "3"], ["Debilitating Mark", "2", "3", "4"], ["Divine Aura", "1.5", "6", "6"],
+      ["Chain of Torment", "4", "12", "6"], ["Lightning Strike Scattershot", "0.5", "2", "1"], ["Light of Regeneration", "7", "1", "2"], ["Condemnation", "7", "14", "8"],
+      ["Healing Light", "12", "2", "6"], ["Radiant Recovery", "12", "2", "6"], ["Bolt", "1.5", "6", "6"], ["Defiance", "1", "0.5", "9"],
+      ["Warm Benediction", "7", "1", "6"], ["Empyrean Lords' Benediction", "1", "0.5", "3"], ["Empyrean Lord's Grace", "2", "4", "6"], ["Healing Enhancement", "9", "1", "6"],
+      ["Immortal Veil", "3", "0.5", "5"], ["Heal Block", "0", "0", "3"], ["Prayer of Concentration", "5", "0.5", "4"], ["Earth's Grace", "3", "4", "3"],
+      ["Survival Willpower", "1.5", "0.5", "9"], ["Radiant Benediction", "6", "1", "1"]
+    ];
+    const statWeights = [
+      ["Attack Bonus +3", "1.2", "1.2", "0.8"], ["Critical Hit +5", "0.3", "0.8", "0.7"], ["Critical Hit Resist +5", "0.5", "0.3", "1.2"],
+      ["Defense Bonus +30", "0.6", "0.3", "0.2"], ["HP +100", "1.2", "0.5", "1"], ["MP +50", "0.4", "0.3", "0.2"],
+      ["Combat Speed +1.5%", "7.5", "7", "8"], ["Cooldown Reduction +1.5%", "8", "6.5", "5"], ["Damage Boost +1.5%", "4", "6.5", "5"],
+      ["Damage Tolerance +1.5%", "7.5", "3", "9"], ["Critical Damage Boost +1.5%", "1.5", "5", "3"], ["Critical Damage Tolerance +1.5%", "3", "1.5", "8"],
+      ["Multi-Hit Chance +1.5%", "1.5", "4.5", "2"], ["Multi-Hit Resist +1.5%", "2.5", "1", "4"], ["PvP Attack +3", "0", "0", "0.8"],
+      ["PvP Defense +30", "0", "0", "0.6"], ["PvP Critical Hit +5", "0", "0", "0.6"], ["PvP Critical Hit Resist +5", "0", "0", "0.8"],
+      ["PvP Accuracy +5", "0", "0", "0.5"], ["PvP Evasion +3", "0", "0", "0.5"], ["Status Effect Chance +1%", "0", "0", "2"],
+      ["Status Effect Resist +1%", "0", "0", "4"], ["PvP Damage Boost +1.5%", "0", "0", "5"], ["PvP Damage Tolerance +1.5%", "0", "0", "6"]
+    ];
+
+    let activeBuildId = "healer149";
+    let activeBoardName = "Nezekan";
+    let activeStep = 0;
+    let referenceTab = "boards";
+
+    function parseSequence(sequence) {
+      return sequence.split("; ").map((name, index) => [name, inferCost(name), ""]);
+    }
+
+    function inferCost(name) {
+      if (name.includes("+1.5%")) return 4;
+      if (activeNames.has(name)) return 3;
+      if (passiveNames.has(name)) return 2;
+      return 1;
+    }
+
+    function totalPoints(clicks) {
+      return clicks.reduce((sum, click) => sum + Number(click[1] || 1), 0);
+    }
+
+    function makeStats(stats) {
+      return stats.map(([label, value]) => `<div class="stat-item"><span>${label}</span><strong>${value}</strong></div>`).join("");
+    }
+
+    function makeSkills(skills) {
+      return skills.map(([name, value]) => `<div class="skill-line"><span>${name}</span><span>${value}</span></div>`).join("");
+    }
+
+    function makeBars(distribution, max = 100) {
+      return Object.entries(distribution).map(([name, points]) => `<div class="bar-row"><span>${name}</span><div class="bar-track"><div class="bar-fill" style="width:${Math.min(100, points / max * 100)}%"></div></div><strong>${points}</strong></div>`).join("");
+    }
+
+    function routePositions(clicks) {
+      const exact = clicks.some(click => click[2]);
+      if (!exact) {
+        const positions = [];
+        const ring = [[-3,-2],[-2,-3],[-1,-3],[0,-3],[1,-3],[2,-3],[3,-2],[3,-1],[3,0],[3,1],[3,2],[2,3],[1,3],[0,3],[-1,3],[-2,3],[-3,2],[-3,1],[-3,0],[-3,-1],[-2,-2],[-1,-2],[0,-2],[1,-2],[2,-2],[2,-1],[2,0],[2,1],[2,2],[1,2],[0,2],[-1,2],[-2,2],[-2,1],[-2,0],[-2,-1],[-1,-1],[0,-1],[1,-1],[1,0],[1,1],[0,1],[-1,1],[-1,0],[0,0]];
+        clicks.forEach((_, index) => positions.push(ring[index % ring.length] || [0, 0]));
+        return { positions, start: [0, 0] };
+      }
+      const positions = clicks.map(click => {
+        const phrase = click[2] || "";
+        const result = [0, 0];
+        phrase.split(/\s+/).forEach((part, index, all) => {
+          if (/^\d+$/.test(part) && all[index + 1]) {
+            const amount = Number(part);
+            const direction = all[index + 1];
+            if (direction === "up") result[1] -= amount;
+            if (direction === "down") result[1] += amount;
+            if (direction === "left") result[0] -= amount;
+            if (direction === "right") result[0] += amount;
+          }
+        });
+        return result;
+      });
+      return { positions, start: [0, 0] };
+    }
+
+    function mapDimensions(positions) {
+      const all = positions.concat([[0,0]]);
+      const xs = all.map(point => point[0]);
+      const ys = all.map(point => point[1]);
+      const minX = Math.min(...xs), maxX = Math.max(...xs), minY = Math.min(...ys), maxY = Math.max(...ys);
+      return { minX, maxX, minY, maxY, cols: maxX - minX + 1, rows: maxY - minY + 1 };
+    }
+
+    function boardMapHtml(board) {
+      const clicks = board.clicks;
+      const { positions, start } = routePositions(clicks);
+      const dimensions = mapDimensions(positions);
+      const selected = Math.min(activeStep, clicks.length - 1);
+      const nodeByKey = new Map(positions.map((pos, index) => [`${pos[0]},${pos[1]}`, index]));
+      const cellHtml = [];
+      for (let y = dimensions.minY; y <= dimensions.maxY; y++) {
+        for (let x = dimensions.minX; x <= dimensions.maxX; x++) {
+          const key = `${x},${y}`;
+          const nodeIndex = nodeByKey.get(key);
+          const isStart = x === start[0] && y === start[1];
+          if (nodeIndex !== undefined) {
+            cellHtml.push(`<div class="map-cell"><button class="map-node ${nodeIndex === selected ? "is-selected" : ""}" data-node-index="${nodeIndex}" title="${escapeHtml(clicks[nodeIndex][0])}">${nodeIndex + 1}</button></div>`);
+          } else if (isStart) {
+            cellHtml.push(`<div class="map-cell"><div class="map-node map-start" title="Free center node"></div></div>`);
+          } else {
+            cellHtml.push(`<div class="map-cell is-empty"></div>`);
+          }
+        }
+      }
+      const points = positions.map(([x, y]) => {
+        const px = ((x - dimensions.minX) + .5) / dimensions.cols * 100;
+        const py = ((y - dimensions.minY) + .5) / dimensions.rows * 100;
+        return `${px},${py}`;
+      }).join(" ");
+      const selectedPoints = positions.slice(0, selected + 1).map(([x, y]) => {
+        const px = ((x - dimensions.minX) + .5) / dimensions.cols * 100;
+        const py = ((y - dimensions.minY) + .5) / dimensions.rows * 100;
+        return `${px},${py}`;
+      }).join(" ");
+      return `<div class="board-map" style="grid-template-columns:repeat(${dimensions.cols},1fr);grid-template-rows:repeat(${dimensions.rows},1fr)"><svg class="map-wire" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><polyline points="${points}"></polyline><polyline class="is-selected" points="${selectedPoints}"></polyline></svg>${cellHtml.join("")}</div>`;
+    }
+
+    function escapeHtml(value) {
+      return String(value).replace(/[&<>"']/g, char => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;", "'":"&#39;"}[char]));
+    }
+
+    function renderBuildList() {
+      const list = document.getElementById("buildList");
+      const items = Object.entries(builds).map(([id, build], index) => `<button class="build-button ${id === activeBuildId ? "is-active" : ""}" data-build-id="${id}"><span class="build-index">0${index + 1}</span><span class="build-name">${build.nav}</span><span class="build-budget">${build.budget}</span></button>`);
+      items.push(`<button class="build-button ${activeBuildId === "reference" ? "is-active" : ""}" data-build-id="reference"><span class="build-index">06</span><span class="build-name">Reference</span><span class="build-budget">data</span></button>`);
+      list.innerHTML = items.join("");
+      list.querySelectorAll("[data-build-id]").forEach(button => button.addEventListener("click", () => {
+        activeBuildId = button.dataset.buildId;
+        activeBoardName = activeBuildId === "reference" ? "Nezekan" : Object.keys(builds[activeBuildId].boards || {})[0];
+        activeStep = 0;
+        render();
+      }));
+    }
+
+    function renderMetricStrip(build) {
+      const metrics = build === "reference" ? [["Tables", "3"], ["Boards", "5"], ["Skills", "22"], ["Weights", "2"]] : [["Budget", build.budget], ["Route value", build.value], ["Signature", build.signature], ["Boards", Object.keys(build.distribution).length]];
+      document.getElementById("metricStrip").innerHTML = metrics.map(([label, value]) => `<div class="metric"><span class="metric-label">${label}</span><strong class="metric-value">${value}</strong></div>`).join("");
+    }
+
+    function renderRouteView(build) {
+      const boardNames = Object.keys(build.boards);
+      if (!boardNames.includes(activeBoardName)) activeBoardName = boardNames[0];
+      const board = build.boards[activeBoardName];
+      const selectedIndex = Math.min(activeStep, board.clicks.length - 1);
+      activeStep = selectedIndex;
+      document.getElementById("visualTitle").textContent = activeBoardName;
+      document.getElementById("visualMeta").textContent = `${board.points || totalPoints(board.clicks)} points · ${board.clicks.length} clicks`;
+      document.getElementById("visualBody").innerHTML = `<div class="board-stage"><div class="board-legend"><span>Gold</span> click order · <span>Blue</span> free center</div>${boardMapHtml(board)}</div><div class="sequence-strip"><div class="sequence-selected"><strong>${escapeHtml(board.clicks[selectedIndex][0])}</strong><small>Step ${selectedIndex + 1} of ${board.clicks.length} · ${board.clicks[selectedIndex][2] || "sequence order"}</small></div><div class="sequence-control"><input class="sequence-range" id="sequenceRange" type="range" min="0" max="${board.clicks.length - 1}" value="${selectedIndex}" aria-label="Click order"><div class="sequence-ticks"><span>start</span><span>mid-route</span><span>finish</span></div></div></div>`;
+      const range = document.getElementById("sequenceRange");
+      range.addEventListener("input", event => { activeStep = Number(event.target.value); renderRouteView(build); renderDetail(build); });
+      document.querySelectorAll("[data-node-index]").forEach(node => node.addEventListener("click", () => { activeStep = Number(node.dataset.nodeIndex); renderRouteView(build); renderDetail(build); }));
+    }
+
+    function renderTabs(build) {
+      const tabs = Object.keys(build.boards).map(name => `<button class="board-tab ${name === activeBoardName ? "is-active" : ""}" data-board-name="${name}">${name}</button>`);
+      document.getElementById("boardTabs").innerHTML = tabs.join("");
+      document.querySelectorAll("[data-board-name]").forEach(button => button.addEventListener("click", () => { activeBoardName = button.dataset.boardName; activeStep = 0; renderRouteView(build); renderDetail(build); renderTabs(build); }));
+    }
+
+    function renderDetail(build) {
+      const board = build.boards[activeBoardName];
+      const selected = board ? board.clicks[Math.min(activeStep, board.clicks.length - 1)] : null;
+      document.getElementById("detailTitle").textContent = build.detailTitle;
+      document.getElementById("detailDescription").textContent = build.detailDescription;
+      document.getElementById("detailBody").innerHTML = `<div class="detail-scroll"><div class="detail-section"><h4>At the selected step</h4><div class="stat-grid">${selected ? `<div class="stat-item"><span>Node</span><strong>${selected[0]}</strong></div><div class="stat-item"><span>Cost</span><strong>${selected[1] || "1"}</strong></div><div class="stat-item"><span>Points so far</span><strong>${totalPoints(board.clicks.slice(0, activeStep + 1))}</strong></div>` : `<div class="stat-item"><span>Profile</span><strong>Full budget</strong></div><div class="stat-item"><span>Boards</span><strong>4</strong></div><div class="stat-item"><span>Route</span><strong>Summary</strong></div>`}</div></div><div class="detail-section"><h4>Skill levels</h4><div class="skill-lines">${makeSkills(build.skills || [])}</div></div><div class="detail-section"><h4>Board allocation</h4><div class="board-bars">${makeBars(build.distribution, Math.max(...Object.values(build.distribution)))}</div></div><div class="detail-section"><h4>Stat totals</h4><div class="stat-grid">${makeStats(build.stats || [])}</div></div></div>`;
+      document.getElementById("detailFoot").innerHTML = `<span>${build.foot}</span><strong>${activeBoardName}${selected ? ` · step ${activeStep + 1}` : ""}</strong>`;
+    }
+
+    function renderFullView(build) {
+      document.getElementById("visualTitle").textContent = "316-point profiles";
+      document.getElementById("visualMeta").textContent = "3 full-budget summaries";
+      document.getElementById("visualBody").innerHTML = `<div class="full-grid" style="padding:16px"><div class="profile-list">${build.profiles.map(profile => `<div class="profile-row"><h4>${profile.name}<span>${profile.value}</span></h4><p>${profile.note}</p><p class="profile-stats">${profile.stats}</p><div class="board-bars">${makeBars(profile.distribution, 100)}</div></div>`).join("")}</div><div class="full-skills"><h4>Skill levels at 316</h4><div class="level-grid"><div class="head">Skill</div><div class="head">Healer</div><div class="head">Damage</div><div class="head">PvP</div><div class="head">Note</div>${build.fullSkills.map(row => `<div class="skill-name">${row[0]}</div><div class="level">${row[1]}</div><div class="level">${row[2]}</div><div class="level">${row[3]}</div><div class="level">${row[1] === "14" && row[2] === "14" && row[3] === "14" ? "full" : "profile"}</div>`).join("")}</div><p class="level-note">The source lists four profile families at 316 points, including the separate 100-point Azphel sample.</p></div></div>`;
+      document.getElementById("boardTabs").innerHTML = "";
+      document.getElementById("detailTitle").textContent = build.detailTitle;
+      document.getElementById("detailDescription").textContent = build.detailDescription;
+      document.getElementById("detailBody").innerHTML = `<div class="detail-scroll"><div class="detail-section"><h4>Full-budget stat snapshot</h4><div class="stat-grid">${makeStats(build.stats)}</div></div><div class="detail-section"><h4>Board allocation</h4><div class="board-bars">${makeBars(build.distribution, Math.max(...Object.values(build.distribution)))}</div></div><div class="detail-section"><h4>How to read it</h4><p style="margin:0;color:var(--muted);font-size:11px;line-height:1.5">Each profile uses the same value weights as the 149-point pages. The difference is where the budget can reach once the priority skills and corners are filled.</p></div></div>`;
+      document.getElementById("detailFoot").innerHTML = `<span>${build.foot}</span><strong>Summary view</strong>`;
+    }
+
+    function makeReferenceTable(headers, rows, kinds = []) {
+      return `<table class="ref-table"><thead><tr>${headers.map(head => `<th>${head}</th>`).join("")}</tr></thead><tbody>${rows.map(row => `<tr>${row.map((cell, index) => `<td class="${kinds[index] || ""}">${cell}</td>`).join("")}</tr>`).join("")}</tbody></table>`;
+    }
+
+    function renderReference() {
+      document.getElementById("overviewTitle").textContent = "Reference tables, visualized";
+      document.getElementById("overviewDescription").textContent = "The underlying board geometry and weights remain available here, translated into compact working tables for planning and comparison.";
+      document.getElementById("visualTitle").textContent = "Board reference";
+      document.getElementById("visualMeta").textContent = "5 boards · 22 skills · 24 stats";
+      document.getElementById("boardTabs").innerHTML = "";
+      document.getElementById("visualBody").innerHTML = `<div class="reference-view" style="padding:14px 16px"><div class="reference-tabs"><button class="reference-tab ${referenceTab === "boards" ? "is-active" : ""}" data-reference-tab="boards">Board anatomy</button><button class="reference-tab ${referenceTab === "skills" ? "is-active" : ""}" data-reference-tab="skills">Skill positions</button><button class="reference-tab ${referenceTab === "weights" ? "is-active" : ""}" data-reference-tab="weights">Weights</button></div><div class="reference-pane" id="referencePane"></div></div>`;
+      const pane = document.getElementById("referencePane");
+      if (referenceTab === "boards") pane.innerHTML = `<div class="ref-table-wrap">${makeReferenceTable(["Board", "Unlock", "Nodes", "Fill", "Corners", "Pool"], boardOverview, ["", "muted", "muted", "", "muted", "muted"])}</div>`;
+      if (referenceTab === "skills") pane.innerHTML = `<div class="ref-table-wrap">${makeReferenceTable(["Skill", "Kind", "Nezekan", "Zikel", "Vaizel", "Triniel"], skillPositions, ["", "kind", "muted", "muted", "muted", "muted"])}</div>`;
+      if (referenceTab === "weights") pane.innerHTML = `<div class="weight-grid"><div class="weight-panel"><h4>Skill value per level</h4>${makeReferenceTable(["Skill", "Healer", "Damage", "PvP"], skillWeights, ["", "", "", ""])}</div><div class="weight-panel"><h4>Stat value per node</h4>${makeReferenceTable(["Stat", "Healer", "Damage", "PvP"], statWeights, ["", "", "", ""])}</div></div>`;
+      document.querySelectorAll("[data-reference-tab]").forEach(button => button.addEventListener("click", () => { referenceTab = button.dataset.referenceTab; renderReference(); }));
+      document.getElementById("detailTitle").textContent = "Reference notes";
+      document.getElementById("detailDescription").textContent = "The source rules stay close to the data: adjacency is orthogonal, costs rise by node type, and weights set priority rather than measured output.";
+      document.getElementById("detailBody").innerHTML = `<div class="detail-scroll"><div class="detail-section"><h4>Board rules</h4><div class="skill-lines"><div class="skill-line"><span>Common node</span><span>1 point</span></div><div class="skill-line"><span>Passive skill</span><span>2 points</span></div><div class="skill-line"><span>Active skill</span><span>3 points</span></div><div class="skill-line"><span>Corner</span><span>4 points</span></div><div class="skill-line"><span>Adjacency</span><span>no diagonals</span></div><div class="skill-line"><span>Skill cap from boards</span><span>+4</span></div></div></div><div class="detail-section"><h4>Source method</h4><p style="margin:0;color:var(--muted);font-size:11px;line-height:1.5">Each board search covers connected node sets grown from the start. Shared pools then split the budget for the highest total value. A node at zero value may still be bought to connect the route.</p></div><div class="detail-section"><h4>Source page</h4><p style="margin:0;color:var(--muted);font-size:11px;line-height:1.5"><a style="color:var(--gold-bright)" href="${sourceUrl}" target="_blank" rel="noreferrer">Cleric Daevanion board build</a><br>Accessed for this visual transformation.</p></div></div>`;
+      document.getElementById("detailFoot").innerHTML = `<span>Reference layer</span><strong>${referenceTab}</strong>`;
+    }
+
+    function render() {
+      renderBuildList();
+      const isReference = activeBuildId === "reference";
+      renderMetricStrip(isReference ? "reference" : builds[activeBuildId]);
+      if (isReference) {
+        renderReference();
+        return;
+      }
+      const build = builds[activeBuildId];
+      document.getElementById("overviewTitle").textContent = build.title;
+      document.getElementById("overviewDescription").textContent = build.description;
+      if (activeBuildId === "full316") {
+        renderFullView(build);
+        return;
+      }
+      renderTabs(build);
+      renderRouteView(build);
+      renderDetail(build);
+    }
+
+    document.getElementById("motionToggle").addEventListener("change", event => document.documentElement.classList.toggle("reduced-motion", event.target.checked));
+    render();
+  </script>
+</body>
+</html>

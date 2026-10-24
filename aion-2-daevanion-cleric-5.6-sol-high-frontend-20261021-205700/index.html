@@ -1,0 +1,560 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+<title>Cleric Daevanion Visual Guide</title>
+<style>
+:root{
+  --black:#000000;
+  --ink:#f4f1e7;
+  --muted:#8c93a3;
+  --line:#252a34;
+  --blue:#7ad8ff;
+  --violet:#a88cff;
+  --gold:#d6b66a;
+  --rose:#d98ca6;
+  --aqua:#78e0cb;
+  --danger:#ff806c;
+  --panel:#07090d;
+  --panel2:#0c1017;
+  --shadow:0 22px 70px rgba(0,0,0,.62);
+  --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+  --sans:"Avenir Next","Segoe UI",Arial,sans-serif;
+  --cond:"Avenir Next Condensed","Arial Narrow","Roboto Condensed",Arial,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;height:100%;background:var(--black);color:var(--ink);overflow:hidden}
+body{font-family:var(--sans);text-rendering:optimizeLegibility}
+button,input,a{font:inherit}
+button{color:inherit}
+button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid var(--blue);outline-offset:3px}
+button{cursor:pointer}
+.app{height:100dvh;display:grid;grid-template-columns:148px minmax(0,1fr);background:
+radial-gradient(circle at 69% 44%,rgba(67,93,138,.13),transparent 34%),
+radial-gradient(circle at 34% 62%,rgba(111,70,148,.10),transparent 28%),#000}
+.nav{border-right:1px solid var(--line);padding:22px 15px 18px;display:flex;flex-direction:column;min-height:0}
+.brand{font-family:var(--serif);font-size:20px;line-height:1.05;margin:0 0 30px;letter-spacing:-.02em}
+.brand small{display:block;color:var(--muted);font:12px/1.2 var(--sans);margin-top:7px}
+.nav-list{display:grid;gap:2px}
+.nav-btn{appearance:none;background:transparent;border:0;border-left:1px solid transparent;text-align:left;padding:11px 9px;color:#767d8c;font-size:13px;transition:color .18s ease,border-color .18s ease,background .18s ease}
+.nav-btn.active{color:var(--ink);border-left-color:var(--gold);background:linear-gradient(90deg,rgba(214,182,106,.08),transparent)}
+.nav-foot{margin-top:auto;display:grid;gap:11px;color:#6f7581;font-size:11px;line-height:1.35}
+.source-link{color:#a6adba;text-decoration:none;border-bottom:1px solid #343945;width:max-content;max-width:100%}
+.motion-toggle{appearance:none;background:transparent;border:0;padding:0;color:#797f8c;text-align:left;font-size:11px}
+.main{min-width:0;min-height:0;position:relative;overflow:hidden}
+.view{position:absolute;inset:0;padding:22px 26px 24px;opacity:0;pointer-events:none;transform:translateX(14px);transition:opacity .22s ease,transform .22s ease}
+.view.active{opacity:1;pointer-events:auto;transform:none}
+.view-head{height:70px;display:flex;align-items:flex-start;justify-content:space-between;gap:20px}
+h1,h2,h3,p{margin:0}
+.view-title{font-family:var(--serif);font-weight:500;font-size:clamp(25px,3vw,42px);letter-spacing:-.035em;line-height:.98}
+.view-copy{max-width:560px;color:var(--muted);font-size:12px;line-height:1.55;margin-top:5px}
+.text-btn{appearance:none;border:0;border-bottom:1px solid #38404d;background:transparent;padding:4px 0;color:#a7afbc;font-size:12px}
+
+/* build explorer */
+.build-shell{height:calc(100% - 70px);display:grid;grid-template-rows:48px minmax(0,1fr);min-height:0}
+.build-tabs{display:flex;align-items:center;gap:25px;border-bottom:1px solid var(--line);min-width:0;overflow:hidden}
+.build-tab{appearance:none;background:transparent;border:0;border-bottom:2px solid transparent;height:48px;padding:0;color:#737b8a;white-space:nowrap;font-size:13px}
+.build-tab.active{color:var(--ink);border-bottom-color:var(--blue)}
+.build-stage{display:grid;grid-template-columns:minmax(0,1fr) 290px;min-height:0}
+.board-area{position:relative;min-width:0;min-height:0;display:grid;grid-template-rows:54px minmax(0,1fr) 92px}
+.board-switch{display:flex;align-items:center;justify-content:center;gap:18px}
+.board-btn{appearance:none;background:transparent;border:0;padding:6px 0;border-bottom:1px solid transparent;color:#676f7e;font-family:var(--serif);font-size:15px}
+.board-btn.active{color:var(--ink);border-bottom-color:var(--gold)}
+.constellation-wrap{position:relative;display:grid;place-items:center;min-height:0;overflow:hidden}
+.orbit{position:absolute;width:min(56vmin,560px);aspect-ratio:1;border:1px solid rgba(122,216,255,.11);border-radius:50%;animation:orbit 26s linear infinite;pointer-events:none}
+.orbit:before,.orbit:after{content:"";position:absolute;inset:13%;border:1px solid rgba(168,140,255,.08);border-radius:50%}
+.orbit:after{inset:31%;border-color:rgba(214,182,106,.10)}
+.orbit-mark{position:absolute;width:6px;height:6px;border:1px solid rgba(122,216,255,.55);left:50%;top:-3px;transform:translateX(-50%) rotate(45deg);background:#000}
+.board-svg{width:min(70vmin,690px);height:min(70vmin,690px);max-width:92%;max-height:92%;filter:drop-shadow(0 18px 50px rgba(0,0,0,.7));overflow:visible}
+.path-line{stroke:rgba(122,216,255,.36);stroke-width:1.2;fill:none;vector-effect:non-scaling-stroke}
+.path-line.future{stroke:rgba(92,99,114,.15)}
+.node-dot{fill:#080b11;stroke:#3e4654;stroke-width:1.2;vector-effect:non-scaling-stroke;transition:transform .15s ease,opacity .2s ease,stroke .2s ease,fill .2s ease}
+.node-dot.bought{fill:#0d1821;stroke:var(--blue)}
+.node-dot.skill{fill:#151126;stroke:var(--violet)}
+.node-dot.corner{fill:#1f190c;stroke:var(--gold)}
+.node-dot.current{stroke:#fff;stroke-width:2.2;filter:drop-shadow(0 0 9px rgba(122,216,255,.8))}
+.node-dot:hover{transform:scale(1.15);transform-box:fill-box;transform-origin:center}
+.node-label{font-family:var(--cond);font-size:10px;fill:#cfd5df;text-anchor:middle;dominant-baseline:central;pointer-events:none}
+.node-label.future{fill:#555d6b}
+.center-node{fill:#e9e4d5;stroke:var(--gold);stroke-width:1.5}
+.center-label{fill:#050608;font-size:10px;font-weight:800;text-anchor:middle;dominant-baseline:central}
+.ghost-node{fill:#090b0f;stroke:#212630;stroke-width:.8}
+.board-caption{position:absolute;left:18px;bottom:12px;color:#596170;font-size:11px;line-height:1.45;max-width:260px}
+.step-control{display:grid;grid-template-columns:58px minmax(0,1fr) 58px;align-items:center;gap:13px;border-top:1px solid var(--line);padding:10px 18px 6px}
+.step-count{font-family:var(--serif);font-size:24px;text-align:center;color:var(--ink)}
+.range-wrap{display:grid;gap:7px}
+.range-row{display:flex;justify-content:space-between;color:#68707f;font-size:10px}
+input[type="range"]{width:100%;accent-color:var(--blue)}
+.step-nav{appearance:none;background:transparent;border:1px solid #2c323d;width:44px;height:38px;color:#aab1bd;font-size:18px;line-height:1}
+.detail-rail{border-left:1px solid var(--line);min-height:0;padding:18px 0 0 22px;display:grid;grid-template-rows:auto auto minmax(0,1fr);gap:20px}
+.metric-line{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:baseline;border-bottom:1px solid #1c212a;padding:0 0 9px;margin-bottom:9px}
+.metric-line strong{font-family:var(--serif);font-size:22px;font-weight:500}
+.metric-line span{font-size:11px;color:#747d8d}
+.current-node{min-height:94px}
+.current-node h3{font-family:var(--serif);font-size:25px;font-weight:500;line-height:1.05;letter-spacing:-.02em;max-width:245px}
+.current-node p{color:#798190;font-size:11px;margin-top:8px}
+.mini-stats{min-height:0;overflow:hidden;display:grid;align-content:start;gap:8px}
+.stat-row{display:grid;grid-template-columns:1fr 78px;gap:9px;align-items:center;font-size:10px;color:#8d95a3}
+.stat-track{height:2px;background:#1f242c;position:relative}
+.stat-fill{position:absolute;inset:0 auto 0 0;background:#8da9b7;width:50%}
+
+/* season */
+.season-shell{height:calc(100% - 70px);display:grid;grid-template-columns:220px minmax(0,1fr);min-height:0;border-top:1px solid var(--line)}
+.mode-list{padding:20px 22px 20px 0;display:grid;align-content:start;gap:4px;border-right:1px solid var(--line)}
+.mode-btn{appearance:none;background:transparent;border:0;text-align:left;color:#707887;padding:12px 4px;font-size:13px;border-bottom:1px solid transparent}
+.mode-btn.active{color:var(--ink);border-bottom-color:#3c4350}
+.season-stage{min-height:0;padding:20px 0 0 28px;display:grid;grid-template-rows:140px minmax(0,1fr)}
+.alloc-hero{display:grid;grid-template-columns:180px minmax(0,1fr);gap:25px;align-items:center}
+.big-score{font-family:var(--serif);font-size:68px;line-height:.85;letter-spacing:-.06em}
+.big-score small{display:block;font:11px/1.4 var(--sans);color:#7d8491;letter-spacing:0;margin-top:12px}
+.alloc-bars{display:grid;gap:12px}
+.alloc-row{display:grid;grid-template-columns:70px minmax(0,1fr) 34px;gap:10px;align-items:center;font-size:11px;color:#8c94a2}
+.alloc-track{height:5px;background:#141820;position:relative;overflow:hidden}
+.alloc-fill{height:100%;background:linear-gradient(90deg,var(--blue),var(--violet))}
+.season-lower{display:grid;grid-template-columns:1fr 1fr;gap:28px;min-height:0}
+.skill-matrix,.season-stats{border-top:1px solid #232833;padding-top:13px;min-height:0}
+.subhead{font-family:var(--serif);font-size:18px;font-weight:500;margin-bottom:10px}
+.skill-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 18px;min-height:0}
+.skill-level{display:grid;grid-template-columns:1fr 42px;gap:8px;padding:5px 0;border-bottom:1px solid #161a21;font-size:10px;color:#88909e}
+.skill-level b{font-family:var(--cond);font-size:12px;color:#dfe3ea;text-align:right}
+
+/* atlas */
+.atlas-shell{height:calc(100% - 70px);display:grid;grid-template-columns:260px minmax(0,1fr);border-top:1px solid var(--line);min-height:0}
+.skill-browser{border-right:1px solid var(--line);padding:16px 24px 10px 0;display:grid;grid-template-rows:38px minmax(0,1fr) 34px;min-height:0}
+.skill-name{font-family:var(--serif);font-size:18px}
+.skill-list{display:grid;align-content:start;gap:0;min-height:0}
+.skill-btn{appearance:none;background:transparent;border:0;text-align:left;padding:6px 4px;color:#6f7785;font-size:11px;border-left:1px solid transparent}
+.skill-btn.active{color:#e6e2d8;border-left-color:var(--violet)}
+.pager{display:flex;align-items:center;justify-content:space-between;color:#6f7785;font-size:10px}
+.pager button{appearance:none;border:0;background:transparent;color:#a8afbb;padding:4px}
+.compass-grid{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:1px;background:#1c2028;min-height:0}
+.compass{background:#030407;position:relative;display:grid;place-items:center;overflow:hidden}
+.compass h3{position:absolute;left:16px;top:13px;font-family:var(--serif);font-size:18px;font-weight:500}
+.compass svg{width:min(24vw,260px);height:min(24vw,260px);max-width:70%;max-height:70%}
+.axis{stroke:#242a34;stroke-width:1}
+.axis-ring{fill:none;stroke:#171c24;stroke-width:1}
+.marker{fill:#10172a;stroke:var(--violet);stroke-width:1.5;filter:drop-shadow(0 0 8px rgba(168,140,255,.35))}
+.marker-label{fill:#ddd7f7;font:9px var(--cond);text-anchor:middle;dominant-baseline:central}
+.none-note{color:#505765;font:11px var(--sans)}
+
+/* weights */
+.weights-shell{height:calc(100% - 70px);display:grid;grid-template-rows:48px minmax(0,1fr) 38px;border-top:1px solid var(--line);min-height:0}
+.weight-tools{display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #1d222a}
+.segment{display:flex;gap:20px}
+.segment button{appearance:none;background:transparent;border:0;padding:0 0 8px;color:#707887;border-bottom:1px solid transparent;font-size:12px}
+.segment button.active{color:var(--ink);border-bottom-color:var(--gold)}
+.weight-chart{padding:16px 3% 8px;display:grid;align-content:center;gap:11px;min-height:0}
+.weight-row{display:grid;grid-template-columns:minmax(130px,260px) minmax(0,1fr) 38px;gap:14px;align-items:center;min-height:22px}
+.weight-label{font-size:11px;color:#9aa2b0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.weight-track{height:1px;background:#242a34;position:relative}
+.weight-fill{position:absolute;left:0;top:-2px;height:5px;background:linear-gradient(90deg,var(--aqua),var(--blue));transform-origin:left center;animation:grow .45s cubic-bezier(.2,.7,.2,1)}
+.weight-dot{position:absolute;top:50%;width:8px;height:8px;border-radius:50%;background:#d9f7f1;transform:translate(-50%,-50%);box-shadow:0 0 12px rgba(120,224,203,.35)}
+.weight-val{font-family:var(--cond);font-size:12px;text-align:right;color:#d8dde5}
+.weight-foot{display:flex;align-items:center;justify-content:space-between;color:#626a78;font-size:10px}
+.weight-foot button{appearance:none;border:0;background:transparent;color:#a1a8b4}
+
+/* boards */
+.boards-shell{height:calc(100% - 70px);border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(5,1fr);min-height:0}
+.board-profile{position:relative;border-right:1px solid #1d222a;padding:22px 18px 18px;display:grid;grid-template-rows:82px minmax(0,1fr);overflow:hidden}
+.board-profile:last-child{border-right:0}
+.board-profile h3{font-family:var(--serif);font-size:26px;font-weight:500}
+.board-profile h3 span{display:block;font:10px var(--sans);color:#727b8a;margin-top:6px}
+.rune{width:100%;aspect-ratio:1;max-width:180px;place-self:center;position:relative;border:1px solid #262c36;transform:rotate(45deg);animation:breathe 5s ease-in-out infinite}
+.rune:before,.rune:after{content:"";position:absolute;inset:16%;border:1px solid #303745}
+.rune:after{inset:33%;border-color:rgba(214,182,106,.55);animation:counter 16s linear infinite}
+.rune-data{position:absolute;inset:0;display:grid;place-items:center;transform:rotate(-45deg);text-align:center;font-family:var(--serif);font-size:31px}
+.rune-data small{display:block;font:10px var(--sans);color:#79818f;margin-top:4px}
+.board-profile dl{position:absolute;left:18px;right:18px;bottom:16px;margin:0;display:grid;gap:7px}
+.board-profile dl div{display:grid;grid-template-columns:1fr auto;border-top:1px solid #171b22;padding-top:6px;font-size:10px;color:#707988}
+.board-profile dd{margin:0;color:#bbc2cd;text-align:right}
+
+@keyframes orbit{to{transform:rotate(360deg)}}
+@keyframes counter{to{transform:rotate(-360deg)}}
+@keyframes breathe{50%{transform:rotate(45deg) scale(1.035);border-color:#354050}}
+@keyframes grow{from{transform:scaleX(0)}}
+
+.reduced *{animation:none!important;transition:none!important}
+
+@media (max-width:900px){
+  .app{grid-template-columns:1fr;grid-template-rows:minmax(0,1fr) 58px}
+  .nav{grid-row:2;border-right:0;border-top:1px solid var(--line);padding:0 9px;display:grid;grid-template-columns:1fr auto;align-items:center;background:#020305;z-index:20}
+  .brand,.nav-foot{display:none}
+  .nav-list{display:grid;grid-template-columns:repeat(5,1fr);gap:0}
+  .nav-btn{border-left:0;border-top:1px solid transparent;text-align:center;padding:18px 4px 14px;font-size:10px}
+  .nav-btn.active{border-left:0;border-top-color:var(--gold);background:linear-gradient(180deg,rgba(214,182,106,.08),transparent)}
+  .main{grid-row:1}
+  .view{padding:15px 14px 12px}
+  .view-head{height:48px}
+  .view-title{font-size:27px}
+  .view-copy{display:none}
+  .build-shell,.season-shell,.atlas-shell,.weights-shell,.boards-shell{height:calc(100% - 48px)}
+  .build-tabs{gap:18px;overflow-x:auto;scrollbar-width:none}
+  .build-tabs::-webkit-scrollbar{display:none}
+  .build-stage{grid-template-columns:1fr}
+  .detail-rail{position:absolute;right:10px;top:110px;width:154px;height:150px;border:1px solid #272d37;background:rgba(3,5,8,.92);padding:10px;display:block;z-index:5;box-shadow:var(--shadow)}
+  .metric-line{padding-bottom:5px;margin-bottom:6px}
+  .metric-line strong{font-size:16px}
+  .current-node h3{font-size:16px;max-width:132px}
+  .current-node p{font-size:9px;margin-top:5px}
+  .mini-stats{display:none}
+  .board-area{grid-template-rows:43px minmax(0,1fr) 74px}
+  .board-switch{justify-content:flex-start;gap:16px;overflow-x:auto;padding-left:4px;scrollbar-width:none}
+  .board-btn{font-size:13px;white-space:nowrap}
+  .orbit{width:min(74vmin,520px)}
+  .board-svg{width:min(86vmin,650px);height:min(86vmin,650px)}
+  .board-caption{display:none}
+  .step-control{grid-template-columns:44px 1fr 44px;padding:8px 5px 4px}
+  .step-count{font-size:19px}
+  .step-nav{width:38px;height:34px}
+  .season-shell{grid-template-columns:1fr;grid-template-rows:43px minmax(0,1fr)}
+  .mode-list{border-right:0;border-bottom:1px solid var(--line);padding:0;display:flex;gap:18px;overflow-x:auto}
+  .mode-btn{white-space:nowrap;padding:12px 0 8px}
+  .season-stage{padding:12px 0 0;grid-template-rows:110px minmax(0,1fr)}
+  .alloc-hero{grid-template-columns:110px 1fr;gap:14px}
+  .big-score{font-size:46px}
+  .season-lower{grid-template-columns:1fr;gap:10px}
+  .season-stats{display:none}
+  .skill-grid{grid-template-columns:1fr 1fr}
+  .atlas-shell{grid-template-columns:130px 1fr}
+  .skill-browser{padding-right:9px;grid-template-rows:32px minmax(0,1fr) 28px}
+  .skill-btn{font-size:9px;padding:5px 2px}
+  .skill-name{font-size:14px}
+  .compass h3{font-size:13px;left:8px;top:8px}
+  .compass svg{max-width:82%;max-height:82%}
+  .weight-row{grid-template-columns:120px 1fr 30px;gap:9px}
+  .weight-chart{padding-left:0;padding-right:0}
+  .boards-shell{grid-template-columns:1fr;grid-template-rows:repeat(5,1fr)}
+  .board-profile{grid-template-columns:88px 58px minmax(0,1fr);grid-template-rows:1fr;border-right:0;border-bottom:1px solid #1d222a;padding:7px 8px;align-items:center;gap:7px}
+  .board-profile h3{font-size:17px;z-index:2;grid-column:1}
+  .board-profile h3 span{font-size:8px}
+  .rune{max-width:50px;grid-column:2;place-self:center}
+  .rune-data{font-size:15px}
+  .rune-data small{display:none}
+  .board-profile dl{position:static;grid-column:3;transform:none;width:auto;gap:2px;align-self:center}
+  .board-profile dl div{grid-template-columns:52px minmax(0,1fr);font-size:7.5px;padding-top:2px;gap:5px}
+  .board-profile dd{white-space:normal;line-height:1.15}
+}
+@media (max-width:520px){
+  .view{padding-left:10px;padding-right:10px}
+  .build-tab{font-size:11px}
+  .detail-rail{top:101px;right:4px;width:142px}
+  .atlas-shell{grid-template-columns:112px 1fr}
+  .weight-row{grid-template-columns:105px 1fr 25px}
+  .weight-label{font-size:9px}
+}
+</style>
+</head>
+<body>
+<div class="app" id="app">
+  <aside class="nav" aria-label="Guide views">
+    <div class="brand">Cleric<br>Daevanion<small>visual field guide</small></div>
+    <div class="nav-list">
+      <button class="nav-btn active" data-view="builds">Builds</button>
+      <button class="nav-btn" data-view="season">316 points</button>
+      <button class="nav-btn" data-view="atlas">Skill atlas</button>
+      <button class="nav-btn" data-view="weights">Weights</button>
+      <button class="nav-btn" data-view="boards">Boards</button>
+    </div>
+    <div class="nav-foot">
+      <a class="source-link" href="https://aion2.grimvane.app/companion/wiki/daevanion-cleric/" target="_blank" rel="noreferrer">Aion 2 Companion source</a>
+      <span>Source checked 23 Oct 2026</span>
+      <button class="motion-toggle" id="motionToggle">Reduce motion</button>
+    </div>
+  </aside>
+
+  <main class="main">
+    <section class="view active" id="view-builds">
+      <header class="view-head">
+        <div><h1 class="view-title">Build paths</h1><p class="view-copy">Every purchase becomes a point in the board constellation. Drag the step control or select a node to replay the path.</p></div>
+      </header>
+      <div class="build-shell">
+        <div class="build-tabs" id="buildTabs"></div>
+        <div class="build-stage">
+          <div class="board-area">
+            <div class="board-switch" id="boardSwitch"></div>
+            <div class="constellation-wrap">
+              <div class="orbit"><span class="orbit-mark"></span></div>
+              <svg class="board-svg" id="boardSvg" viewBox="0 0 640 640" role="img" aria-label="Daevanion purchase path"></svg>
+              <div class="board-caption" id="boardCaption"></div>
+            </div>
+            <div class="step-control">
+              <button class="step-nav" id="stepPrev" aria-label="Previous step">‹</button>
+              <div class="range-wrap"><div class="range-row"><span>Start</span><span id="rangeMax">Final</span></div><input id="stepRange" type="range" min="1" value="1" step="1" /></div>
+              <button class="step-nav" id="stepNext" aria-label="Next step">›</button>
+            </div>
+          </div>
+          <aside class="detail-rail">
+            <div>
+              <div class="metric-line"><span>Spent</span><strong id="spentMetric">149</strong></div>
+              <div class="metric-line"><span>Board</span><strong id="boardPointsMetric">42</strong></div>
+            </div>
+            <div class="current-node"><h3 id="currentNodeTitle">Defense Bonus +30</h3><p id="currentNodeMeta">Click 1 · 1 point</p></div>
+            <div class="mini-stats" id="miniStats"></div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <section class="view" id="view-season">
+      <header class="view-head"><div><h2 class="view-title">Full season</h2><p class="view-copy">The 316-point builds compress into allocation balance, final skill levels and total stats. Azphel uses its separate 100-point sample budget.</p></div></header>
+      <div class="season-shell">
+        <div class="mode-list" id="seasonModes"></div>
+        <div class="season-stage">
+          <div class="alloc-hero"><div class="big-score" id="seasonValue">503.5<small>value score</small></div><div class="alloc-bars" id="allocBars"></div></div>
+          <div class="season-lower"><div class="skill-matrix"><h3 class="subhead">Final skill levels</h3><div class="skill-grid" id="seasonSkills"></div></div><div class="season-stats"><h3 class="subhead">Stat totals</h3><div class="mini-stats" id="seasonStats"></div></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="view" id="view-atlas">
+      <header class="view-head"><div><h2 class="view-title">Skill atlas</h2><p class="view-copy">The source position table becomes four directional plots. Pick a skill to see exactly where its nodes sit relative to each board start.</p></div></header>
+      <div class="atlas-shell">
+        <div class="skill-browser"><div class="skill-name" id="atlasKind">Active skills</div><div class="skill-list" id="skillList"></div><div class="pager"><button id="skillPrev">Previous</button><span id="skillPage">1 / 3</span><button id="skillNext">Next</button></div></div>
+        <div class="compass-grid" id="compassGrid"></div>
+      </div>
+    </section>
+
+    <section class="view" id="view-weights">
+      <header class="view-head"><div><h2 class="view-title">Priority weights</h2><p class="view-copy">Weights set purchase order, not measured output. Compare the same skill or stat under healer, damage and PvP priorities.</p></div></header>
+      <div class="weights-shell">
+        <div class="weight-tools"><div class="segment" id="weightType"></div><div class="segment" id="weightMode"></div></div>
+        <div class="weight-chart" id="weightChart"></div>
+        <div class="weight-foot"><button id="weightPrev">Previous page</button><span id="weightPage"></span><button id="weightNext">Next page</button></div>
+      </div>
+    </section>
+
+    <section class="view" id="view-boards">
+      <header class="view-head"><div><h2 class="view-title">Board anatomy</h2><p class="view-copy">Unlock level, fill cost, node volume, corner effects and crystal pool, transformed from the board specification table.</p></div></header>
+      <div class="boards-shell" id="boardsShell"></div>
+    </section>
+  </main>
+</div>
+<script>
+const activeSkills=new Set(["Earth's Retribution","Judgment Thunder","Debilitating Mark","Divine Aura","Chain of Torment","Lightning Strike Scattershot","Light of Regeneration","Condemnation","Healing Light","Radiant Recovery","Bolt","Defiance"]);
+const passiveSkills=new Set(["Warm Benediction","Empyrean Lords' Benediction","Empyrean Lord's Benediction","Empyrean Lord's Grace","Healing Enhancement","Immortal Veil","Heal Block","Prayer of Concentration","Earth's Grace","Survival Willpower","Radiant Benediction"]);
+const cornerTerms=["Combat Speed","Cooldown Reduction","Damage Boost","Damage Tolerance","Critical Damage Boost","Critical Damage Tolerance","Multi-Hit Chance","Multi-Hit Resist","PvP Damage Boost","PvP Damage Tolerance"];
+const isCorner=n=>cornerTerms.some(x=>n.startsWith(x));
+const cleanSkill=n=>n.replace(/ \+1$/,'');
+function nodeCost(name){const n=cleanSkill(name);if(isCorner(n))return 4;if(activeSkills.has(n))return 3;if(passiveSkills.has(n))return 2;return 1}
+function nodeType(name){const n=cleanSkill(name);if(isCorner(n))return 'corner';if(activeSkills.has(n)||passiveSkills.has(n))return 'skill';return 'stat'}
+
+const maps={
+heal:{
+Nezekan:["      3    .   .   .       .   .  12       .   .  27","      4    .       .   .   .      11   .   .      26","      5    .   .   .       .   .  10      16  17  18","      6        .           .       9      15       .","      7    .   .   .   .   .   7   8  13  14   .   .","      8    .           .       S       .           .","      9    .   .   4   3   2   1  19   .   .   .   .","     10    .       5       .      20           .","     11    .   .   6       .   .  21       .   .   .","     12    .       .   .   .      22  24  25       .","     13    .   .   .       .   .  23       .   .   ."],
+Zikel:["      3    .   .   .   .   .   .   .   .   .   .   .","      4    .       .       .           .           .","      5    .   .   .       .   .   .   .   .   .   .","      6    .       .   .   .       .       .       .","      7    .   .   .       .      10  11   .   .   .","      8        .           .   S   1           .","      9   22   .   .   .   .       2       9   .   .","     10   21       .       .       3   7   8       .","     11   20  17  16  15   6   5   4      12  13  14","     12    .           .           .       .      18","     13    .   .   .   .   .   .   .   .   .   .  19"],
+Vaizel:["      3    .   .  19       .   .   .   .   .   .   .","      4    .      18  17  16       .       .       .","      5    .   .   .      13  12  11  14  15   .   .","      6        .           .      10           .","      7    .   .   .   .   .   1   2   3   .   .   .","      8    .           .       S       4           .","      9    .   .   .   .   .   .   .   5   6   7   .","     10        .           .       .           8","     11    .   .   .   .   .   .   .       .   9   .","     12    .       .       .       .   .   .       .","     13    .   .   .   .   .   .   .       .   .   ."],
+Triniel:["      2    .   .   .           .   .   .           .   .   .","      3    .       .   .   .   .       .   .   .   .       .","      4    .       .           .   .   .           .       .","      5    .   .   .   .   .   .       .   7   8   9  10  11","      6            .       .               6           .","      7    .   .   .   .  20   .   .   .   5   .  29   .   .","      8   18       .      19       S       4      28       .","      9   17  16  15  14  13  12   1   2   3  23  24   .   .","     10        .          21               .      25","     11    .   .   .   .  22   .       .   .  27  26   .   .","     12    .       .           .   .   .           .       .","     13    .       .   .   .   .       .   .   .   .       .","     14    .   .   .           .   .   .           .   .   ."]},
+damage:{
+Nezekan:["      3   25  24  23       .   .   .      20  21  22","      4    .       9   .   .       .   .  19       .","      5    .   7   8       .   .   .      17   .   .","      6        6           .       .      16       .","      7    .   5   4   3   2   1   .  14  15   .   .","      8    .           .       S      13           .","      9    .   .   .   .  26  10  11  12  18   .   .","     10    .       .      27       .           .","     11    .   .   .      28  29   .       .   .   .","     12    .      33  32  30       .   .   .       .","     13   36  35  34      31   .   .       .   .   ."],
+Zikel:["      3    .   .   .   .   .   .   .  22  23  24  25","      4    .       .       .          21          26","      5    .   .   .      17  18  19  20   .   .  27","      6    .       5   4   3       .       .      28","      7    .   7   6       2       .   .   .   .  29","      8        8           1   S   .           .","      9   10   9   .   .   .       .       .   .   .","     10   11       .       .       .   .   .       .","     11   12   .   .   .   .   .   .       .   .   .","     12   13           .           .       .       .","     13   14  15  16   .   .   .   .   .   .   .   ."],
+Vaizel:["      3    .   .   .       .   .   .   .   .   .   .","      4    .       .   .   .       .       .       .","      5    .   .   .       .   .   .   .   8   7   .","      6        .           .       9           6","      7    .   .   .   .   .   1   2   3   4   5  18","      8    .           .       S       .          19","      9    .  14  13  12  11  10   .   .   .   .   .","     10       15           .       .           .","     11    .  16  17   .   .   .   .       .   .   .","     12    .       .       .       .   .   .       .","     13    .   .   .   .   .   .   .       .   .   ."],
+Triniel:["      2    .   .   .           .   .   .           .   .   .","      3    .       .   .   .   .       .   .   .   .       .","      4    .       .           .   .   .           .       .","      5    .   .   .   .   .   .       .   .   .   .   .   .","      6            .       .               .           .","      7    .   .   .   7   3   2   1   .   .   .   .   .   .","      8    .       .       .       S       .       .       .","      9    .   .   .   .   .   .   4   5   6   .   .   .   .","     10        .           .               .       .","     11    .   .   .   .   .   .       .   .   .   .   .   .","     12    .       .           .   .   .           .       .","     13    .       .   .   .   .       .   .   .   .       .","     14    .   .   .           .   .   .           .   .   ."]},
+pvp:{
+Nezekan:["      3    .   .   .       .   .   .       8   .   .","      4    .       .   .   .       .   .   7       .","      5    .   .   .       .   .   .       6   9  10","      6        .           .       .       5       .","      7    .   .   .   .   .   1   2   3   4   .   .","      8   17           .       S       .           .","      9   16  15  14  13  12  11   .   .   .   .   .","     10   18      20       .       .           .","     11   19   .  21       .   .   .       .   .   .","     12    .      22  24  25       .   .   .       .","     13    .   .  23      26  27  28       .   .   ."],
+Zikel:["      3    .   .   .   .   .   .   .   .   .   .   .","      4    .       .       .           .           .","      5    .   .   .       .   .   .   .  11  12   .","      6    .       .   .   .       .      10       .","      7    .   .   .       .       7   8   9   .   .","      8        .           1   S   6           .","      9    .   .   .   3   2       .       .   .   .","     10    .       .       4       .   .   .       .","     11    .   .   .   .   5  13  14       .   .   .","     12    .           .          15       .       .","     13    .   .   .   .   .   .  16  17  18  19  20"],
+Vaizel:["      3    .   .   .       .   .   .  22  21  24  25","      4    .       .   .   .       .      20       .","      5    .   .   .       .   .   .   .  19  18  23","      6        .           .       .          17","      7    .   .   .   3   2   1  13  14  15  16   .","      8    .           .       S       .           .","      9    .   .   .   .   .   4   5   .   .   .   .","     10        .           .       6           .","     11    .   .   .   .   .   .   7       .   .   .","     12    .       .       .       8   .   .       .","     13    .   .   .  12  11  10   9       .   .   ."],
+Triniel:["      2    .   .   .           .   .   .           .   .   .","      3    .       .   .   .   .       .   .   .   .       .","      4    .       .           .   .   .           .       .","      5    .   .   .   .   .   .       .   .   .   .   .   .","      6            .       .               .           .","      7    .   .   .   .  16   .   .   .   .   .   .   .   .","      8   24       .      15       S       .       .       .","      9   23  19  18  17  14  13   1   2   3   .   .   .   .","     10       20           .               4       .","     11   22  21   .   .   .   .      10   5   6   7   8   9","     12    .       .           .   .  11           .       .","     13    .       .   .   .   .      12   .   .   .       .","     14    .   .   .           .   .   .           .   .   ."]},
+azphel:{Azphel:["      1    .   .   .   .       .   .   .       .   .   .   .   .   .","      2    .           .   .   .       .       .           .       .","      3    .   .   .   .       .   .   .   .   .   .   .   .   .   .","      4            .               .       .       .       .","      5    .   .   .       .   .   .   .   .   .   .   .   .","      6    .       .   .   .       .           .           .   .   .","      7    .               .   .   .   1   2   3   .   .   .       .","      8    .   .   .           .       S       .           .   .   .","      9    .       .   .   .   6   5   4   .   .   .               .","     10    .   .   .           7           .       .   .   .       .","     11           17  16  15   8   9   .   .   .   .       .   .   .","     12           18       .      10       .               .","     13    .   .  19   .   .   .  11  12   .   .       .   .   .   .","     14    .      20           .      13       .   .   .           .","     15   24  23  21  22   .   .      14   .   .       .   .   .   ."]}
+};
+
+const builds={
+heal:{label:'149 healer',spent:149,value:299.8,boardPoints:{Nezekan:42,Zikel:36,Vaizel:28,Triniel:43},stats:{'Attack Bonus':39,'Critical Hit':50,'Critical Hit Resist':25,'Defense Bonus':270,'HP':1700,'MP':550,'Cooldown Reduction':'1.5%','Damage Tolerance':'1.5%'},steps:{
+Nezekan:['Defense Bonus +30','Critical Hit +5','Healing Enhancement','HP +100','Defense Bonus +30','Healing Light','Attack Bonus +3','Critical Hit Resist +5','Defense Bonus +30','HP +100','MP +50','Radiant Recovery','Immortal Veil','MP +50','Attack Bonus +3','Condemnation','HP +100','Healing Enhancement','HP +100','Critical Hit +5','Critical Hit Resist +5','Attack Bonus +3','Warm Benediction','HP +100','Light of Regeneration','MP +50','Cooldown Reduction +1.5%'],
+Zikel:['Attack Bonus +3','Critical Hit Resist +5','Radiant Benediction','Defense Bonus +30','HP +100','Healing Light','Critical Hit +5','HP +100','Radiant Recovery','MP +50','Prayer of Concentration','Attack Bonus +3','MP +50','Light of Regeneration','Critical Hit +5','HP +100','Prayer of Concentration','Defense Bonus +30','Damage Tolerance +1.5%','Defense Bonus +30','Critical Hit +5','Condemnation'],
+Vaizel:['Attack Bonus +3','Critical Hit Resist +5','Defense Bonus +30','HP +100','Radiant Benediction','Attack Bonus +3','HP +100','Critical Hit +5','Healing Light',"Earth's Grace",'MP +50','Critical Hit +5','Radiant Recovery','HP +100','Condemnation','MP +50','Critical Hit +5','Attack Bonus +3','Warm Benediction'],
+Triniel:['Attack Bonus +3','HP +100','Chain of Torment','Attack Bonus +3','MP +50','HP +100','Healing Light','Critical Hit +5','HP +100','MP +50','Healing Enhancement','Critical Hit +5','HP +100','Critical Hit Resist +5','Immortal Veil','Attack Bonus +3','HP +100','Radiant Recovery','Defense Bonus +30','Condemnation','MP +50','Light of Regeneration','Defense Bonus +30','MP +50','Attack Bonus +3','HP +100','Warm Benediction','Attack Bonus +3','Prayer of Concentration']}},
+damage:{label:'149 damage',spent:149,value:263.5,boardPoints:{Nezekan:60,Zikel:48,Vaizel:30,Triniel:11},stats:{'Attack Bonus':51,'Critical Hit':45,'Critical Hit Resist':45,'Defense Bonus':300,'HP':800,'MP':450,'Combat Speed':'1.5%','Cooldown Reduction':'3%','Damage Boost':'3%'},steps:{
+Nezekan:['Attack Bonus +3','MP +50','HP +100','Judgment Thunder','Attack Bonus +3','HP +100','Defense Bonus +30','HP +100','Chain of Torment','Defense Bonus +30','HP +100','MP +50','Attack Bonus +3','Immortal Veil','MP +50','Attack Bonus +3','Condemnation',"Earth's Retribution",'Critical Hit Resist +5',"Empyrean Lord's Grace",'Critical Hit +5','Cooldown Reduction +1.5%','Critical Hit Resist +5','Attack Bonus +3','Combat Speed +1.5%','Critical Hit +5','Attack Bonus +3','MP +50','Divine Aura','HP +100','Bolt','Attack Bonus +3','Critical Hit +5',"Empyrean Lord's Grace",'Critical Hit Resist +5','Cooldown Reduction +1.5%'],
+Zikel:['Defense Bonus +30','Critical Hit +5',"Earth's Grace",'Critical Hit Resist +5','MP +50','Divine Aura','HP +100','Attack Bonus +3','Defense Bonus +30','Condemnation','Critical Hit +5','Defense Bonus +30','Critical Hit Resist +5','Damage Boost +1.5%','Attack Bonus +3','Chain of Torment','Attack Bonus +3','MP +50','Debilitating Mark','Critical Hit Resist +5','MP +50','Attack Bonus +3','Bolt','Defense Bonus +30','Damage Boost +1.5%','Critical Hit +5','Attack Bonus +3','Critical Hit Resist +5','Judgment Thunder'],
+Vaizel:['Attack Bonus +3','Critical Hit Resist +5','Defense Bonus +30','Chain of Torment','HP +100','Critical Hit Resist +5','Attack Bonus +3','Condemnation',"Earth's Grace",'Defense Bonus +30','Critical Hit +5','Attack Bonus +3','Bolt','MP +50','Critical Hit +5','Defense Bonus +30','Judgment Thunder','Critical Hit +5',"Earth's Retribution"],
+Triniel:['Defense Bonus +30','MP +50','Condemnation','Attack Bonus +3','HP +100','Chain of Torment','Attack Bonus +3']}},
+pvp:{label:'149 PvP',spent:149,value:280.9,boardPoints:{Nezekan:43,Zikel:30,Vaizel:40,Triniel:36},stats:{'Attack Bonus':30,'Critical Hit':55,'Critical Hit Resist':55,'Defense Bonus':300,'HP':1600,'MP':250,'Damage Tolerance':'1.5%','Critical Damage Tolerance':'1.5%'},steps:{
+Nezekan:['Attack Bonus +3','Critical Hit Resist +5','Immortal Veil','MP +50','Attack Bonus +3','Condemnation','Critical Hit Resist +5',"Empyrean Lord's Grace",'HP +100','Healing Enhancement','Defense Bonus +30','Critical Hit +5','Healing Enhancement','HP +100','Critical Hit Resist +5','Critical Hit +5','Defiance','Attack Bonus +3','Immortal Veil','Defense Bonus +30','Healing Light','Critical Hit +5',"Empyrean Lord's Grace",'Attack Bonus +3','HP +100','Bolt','Critical Hit +5','Warm Benediction'],
+Zikel:['Defense Bonus +30','HP +100','Survival Willpower','Critical Hit Resist +5','Healing Light','Attack Bonus +3','MP +50','Prayer of Concentration','HP +100','Critical Hit +5','MP +50','Survival Willpower','HP +100','Defense Bonus +30','MP +50','Defiance','Critical Hit +5','HP +100','Critical Hit Resist +5','Damage Tolerance +1.5%'],
+Vaizel:['Attack Bonus +3','HP +100','Survival Willpower','Defense Bonus +30','MP +50','Critical Hit Resist +5','Divine Aura','HP +100','Critical Hit +5','Defiance','Defense Bonus +30','Healing Enhancement','Critical Hit Resist +5','Defense Bonus +30','Chain of Torment','HP +100','Critical Hit Resist +5','Attack Bonus +3','Condemnation','Defense Bonus +30','Critical Hit Resist +5',"Empyrean Lord's Grace",'Immortal Veil','HP +100','Critical Damage Tolerance +1.5%'],
+Triniel:['Attack Bonus +3','HP +100','Chain of Torment','Critical Hit Resist +5','Critical Hit +5','Warm Benediction','HP +100','Critical Hit +5','Defiance','Defense Bonus +30','Attack Bonus +3','Survival Willpower','Critical Hit +5','HP +100','Defense Bonus +30','Condemnation','Critical Hit Resist +5','Immortal Veil','Attack Bonus +3','Critical Hit +5','HP +100',"Empyrean Lord's Grace",'HP +100','Radiant Recovery']}},
+azphel:{label:'Azphel 40',spent:40,value:40.2,boardPoints:{Azphel:40},stats:{'HP':200,'MP':50,'PvP Attack':12,'PvP Defense':120,'PvP Critical Hit Resist':15,'PvP Accuracy':10,'PvP Evasion':12,'Status Effect Resist':'4%','PvP Damage Boost':'1.5%','PvP Damage Tolerance':'1.5%'},steps:{Azphel:['HP +100','PvP Attack +3','Status Effect Resist +1%','MP +50','PvP Attack +3','Status Effect Resist +1%','PvP Accuracy +5','PvP Attack +3, PvP Defense +30','PvP Crit Resist +5','PvP Evasion +3','PvP Defense +30','HP +100','PvP Evasion +3','PvP Damage Tolerance +1.5%','PvP Evasion +3','PvP Defense +30','Status Effect Resist +1%','PvP Crit Resist +5','PvP Accuracy +5, PvP Evasion +3','PvP Defense +30','PvP Crit Resist +5','Status Effect Resist +1%','PvP Attack +3','PvP Damage Boost +1.5%']}}
+};
+
+const boardSpecs=[
+{name:'Nezekan',unlock:12,nodes:'66 stat · 22 skill · start',fill:134,corners:'2× Combat Speed / 2× Cooldown Reduction',pool:'Daevanion Crystal'},
+{name:'Zikel',unlock:20,nodes:'66 stat · 22 skill · start',fill:134,corners:'2× Damage Boost / 2× Damage Tolerance',pool:'Daevanion Crystal'},
+{name:'Vaizel',unlock:30,nodes:'66 stat · 22 skill · start',fill:134,corners:'2× Crit damage boost / 2× tolerance',pool:'Daevanion Crystal'},
+{name:'Triniel',unlock:40,nodes:'94 stat · 22 skill · start',fill:168,corners:'3× Multi-hit chance / 3× resist',pool:'Daevanion Crystal'},
+{name:'Azphel',unlock:45,nodes:'152 stat · start · no skills',fill:232,corners:'4× PvP damage boost / 4× tolerance',pool:'Azphel crystals'}
+];
+
+const skillPositions=[
+["Earth's Retribution",'active','1 down 3 right','3 up 5 left','5 right','5 down 4 right'],
+['Judgment Thunder','active','1 up 3 left','1 up 5 right','3 down 3 left','5 up 4 right'],
+['Debilitating Mark','active','3 up','3 up 1 right','3 up 4 left','5 down 4 left'],
+['Divine Aura','active','3 down','1 up 3 left','3 down 1 right','5 up 4 left'],
+['Chain of Torment','active','4 up 3 left','5 down 3 left','1 up 3 right','1 down 2 right'],
+['Lightning Strike Scattershot','active','5 right','5 up 1 left','5 up','3 up 6 left'],
+['Light of Regeneration','active','4 down 3 right','3 down 5 right','5 left','3 down 2 left'],
+['Condemnation','active','3 up 3 right','1 down 5 left','3 up 3 right','1 up 2 left'],
+['Healing Light','active','3 down 3 left','3 down 1 left','3 down 4 right','3 up 2 right'],
+['Radiant Recovery','active','5 up 1 right','1 down 3 right','3 up 1 left','6 left'],
+['Bolt','active','5 down 1 left','5 up 3 right','1 down 3 left','6 right'],
+['Defiance','active','5 left','5 down 1 right','5 down','3 down 6 right'],
+['Warm Benediction','passive','3 up 5 left; 5 down 1 right','none','5 up 3 left','3 down 3 right'],
+["Empyrean Lords' Benediction",'passive','5 up 1 left; 3 down 5 right','none','5 down 3 right','3 up 3 left'],
+["Empyrean Lord's Grace",'passive','5 up 3 right; 5 down 3 left','none','5 up 2 right','3 down 6 left'],
+['Healing Enhancement','passive','3 up 5 right; 1 down 2 left','none','5 down 2 left','3 up 6 right'],
+['Immortal Veil','passive','1 up 2 right; 3 down 5 left','none','3 up 5 right','1 down 4 left'],
+['Heal Block','passive','none','5 up 1 right; 5 down 1 left','2 down 1 left','5 up 1 right'],
+['Prayer of Concentration','passive','none','1 up 2 right; 3 down 4 left','3 down 5 left','1 up 4 right'],
+["Earth's Grace",'passive','none','2 up 1 left; 4 down 3 right','2 up 1 right','5 down 1 left'],
+['Survival Willpower','passive','none','3 up 4 right; 1 down 2 left','1 up 2 left','5 down 1 right'],
+['Radiant Benediction','passive','none','4 up 3 left; 2 down 1 right','1 down 2 right','5 up 1 left']
+];
+
+const skillWeights=[
+["Earth's Retribution",2,5,6],['Judgment Thunder',2,9,3],['Debilitating Mark',2,3,4],['Divine Aura',1.5,6,6],['Chain of Torment',4,12,6],['Lightning Strike Scattershot',.5,2,1],['Light of Regeneration',7,1,2],['Condemnation',7,14,8],['Healing Light',12,2,6],['Radiant Recovery',12,2,6],['Bolt',1.5,6,6],['Defiance',1,.5,9],['Warm Benediction',7,1,6],["Empyrean Lords' Benediction",1,.5,3],["Empyrean Lord's Grace",2,4,6],['Healing Enhancement',9,1,6],['Immortal Veil',3,.5,5],['Heal Block',0,0,3],['Prayer of Concentration',5,.5,4],["Earth's Grace",3,4,3],['Survival Willpower',1.5,.5,9],['Radiant Benediction',6,1,1]
+];
+const statWeights=[
+['Attack Bonus +3',1.2,1.2,.8],['Critical Hit +5',.3,.8,.7],['Critical Hit Resist +5',.5,.3,1.2],['Defense Bonus +30',.6,.3,.2],['HP +100',1.2,.5,1],['MP +50',.4,.3,.2],['Combat Speed +1.5%',7.5,7,8],['Cooldown Reduction +1.5%',8,6.5,5],['Damage Boost +1.5%',4,6.5,5],['Damage Tolerance +1.5%',7.5,3,9],['Critical Damage Boost +1.5%',1.5,5,3],['Critical Damage Tolerance +1.5%',3,1.5,8],['Multi-Hit Chance +1.5%',1.5,4.5,2],['Multi-Hit Resist +1.5%',2.5,1,4],['PvP Attack +3',0,0,.8],['PvP Defense +30',0,0,.6],['PvP Critical Hit +5',0,0,.6],['PvP Critical Hit Resist +5',0,0,.8],['PvP Accuracy +5',0,0,.5],['PvP Evasion +3',0,0,.5],['Status Effect Chance +1%',0,0,2],['Status Effect Resist +1%',0,0,4],['PvP Damage Boost +1.5%',0,0,5],['PvP Damage Tolerance +1.5%',0,0,6]
+];
+
+const season={
+healer:{label:'PvE healer',value:503.5,alloc:{Nezekan:87,Zikel:88,Vaizel:73,Triniel:68},skills:{"Earth's Retribution":11,'Judgment Thunder':13,'Debilitating Mark':11,'Chain of Torment':14,'Light of Regeneration':14,'Condemnation':14,'Healing Light':14,'Radiant Recovery':14,'Warm Benediction':14,"Empyrean Lord's Grace":14,'Healing Enhancement':14,'Immortal Veil':14,'Prayer of Concentration':14,"Earth's Grace":14,'Survival Willpower':12,'Radiant Benediction':14},stats:{'Attack Bonus':120,'Critical Hit':60,'Critical Hit Resist':95,'Defense Bonus':750,'HP':3900,'MP':700,'Combat Speed':'3%','Cooldown Reduction':'3%','Damage Boost':'3%','Damage Tolerance':'3%'}},
+damage:{label:'PvE damage',value:431.1,alloc:{Nezekan:79,Zikel:68,Vaizel:76,Triniel:93},skills:{"Earth's Retribution":14,'Judgment Thunder':14,'Debilitating Mark':14,'Divine Aura':14,'Chain of Torment':14,'Condemnation':14,'Healing Light':12,'Radiant Recovery':12,'Bolt':14,"Empyrean Lords' Benediction":11,"Empyrean Lord's Grace":14,"Earth's Grace":14,'Radiant Benediction':11},stats:{'Attack Bonus':126,'Critical Hit':175,'Critical Hit Resist':95,'Defense Bonus':570,'HP':2000,'MP':1050,'Combat Speed':'3%','Cooldown Reduction':'3%','Damage Boost':'3%','Critical Damage Boost':'3%','Multi-Hit Chance':'4.5%'}},
+pvp:{label:'PvP',value:533.7,alloc:{Nezekan:94,Zikel:84,Vaizel:71,Triniel:67},skills:{"Earth's Retribution":14,'Debilitating Mark':12,'Divine Aura':14,'Chain of Torment':14,'Condemnation':14,'Healing Light':13,'Radiant Recovery':14,'Bolt':14,'Defiance':14,'Warm Benediction':14,"Empyrean Lords' Benediction":13,"Empyrean Lord's Grace":14,'Healing Enhancement':14,'Immortal Veil':14,'Heal Block':13,'Prayer of Concentration':14,"Earth's Grace":13,'Survival Willpower':14},stats:{'Attack Bonus':66,'Critical Hit':115,'Critical Hit Resist':105,'Defense Bonus':330,'HP':2400,'MP':900,'Combat Speed':'3%','Cooldown Reduction':'1.5%','Damage Boost':'1.5%','Damage Tolerance':'3%','Critical Damage Tolerance':'3%'}},
+azphel:{label:'Azphel 100',value:97.4,alloc:{Azphel:100},skills:{},stats:{'HP':400,'MP':150,'PvP Attack':21,'PvP Defense':210,'PvP Critical Hit':25,'PvP Critical Hit Resist':50,'PvP Accuracy':40,'PvP Evasion':24,'Status Effect Resist':'8%','PvP Damage Boost':'6%','PvP Damage Tolerance':'3%'}}
+};
+
+let state={view:'builds',build:'heal',board:'Nezekan',step:1,season:'healer',atlasPage:0,atlasIndex:0,weightType:'skill',weightMode:0,weightPage:0};
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+function parseGrid(lines){
+  const out={ghosts:[],points:{},center:null};
+  lines.forEach(line=>{
+    const row=parseInt(line.trimStart().match(/^\d+/)?.[0]||'0');
+    const rowDigits=line.match(/^\s*\d+/)?.[0].length||0;
+    const count=Math.max(0,Math.round((line.length-11)/4)+1);
+    for(let i=0;i<count;i++){
+      const center=11+i*4;
+      const token=line.slice(Math.max(0,center-1),center+2).trim();
+      if(!token)continue;
+      const x=i;
+      if(token==='.')out.ghosts.push([x,row]);
+      else if(token==='S')out.center=[x,row];
+      else if(/^\d+$/.test(token))out.points[+token]=[x,row];
+    }
+  });
+  return out;
+}
+function normalizeCoords(parsed){
+  const all=[...parsed.ghosts,...Object.values(parsed.points),parsed.center].filter(Boolean);
+  const xs=all.map(p=>p[0]), ys=all.map(p=>p[1]);
+  const minX=Math.min(...xs),maxX=Math.max(...xs),minY=Math.min(...ys),maxY=Math.max(...ys);
+  const pad=58,w=640-pad*2,h=640-pad*2;
+  const map=p=>[pad+(p[0]-minX)/(Math.max(1,maxX-minX))*w,pad+(p[1]-minY)/(Math.max(1,maxY-minY))*h];
+  return {ghosts:parsed.ghosts.map(map),points:Object.fromEntries(Object.entries(parsed.points).map(([k,v])=>[k,map(v)])),center:map(parsed.center||[(minX+maxX)/2,(minY+maxY)/2])};
+}
+function cumulative(steps,i){return steps.slice(0,i+1).reduce((a,n)=>a+nodeCost(n),0)}
+
+function renderNav(){
+  $$('.nav-btn').forEach(b=>b.classList.toggle('active',b.dataset.view===state.view));
+  $$('.view').forEach(v=>v.classList.toggle('active',v.id===`view-${state.view}`));
+}
+$$('.nav-btn').forEach(b=>b.addEventListener('click',()=>{state.view=b.dataset.view;renderNav()}));
+
+function renderBuildTabs(){
+  $('#buildTabs').innerHTML=Object.entries(builds).map(([k,b])=>`<button class="build-tab ${state.build===k?'active':''}" data-build="${k}">${b.label}</button>`).join('');
+  $$('#buildTabs .build-tab').forEach(b=>b.onclick=()=>{state.build=b.dataset.build;state.board=Object.keys(builds[state.build].steps)[0];state.step=1;renderBuildTabs();renderBoardSwitch();renderBoard()});
+}
+function renderBoardSwitch(){
+  const names=Object.keys(builds[state.build].steps);
+  if(!names.includes(state.board))state.board=names[0];
+  $('#boardSwitch').innerHTML=names.map(n=>`<button class="board-btn ${state.board===n?'active':''}" data-board="${n}">${n}</button>`).join('');
+  $$('#boardSwitch .board-btn').forEach(b=>b.onclick=()=>{state.board=b.dataset.board;state.step=1;renderBoardSwitch();renderBoard()});
+}
+function renderBoard(){
+  const build=builds[state.build], steps=build.steps[state.board], raw=maps[state.build][state.board];
+  const parsed=normalizeCoords(parseGrid(raw));
+  state.step=Math.min(Math.max(1,state.step),steps.length);
+  const svg=$('#boardSvg');
+  let html='';
+  parsed.ghosts.forEach(([x,y])=>html+=`<circle class="ghost-node" cx="${x}" cy="${y}" r="3.3" />`);
+  const pts=[];
+  for(let i=1;i<=steps.length;i++){if(parsed.points[i])pts.push(parsed.points[i])}
+  for(let i=1;i<pts.length;i++){
+    const a=pts[i-1],b=pts[i]; html+=`<line class="path-line ${i+1>state.step?'future':''}" x1="${a[0]}" y1="${a[1]}" x2="${b[0]}" y2="${b[1]}" />`;
+  }
+  html+=`<circle class="center-node" cx="${parsed.center[0]}" cy="${parsed.center[1]}" r="13"/><text class="center-label" x="${parsed.center[0]}" y="${parsed.center[1]}">S</text>`;
+  for(let i=1;i<=steps.length;i++){
+    const p=parsed.points[i]; if(!p)continue; const t=nodeType(steps[i-1]); const bought=i<=state.step; const current=i===state.step;
+    html+=`<g class="node-hit" data-step="${i}" tabindex="0" role="button" aria-label="Step ${i}, ${steps[i-1]}"><circle class="node-dot ${bought?'bought':''} ${bought?t:''} ${current?'current':''}" cx="${p[0]}" cy="${p[1]}" r="${t==='corner'?13:11}"/><text class="node-label ${bought?'':'future'}" x="${p[0]}" y="${p[1]}">${i}</text></g>`;
+  }
+  svg.innerHTML=html;
+  svg.querySelectorAll('.node-hit').forEach(g=>{const go=()=>{state.step=+g.dataset.step;renderBoard()};g.onclick=go;g.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();go()}}});
+  $('#stepRange').max=steps.length;$('#stepRange').value=state.step;$('#rangeMax').textContent=`${steps.length} clicks`;
+  $('#spentMetric').textContent=build.spent;$('#boardPointsMetric').textContent=build.boardPoints[state.board];
+  const node=steps[state.step-1];$('#currentNodeTitle').textContent=node;
+  const cost=nodeCost(node); const cum=state.build==='azphel'?null:cumulative(steps,state.step-1);
+  $('#currentNodeMeta').textContent=state.build==='azphel'?`Click ${state.step} · sample 40-point route`:`Click ${state.step} · ${cost} point${cost===1?'':'s'} · ${cum} spent on board`;
+  $('#boardCaption').textContent=`${build.label} · ${state.board} · value ${build.value}`;
+  renderStats(build.stats,$('#miniStats'));
+}
+$('#stepRange').oninput=e=>{state.step=+e.target.value;renderBoard()};
+$('#stepPrev').onclick=()=>{state.step=Math.max(1,state.step-1);renderBoard()};
+$('#stepNext').onclick=()=>{state.step=Math.min(builds[state.build].steps[state.board].length,state.step+1);renderBoard()};
+
+function renderStats(stats,el){
+  const entries=Object.entries(stats); const nums=entries.map(([,v])=>parseFloat(v)||0); const max=Math.max(...nums,1);
+  el.innerHTML=entries.map(([k,v])=>`<div class="stat-row"><span>${k} <b style="color:#c7cdd6;font-weight:500">+${v}</b></span><div class="stat-track"><i class="stat-fill" style="width:${Math.max(6,(parseFloat(v)||0)/max*100)}%"></i></div></div>`).join('');
+}
+
+function renderSeason(){
+  $('#seasonModes').innerHTML=Object.entries(season).map(([k,v])=>`<button class="mode-btn ${state.season===k?'active':''}" data-mode="${k}">${v.label}</button>`).join('');
+  $$('#seasonModes .mode-btn').forEach(b=>b.onclick=()=>{state.season=b.dataset.mode;renderSeason()});
+  const s=season[state.season]; $('#seasonValue').innerHTML=`${s.value}<small>value score</small>`;
+  const max=Math.max(...Object.values(s.alloc));
+  $('#allocBars').innerHTML=Object.entries(s.alloc).map(([k,v])=>`<div class="alloc-row"><span>${k}</span><div class="alloc-track"><div class="alloc-fill" style="width:${v/max*100}%"></div></div><b>${v}</b></div>`).join('');
+  const skills=Object.entries(s.skills);
+  $('#seasonSkills').innerHTML=skills.length?skills.map(([k,v])=>`<div class="skill-level"><span>${k}</span><b>${v}</b></div>`).join(''):`<div class="skill-level"><span>Azphel has no skill nodes</span><b>—</b></div>`;
+  renderStats(s.stats,$('#seasonStats'));
+}
+
+let atlasSelection=0;
+function parsePos(s){
+  if(s==='none')return [];
+  return s.split(';').map(part=>{let x=0,y=0;const up=part.match(/(\d+) up/),down=part.match(/(\d+) down/),left=part.match(/(\d+) left/),right=part.match(/(\d+) right/);if(up)y-=+up[1];if(down)y+=+down[1];if(left)x-=+left[1];if(right)x+=+right[1];return[x,y]});
+}
+function renderAtlas(){
+  const per=8,pages=Math.ceil(skillPositions.length/per);state.atlasPage=(state.atlasPage+pages)%pages;
+  const slice=skillPositions.slice(state.atlasPage*per,state.atlasPage*per+per); if(atlasSelection>=slice.length)atlasSelection=0;
+  $('#skillList').innerHTML=slice.map((r,i)=>`<button class="skill-btn ${i===atlasSelection?'active':''}" data-i="${i}">${r[0]}</button>`).join('');
+  $$('#skillList .skill-btn').forEach(b=>b.onclick=()=>{atlasSelection=+b.dataset.i;renderAtlas()});
+  $('#skillPage').textContent=`${state.atlasPage+1} / ${pages}`; $('#atlasKind').textContent=slice[atlasSelection]?.[1]==='passive'?'Passive skills':'Active skills';
+  const row=slice[atlasSelection]||slice[0]; const names=['Nezekan','Zikel','Vaizel','Triniel'];
+  $('#compassGrid').innerHTML=names.map((n,idx)=>{
+    const positions=parsePos(row[idx+2]);
+    const marks=positions.map(([x,y],j)=>{const sx=110+x*15,sy=110+y*15;return `<circle class="marker" cx="${sx}" cy="${sy}" r="9"/><text class="marker-label" x="${sx}" y="${sy}">${positions.length>1?j+1:'+'}</text>`}).join('');
+    return `<div class="compass"><h3>${n}</h3>${positions.length?`<svg viewBox="0 0 220 220" aria-label="${row[0]} position on ${n}"><circle class="axis-ring" cx="110" cy="110" r="75"/><circle class="axis-ring" cx="110" cy="110" r="45"/><line class="axis" x1="25" y1="110" x2="195" y2="110"/><line class="axis" x1="110" y1="25" x2="110" y2="195"/><circle class="center-node" cx="110" cy="110" r="6"/>${marks}</svg>`:`<span class="none-note">No node on this board</span>`}</div>`
+  }).join('');
+}
+$('#skillPrev').onclick=()=>{state.atlasPage--;atlasSelection=0;renderAtlas()};$('#skillNext').onclick=()=>{state.atlasPage++;atlasSelection=0;renderAtlas()};
+
+function renderWeights(){
+  $('#weightType').innerHTML=`<button class="${state.weightType==='skill'?'active':''}" data-t="skill">Skill weights</button><button class="${state.weightType==='stat'?'active':''}" data-t="stat">Stat weights</button>`;
+  $$('#weightType button').forEach(b=>b.onclick=()=>{state.weightType=b.dataset.t;state.weightPage=0;renderWeights()});
+  const modes=['Healer','Damage','PvP']; $('#weightMode').innerHTML=modes.map((m,i)=>`<button class="${state.weightMode===i?'active':''}" data-m="${i}">${m}</button>`).join('');
+  $$('#weightMode button').forEach(b=>b.onclick=()=>{state.weightMode=+b.dataset.m;state.weightPage=0;renderWeights()});
+  const data=(state.weightType==='skill'?skillWeights:statWeights).slice().sort((a,b)=>b[state.weightMode+1]-a[state.weightMode+1]); const per=7,pages=Math.ceil(data.length/per);state.weightPage=(state.weightPage+pages)%pages; const slice=data.slice(state.weightPage*per,state.weightPage*per+per); const max=Math.max(...data.map(r=>r[state.weightMode+1]),1);
+  $('#weightChart').innerHTML=slice.map(r=>{const v=r[state.weightMode+1],w=v/max*100;return `<div class="weight-row"><div class="weight-label" title="${r[0]}">${r[0]}</div><div class="weight-track"><div class="weight-fill" style="width:${w}%"></div><i class="weight-dot" style="left:${w}%"></i></div><div class="weight-val">${v}</div></div>`}).join('');
+  $('#weightPage').textContent=`${state.weightPage+1} / ${pages} · sorted by ${modes[state.weightMode].toLowerCase()} priority`;
+}
+$('#weightPrev').onclick=()=>{state.weightPage--;renderWeights()};$('#weightNext').onclick=()=>{state.weightPage++;renderWeights()};
+
+function renderBoards(){
+  $('#boardsShell').innerHTML=boardSpecs.map((b,i)=>`<article class="board-profile"><h3>${b.name}<span>Unlock level ${b.unlock}</span></h3><div class="rune"><div class="rune-data">${b.fill}<small>points to fill</small></div></div><dl><div><dt>Nodes</dt><dd>${b.nodes}</dd></div><div><dt>Corners</dt><dd>${b.corners}</dd></div><div><dt>Pool</dt><dd>${b.pool}</dd></div></dl></article>`).join('');
+}
+
+$('#motionToggle').onclick=()=>{const reduced=$('#app').classList.toggle('reduced');$('#motionToggle').textContent=reduced?'Enable motion':'Reduce motion'};
+
+renderBuildTabs();renderBoardSwitch();renderBoard();renderSeason();renderAtlas();renderWeights();renderBoards();renderNav();
+</script>
+</body>
+</html>

@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Cleric Daevanion healer boards</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;600;700&family=Marcellus&display=swap">
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:dark light;
+--bg:#0a0f1f;--bg2:#131b36;--ln:#27325a;--tx:#e9edfb;--mu:#8e9bc4;--gold:#ffd873;--pearl:#e3e7ff;--rose:#ff6fa5;--on:#0a0f1f;--edge:#3b4b86;
+--a:#ff8a80;--c:#ff9d4d;--r:#b79cff;--d:#6fa8ff;--h:#5fd6a0;--m:#4fd8e6}
+@media(prefers-color-scheme:light){:root:not([data-theme=dark]){--bg:#eef2fa;--bg2:#fff;--ln:#c5cde4;--tx:#14203d;--mu:#55618a;--gold:#9a6600;--pearl:#2d3d7d;--rose:#d6336c;--on:#fff;--edge:#9aa8d4;--a:#d3443b;--c:#cc6a00;--r:#7650d0;--d:#2a69d4;--h:#18906a;--m:#0b8796}}
+:root[data-theme=light]{--bg:#eef2fa;--bg2:#fff;--ln:#c5cde4;--tx:#14203d;--mu:#55618a;--gold:#9a6600;--pearl:#2d3d7d;--rose:#d6336c;--on:#fff;--edge:#9aa8d4;--a:#d3443b;--c:#cc6a00;--r:#7650d0;--d:#2a69d4;--h:#18906a;--m:#0b8796}
+html,body{height:100%;margin:0}
+body{display:grid;grid-template-columns:240px minmax(0,1fr) 270px;grid-template-rows:auto minmax(0,1fr) auto;grid-template-areas:"h h h" "l s r" "c c c";gap:10px 22px;padding:14px 22px;overflow:hidden;background:var(--bg);color:var(--tx);font:14px/1.4 'Instrument Sans',system-ui,sans-serif}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+header{grid-area:h;display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;position:relative;z-index:6}
+h1{font:400 28px/1.1 Marcellus,Georgia,serif;margin:0}
+header p{margin:4px 0 0;color:var(--mu)}
+#tb{display:flex;gap:4px;flex-wrap:wrap}
+.tb{background:none;border:0;border-bottom:2px solid transparent;color:var(--mu);padding:6px 10px}
+.tb small{display:block;font-size:11px;opacity:.8}
+.tb[aria-selected=true]{color:var(--tx);border-color:var(--gold)}
+#tg{display:none;background:none;border:1px solid var(--ln);border-radius:6px;padding:6px 10px}
+#l{grid-area:l;display:flex;flex-direction:column;gap:18px;min-height:0;overflow:hidden}
+#ro h2{font:400 22px/1.2 Marcellus,Georgia,serif;margin:0 0 6px}
+#ro p{margin:0 0 6px;color:var(--mu);font-size:13px}
+#ro .hn{font-size:12px;margin-top:10px}
+h3{font:400 16px Marcellus,Georgia,serif;margin:0 0 6px}
+.nt{margin:0 0 8px;font-size:12px;color:var(--mu)}
+.sr{display:grid;grid-template-columns:64px 1fr 22px;gap:8px;align-items:center;width:100%;background:none;border:0;padding:3px 0;text-align:left;font-size:13px}
+.sr i{height:8px;border-radius:2px;background:var(--gold);width:var(--w);opacity:.55}
+.sr.on i{opacity:1}.sr.on span{color:var(--gold)}
+.sr b{text-align:right}
+#lg{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:6px 10px;font-size:12px;color:var(--mu)}
+#lg li{display:flex;align-items:center;gap:7px}
+.sw{width:12px;height:12px;border-radius:50%;background:var(--x);flex:none}
+.sw.ac{background:none;border:2px solid var(--gold)}
+.sw.ps{border-radius:2px;background:var(--pearl);transform:rotate(45deg) scale(.8)}
+.sw.cn{border-radius:2px;background:var(--rose);transform:rotate(45deg) scale(.8)}
+#st{grid-area:s;min-height:0;display:flex;background:radial-gradient(closest-side,rgba(255,216,115,.08),transparent)}
+#st.all{display:grid;grid-template:1fr 1fr/1fr 1fr;gap:6px 12px}
+figure{margin:0;flex:1;min-width:0;min-height:0;display:flex;flex-direction:column;align-items:center}
+figcaption{font:400 14px Marcellus,Georgia,serif;color:var(--mu);padding-bottom:4px}
+svg{flex:1;min-height:0;width:auto;max-width:100%;aspect-ratio:1/1;overflow:visible}
+.gc{fill:none;stroke:var(--ln);stroke-width:1.5;stroke-dasharray:3 3}
+.e{stroke:var(--edge);stroke-width:3;stroke-linecap:round;stroke-dasharray:36;pointer-events:none;animation:draw .3s var(--e) backwards;transition:opacity .25s}
+.st{fill:none;stroke:var(--mu);stroke-width:2}
+.n{cursor:pointer;transform-box:fill-box;transform-origin:center;animation:in .4s var(--e) backwards;transition:opacity .25s;outline:none}
+.sh{transform-box:fill-box;transform-origin:center;fill:var(--f);animation:tick var(--L) linear infinite;animation-delay:calc(var(--p) + 3s)}
+.a{--f:var(--a)}.c{--f:var(--c)}.r{--f:var(--r)}.d{--f:var(--d)}.h{--f:var(--h)}.m{--f:var(--m)}.p{--f:var(--pearl)}.k{--f:var(--rose)}
+.s .sh{fill:var(--bg2);stroke:var(--gold);stroke-width:3}
+.t,.ab{fill:var(--on);font:700 11px 'Instrument Sans',sans-serif;text-anchor:middle;pointer-events:none}
+.ab{font-size:8px;fill:var(--mu)}
+.n .ab{fill:var(--on)}.s .t,.s .ab{fill:var(--gold)}
+.hl .sh,.n:focus-visible .sh{stroke:var(--tx);stroke-width:3}
+.off{opacity:.12}
+@keyframes in{from{opacity:0;transform:scale(.2)}}
+@keyframes draw{from{stroke-dashoffset:36}}
+@keyframes tick{0%,10%,100%{transform:scale(1);filter:none}3%{transform:scale(1.5);filter:brightness(1.8) drop-shadow(0 0 6px var(--gold))}}
+.np *{animation:none!important}
+#r{grid-area:r;min-height:0;overflow:hidden}
+#sk,#sx{list-style:none;margin:0 0 16px;padding:0}
+#sk li{display:grid;grid-template-columns:24px 1fr auto 22px;gap:8px;align-items:center;padding:2px 0;font-size:13px}
+.cd{font:700 10px 'Instrument Sans',sans-serif;color:var(--gold)}
+.pp{display:flex;gap:2px}.pp i{width:8px;height:8px;border-radius:2px;background:var(--ln)}.pp i.f{background:var(--gold)}
+#sk em{font-style:normal;font-weight:700;text-align:right}
+#sx li{display:flex;justify-content:space-between;padding:2px 0;font-size:13px;border-bottom:1px solid var(--ln)}
+#sx span{color:var(--mu)}
+#c{grid-area:c;display:flex;justify-content:space-between;align-items:center;gap:14px}
+#cw{display:flex;flex-wrap:wrap;gap:5px;align-items:center;min-height:30px}
+#cw>span{color:var(--mu);font-size:12px;margin-right:6px}
+.cp{width:28px;height:28px;padding:0;border-radius:50%;border:2px solid transparent;background:var(--f);color:var(--on);font-weight:700;font-size:12px;transition:opacity .25s}
+.cp.s{background:none;border-color:var(--gold);color:var(--gold);border-radius:8px}
+.cp.p,.cp.k{border-radius:4px}
+.cp.hl{outline:2px solid var(--tx)}
+.cp.cur{box-shadow:0 0 0 3px var(--bg),0 0 0 5px var(--gold)}
+.cp.off{opacity:.3}
+#mo{background:none;border:0;color:var(--mu);font-size:12px;text-decoration:underline;white-space:nowrap}
+@media(max-width:900px){
+body{grid-template-columns:minmax(0,1fr);grid-template-rows:auto auto minmax(0,1fr) auto;grid-template-areas:"h" "l" "s" "c";padding:10px 12px;gap:8px 0}
+h1{font-size:22px}header p{display:none}#tg{display:block}
+#sp,#lg,#ro .hn{display:none}#ro h2{font-size:18px;display:inline;margin-right:8px}#ro p{display:inline}
+#r{display:none}body.tt #r{display:block;position:fixed;inset:0;padding:96px 18px 18px;background:var(--bg);z-index:5}
+}
+@media(max-height:700px){#l{gap:10px}#sk li{padding:1px 0}#sx li{padding:1px 0}h1{font-size:22px}}
+</style>
+</head>
+<body>
+<header>
+  <div><h1>Cleric Daevanion boards</h1><p>The 149-point healer build, click by click.</p></div>
+  <nav id="tb" role="tablist" aria-label="Boards"></nav>
+  <button id="tg" type="button">Totals</button>
+</header>
+<aside id="l"><div id="ro" aria-live="polite"></div><div id="sp"></div>
+<ul id="lg">
+<li><i class="sw" style="--x:var(--a)"></i>Attack</li><li><i class="sw" style="--x:var(--c)"></i>Critical hit</li>
+<li><i class="sw" style="--x:var(--r)"></i>Critical resist</li><li><i class="sw" style="--x:var(--d)"></i>Defense</li>
+<li><i class="sw" style="--x:var(--h)"></i>HP</li><li><i class="sw" style="--x:var(--m)"></i>MP</li>
+<li><i class="sw ac"></i>Active skill</li><li><i class="sw ps"></i>Passive skill</li>
+<li><i class="sw cn"></i>Corner</li></ul></aside>
+<main id="st"></main>
+<aside id="r"><h3>Skill levels</h3><p class="nt">Base 10, plus up to 4 from the boards.</p><ul id="sk"></ul><h3>Stat totals</h3><ul id="sx"></ul></aside>
+<footer id="c"><div id="cw"></div><button id="mo" type="button">Pause motion</button></footer>
+<script>
+const SK={HL:['Healing Light',3,'s'],RR:['Radiant Recovery',3,'s'],CD:['Condemnation',3,'s'],LR:['Light of Regeneration',3,'s'],CT:['Chain of Torment',3,'s'],HE:['Healing Enhancement',2,'p'],WB:['Warm Benediction',2,'p'],IV:['Immortal Veil',2,'p'],PC:['Prayer of Concentration',2,'p'],RB:['Radiant Benediction',2,'p'],EG:["Earth's Grace",2,'p']};
+const ST={A:['Attack Bonus',3],C:['Critical Hit',5],R:['Critical Hit Resist',5],D:['Defense Bonus',30],H:['HP',100],M:['MP',50],K:['Cooldown Reduction',1.5,'%'],T:['Damage Tolerance',1.5,'%']};
+const KL={s:'Active skill node',p:'Passive skill node',k:'Corner node'};
+const kind=k=>SK[k]?SK[k][2]:'KT'.includes(k)?'k':k.toLowerCase();
+const cost=k=>SK[k]?SK[k][1]:'KT'.includes(k)?4:1;
+const nm=k=>SK[k]?SK[k][0]+' +1':ST[k][0]+' +'+ST[k][1]+(ST[k][2]||'');
+const off=(r,c)=>[r&&Math.abs(r)+(r>0?' down':' up'),c&&Math.abs(c)+(c>0?' right':' left')].filter(Boolean).join(' ');
+const B=[
+['Nezekan',12,5,'D1,0|C1,-1|HE1,-2|H1,-3|D2,-3|HL3,-3|A-1,0|R-1,1|D-2,1|H-3,1|M-4,1|RR-5,1|IV-1,2|M-1,3|A-2,3|CD-3,3|H-3,4|HE-3,5|H1,1|C2,1|R3,1|A4,1|WB5,1|H4,2|LR4,3|M-4,5|K-5,5'],
+['Zikel',20,5,'A0,1|R1,1|RB2,1|D3,1|H3,0|HL3,-1|C2,2|H2,3|RR1,3|M-1,1|PC-1,2|A3,3|M3,4|LR3,5|C3,-2|H3,-3|PC3,-4|D4,5|T5,5|D3,-5|C2,-5|CD1,-5'],
+['Vaizel',30,5,'A-1,0|R-1,1|D-1,2|H0,2|RB1,2|A1,3|H1,4|C2,4|HL3,4|EG-2,1|M-3,1|C-3,0|RR-3,-1|H-3,2|CD-3,3|M-4,-1|C-4,-2|A-4,-3|WB-5,-3'],
+['Triniel',40,6,'A1,0|H1,1|CT1,2|A0,2|M-1,2|H-2,2|HL-3,2|C-3,3|H-3,4|M-3,5|HE-3,6|C1,-1|H1,-2|R1,-3|IV1,-4|A1,-5|H1,-6|RR0,-6|D0,-2|CD-1,-2|M2,-2|LR3,-2|D1,3|M1,4|A2,4|H3,4|WB3,3|A0,4|PC-1,4']
+].map(([n,u,g,s])=>{let p=0;return{n,u,g,v:s.split('|').map((x,i)=>{const m=x.match(/^([A-Z]+)(-?\d+),(-?\d+)$/),k=m[1];p+=cost(k);return{k,r:+m[2],c:+m[3],p,i}})}});
+const pts=b=>B[b].v.at(-1).p, all=B.reduce((a,b)=>a+b.v.at(-1).p,0);
+let cur=0;const cut=[1/0,1/0,1/0,1/0];
+const $=s=>document.querySelector(s),$$=s=>document.querySelectorAll(s);
+
+function fig(b){
+  const{n,g,v}=B[b],S=36,W=(2*g+1)*S,X=c=>(c+g+.5)*S,Y=r=>(r+g+.5)*S,at={'0,0':-1};
+  v.forEach((o,i)=>at[o.r+','+o.c]=i);
+  const dia=r=>`<polygon class="sh" points="0,${-r} ${r},0 0,${r} ${-r},0"/>`;
+  const cs=g==5?[[-5,-5],[-5,5],[5,-5],[5,5]]:[[-6,-6],[-6,6],[6,-6],[6,6],[-6,0],[6,0]];
+  let cr='',ed='',nd='';
+  cs.forEach(([r,c])=>cr+=`<polygon class="gc" transform="translate(${X(c)} ${Y(r)})" points="0,-19 19,0 0,19 -19,0"/>`);
+  v.forEach((o,i)=>{
+    let j=9e9,pr;
+    [[0,1],[1,0],[0,-1],[-1,0]].forEach(([a,c])=>{const q=at[(o.r+a)+','+(o.c+c)];if(q!==undefined&&q<i&&q<j){j=q;pr=[o.r+a,o.c+c]}});
+    const e=(i*.08).toFixed(2),p=(i*.12).toFixed(2);
+    if(pr)ed+=`<line class="e" data-b="${b}" data-i="${i}" style="--e:${e}s" x1="${X(pr[1])}" y1="${Y(pr[0])}" x2="${X(o.c)}" y2="${Y(o.r)}"/>`;
+    const s=kind(o.k),sk=s=='s'||s=='p';
+    const shp=s=='p'?dia(16):s=='k'?dia(19):`<circle class="sh" r="${s=='s'?16:11}"/>`;
+    nd+=`<g transform="translate(${X(o.c)} ${Y(o.r)})"><g class="n ${s}" data-b="${b}" data-i="${i}" tabindex="0" role="img" aria-label="${i+1}, ${nm(o.k)}" style="--e:${e}s;--p:${p}s">${shp}<text class="t" y="${sk?-1:4}">${i+1}</text>${sk?`<text class="ab" y="9">${o.k}</text>`:''}</g></g>`;
+  });
+  const st=`<g transform="translate(${X(0)} ${Y(0)})"><circle class="st" r="9"/><text class="ab" y="3">S</text></g>`;
+  return `<figure><figcaption>${n}, ${pts(b)} points</figcaption><svg viewBox="0 0 ${W} ${W}" style="--L:${(v.length*.12+3).toFixed(2)}s" role="group" aria-label="${n} board"><defs><pattern id="p${b}" width="36" height="36" patternUnits="userSpaceOnUse"><circle cx="18" cy="18" r="1.3" fill="var(--ln)"/></pattern></defs><rect width="${W}" height="${W}" rx="14" fill="url(#p${b})"/>${cr}${ed}${st}${nd}</svg></figure>`;
+}
+
+function ro(el){
+  const q=el&&el.dataset;let h,s;
+  if(q){const b=B[+q.b],o=b.v[+q.i],c=cost(o.k);
+    h=nm(o.k);
+    s=`${KL[kind(o.k)]||'Stat node'}<br>Click ${o.i+1} of ${b.v.length} on ${b.n}<br>${c} point${c>1?'s':''}, ${o.p} spent on this board<br>${off(o.r,o.c)} from the start`;
+  }else if(cur<4){const b=B[cur];h=b.n;s=`Unlocks at level ${b.u}.<br>${pts(cur)} points in ${b.v.length} clicks.`}
+  else{h='All four boards';s=`${all} points in ${B.reduce((a,b)=>a+b.v.length,0)} clicks.`}
+  $('#ro').innerHTML=`<h2>${h}</h2><p>${s}</p>`+(q?'':'<p class="hn">Hover a node for its details. Click a number below to replay the order up to that click.</p>');
+}
+function hov(el){
+  $$('.hl').forEach(e=>e.classList.remove('hl'));
+  if(el)$$(`[data-b="${el.dataset.b}"][data-i="${el.dataset.i}"]`).forEach(e=>e.classList.add('hl'));
+  ro(el);
+}
+function apply(){
+  $$('[data-i]').forEach(e=>e.classList.toggle('off',+e.dataset.i>=cut[+e.dataset.b]));
+  $$('.cp').forEach(e=>e.classList.toggle('cur',+e.dataset.i==cut[+e.dataset.b]-1));
+}
+function render(){
+  const st=$('#st');st.className=cur==4?'all':'';
+  st.innerHTML=(cur==4?[0,1,2,3]:[cur]).map(fig).join('');
+  $('#cw').innerHTML=cur<4?'<span>Click order</span>'+B[cur].v.map((o,i)=>`<button type="button" class="cp ${kind(o.k)}" data-b="${cur}" data-i="${i}" title="${nm(o.k)}">${i+1}</button>`).join(''):'<span>Pick one board to replay its click order.</span>';
+  $$('.tb').forEach(e=>e.setAttribute('aria-selected',+e.dataset.t==cur));
+  $$('.sr').forEach(e=>e.classList.toggle('on',+e.dataset.t==cur));
+  document.body.classList.remove('tt');$('#tg').textContent='Totals';
+  ro();apply();
+}
+
+$('#tb').innerHTML=B.map((b,i)=>`<button class="tb" role="tab" data-t="${i}">${b.n}<small>Level ${b.u}</small></button>`).join('')+'<button class="tb" role="tab" data-t="4">All four<small>Overview</small></button>';
+$('#sp').innerHTML=`<h3>${all} points</h3>`+B.map((b,i)=>`<button type="button" class="sr" data-t="${i}"><span>${b.n}</span><i style="--w:${pts(i)/Math.max(...B.map((_,j)=>pts(j)))*100}%"></i><b>${pts(i)}</b></button>`).join('');
+
+const tot={},stat={};
+B.forEach(b=>b.v.forEach(o=>{SK[o.k]?tot[o.k]=(tot[o.k]||0)+1:stat[o.k]=(stat[o.k]||0)+ST[o.k][1]}));
+$('#sk').innerHTML=Object.entries(tot).sort((a,b)=>b[1]-a[1]||SK[a[0]][0].localeCompare(SK[b[0]][0])).map(([k,n])=>`<li><b class="cd">${k}</b><span>${SK[k][0]}</span><span class="pp">${[0,1,2,3].map(i=>`<i class="${i<n?'f':''}"></i>`).join('')}</span><em>${10+n}</em></li>`).join('');
+$('#sx').innerHTML=Object.keys(ST).filter(k=>stat[k]).map(k=>`<li><span>${ST[k][0]}</span><b>+${stat[k].toLocaleString('en')}${ST[k][2]||''}</b></li>`).join('');
+
+document.addEventListener('mouseover',e=>hov(e.target.closest('[data-i]')));
+document.addEventListener('mouseout',()=>hov(null));
+document.addEventListener('focusin',e=>{const t=e.target.closest&&e.target.closest('[data-i]');if(t)hov(t)});
+document.addEventListener('click',e=>{
+  const t=e.target.closest('[data-t]');if(t){cur=+t.dataset.t;render();return}
+  const c=e.target.closest('.cp');if(c){const i=+c.dataset.i+1,b=+c.dataset.b;cut[b]=cut[b]==i?1/0:i;apply()}
+});
+$('#tg').onclick=()=>{const on=document.body.classList.toggle('tt');$('#tg').textContent=on?'Board':'Totals'};
+$('#mo').onclick=()=>{const on=document.body.classList.toggle('np');$('#mo').textContent=on?'Play motion':'Pause motion'};
+render();
+</script>
+</body>
+</html>

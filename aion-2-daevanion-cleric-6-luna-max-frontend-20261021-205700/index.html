@@ -1,0 +1,1281 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="color-scheme" content="dark">
+  <title>Cleric Daevanion | Aion 2</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --void: #000000;
+      --slate: #20262a;
+      --bone: #e7e1d6;
+      --ash: #9ca3a5;
+      --dim: #586064;
+      --aether: #83d5e6;
+      --gold: #d5bb73;
+      --lilac: #a89bbd;
+      --red: #cb806f;
+      --display: "Palatino Linotype", "Book Antiqua", Palatino, Georgia, serif;
+      --body: "Trebuchet MS", "Avenir Next", Arial, sans-serif;
+      --data: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+      --page-pad: clamp(12px, 2.1vw, 30px);
+      --cell-line: rgba(231, 225, 214, .075);
+    }
+    * { box-sizing: border-box; }
+    html, body { width: 100%; height: 100%; margin: 0; background: var(--void); color: var(--bone); overflow: hidden; }
+    body { font: 14px/1.4 var(--body); }
+    button, select { color: inherit; font: inherit; }
+    button { cursor: pointer; }
+    button:focus-visible, select:focus-visible, a:focus-visible {
+      outline: 2px solid var(--aether);
+      outline-offset: 3px;
+    }
+    #app {
+      width: 100%;
+      height: 100vh;
+      height: 100dvh;
+      display: grid;
+      grid-template-rows: 66px minmax(0, 1fr) 25px;
+      overflow: hidden;
+      background:
+        radial-gradient(ellipse at 49% 43%, rgba(34, 51, 57, .19), transparent 49%),
+        var(--void);
+    }
+    .masthead {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 0 var(--page-pad);
+      min-width: 0;
+    }
+    .brand { display: flex; align-items: baseline; gap: 13px; min-width: 0; }
+    h1 { margin: 0; font: 400 clamp(25px, 3vw, 37px)/1 var(--display); letter-spacing: -.035em; white-space: nowrap; }
+    .brand-sub { color: var(--ash); font-size: 12px; white-space: nowrap; }
+    .page-nav { display: flex; align-items: center; gap: clamp(12px, 2vw, 28px); min-width: 0; }
+    .nav-button {
+      position: relative;
+      padding: 7px 0;
+      border: 0;
+      background: transparent;
+      color: var(--ash);
+      font-size: 12px;
+      white-space: nowrap;
+    }
+    .nav-compact { display: none; }
+    .nav-button[aria-selected="true"] { color: var(--bone); }
+    .nav-button[aria-selected="true"]::before {
+      content: "";
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      margin: 0 7px 1px 0;
+      background: var(--gold);
+      transform: rotate(45deg);
+    }
+    .page-view { position: relative; min-height: 0; overflow: hidden; }
+    .page-view[hidden] { display: none; }
+    .path-layout {
+      height: 100%;
+      min-height: 0;
+      padding: 9px var(--page-pad) 5px;
+      display: grid;
+      grid-template-columns: minmax(188px, .82fr) minmax(320px, 1.5fr) minmax(210px, .86fr);
+      gap: clamp(12px, 2vw, 28px);
+      align-items: stretch;
+    }
+    .build-rail, .inspect-panel, .board-stage { min-width: 0; min-height: 0; }
+    .build-rail { display: flex; flex-direction: column; gap: 17px; padding: 2px 0; }
+    .control-block label, .subhead {
+      display: block;
+      color: var(--ash);
+      font-size: 12px;
+      margin-bottom: 6px;
+    }
+    .control-block select, .reference-controls select, .summary-select {
+      width: 100%;
+      min-height: 36px;
+      padding: 7px 28px 7px 10px;
+      border: 1px solid #394145;
+      border-radius: 0;
+      background: #080b0d;
+      color: var(--bone);
+      font-size: 13px;
+    }
+    .build-name {
+      margin: 4px 0 0;
+      font: 400 25px/1.06 var(--display);
+    }
+    .build-note { margin: 8px 0 0; color: var(--ash); font-size: 12px; line-height: 1.45; }
+    .budget-readout {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 8px;
+      margin-top: 1px;
+    }
+    .budget-readout strong { font: 400 29px/1 var(--display); }
+    .budget-readout span { color: var(--ash); font-size: 11px; }
+    .value-readout { display: flex; justify-content: space-between; align-items: baseline; margin-top: 7px; }
+    .value-readout b { color: var(--gold); font: 500 15px/1 var(--data); }
+    .value-readout span { color: var(--ash); font-size: 11px; }
+    .allocation { display: grid; gap: 9px; margin-top: 9px; }
+    .allocation-row {
+      display: grid;
+      grid-template-columns: 76px minmax(30px, 1fr) 32px;
+      gap: 8px;
+      align-items: center;
+      color: var(--ash);
+      font-size: 11px;
+    }
+    .allocation-row b { text-align: right; font: 11px var(--data); color: var(--bone); }
+    .track { height: 3px; background: #252b2e; position: relative; }
+    .track i { display: block; height: 100%; background: var(--aether); }
+    .route-copy {
+      margin-top: auto;
+      padding-top: 10px;
+      color: var(--dim);
+      font-size: 11px;
+      line-height: 1.4;
+    }
+    .board-stage {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    .board-heading {
+      width: min(100%, 560px);
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 15px;
+      margin-bottom: 5px;
+    }
+    .board-heading h2 { margin: 0; font: 400 23px/1.05 var(--display); }
+    .board-heading p { margin: 0; color: var(--ash); font-size: 11px; text-align: right; }
+    .map-shell {
+      width: min(100%, 540px, calc(100dvh - 226px));
+      aspect-ratio: 1;
+      display: grid;
+      place-items: center;
+      position: relative;
+    }
+    .map-grid {
+      width: 100%;
+      height: 100%;
+      display: grid;
+      grid-template-columns: 23px repeat(var(--cols), minmax(0, 1fr));
+      grid-template-rows: 23px repeat(var(--rows), minmax(0, 1fr));
+      gap: 2px;
+      position: relative;
+      isolation: isolate;
+    }
+    .axis { display: grid; place-items: center; color: #687175; font: 9px/1 var(--data); }
+    .map-cell { min-width: 0; min-height: 0; display: grid; place-items: center; position: relative; }
+    .map-cell::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border: 1px solid var(--cell-line);
+      opacity: .3;
+      pointer-events: none;
+    }
+    .map-cell.empty::before { opacity: .12; }
+    .node-dot {
+      width: 4px;
+      height: 4px;
+      border: 1px solid #555e61;
+      border-radius: 50%;
+      display: block;
+      background: #161b1d;
+    }
+    .start-node {
+      width: 13px;
+      height: 13px;
+      display: grid;
+      place-items: center;
+      border: 1px solid var(--gold);
+      border-radius: 50%;
+      color: var(--gold);
+      font: 8px/1 var(--data);
+      position: relative;
+      z-index: 1;
+    }
+    .start-node::after {
+      content: "";
+      position: absolute;
+      inset: -5px;
+      border: 1px solid rgba(213, 187, 115, .45);
+      border-radius: 50%;
+      animation: ward 4.8s ease-in-out infinite;
+    }
+    @keyframes ward {
+      0%, 100% { transform: scale(.82); opacity: .18; }
+      55% { transform: scale(1.34); opacity: .68; }
+    }
+    .route-node {
+      width: 86%;
+      height: 86%;
+      min-width: 12px;
+      min-height: 12px;
+      max-width: 30px;
+      max-height: 30px;
+      position: relative;
+      z-index: 2;
+      padding: 0;
+      display: grid;
+      place-items: center;
+      border: 1px solid #50595d;
+      border-radius: 50%;
+      background: #080b0d;
+      color: var(--bone);
+      font: 9px/1 var(--data);
+      transition: background-color .16s ease, border-color .16s ease, color .16s ease, transform .16s ease;
+    }
+    .route-node.active-skill { border-color: rgba(131, 213, 230, .72); color: var(--aether); }
+    .route-node.passive-skill { border-color: rgba(168, 155, 189, .8); color: var(--lilac); }
+    .route-node.corner { border-color: rgba(213, 187, 115, .82); color: var(--gold); }
+    .route-node.selected {
+      background: var(--bone);
+      color: var(--void);
+      border-color: var(--bone);
+      transform: scale(1.12);
+      box-shadow: 0 0 0 3px rgba(131, 213, 230, .22);
+    }
+    .route-node:hover { background: var(--bone); color: var(--void); }
+    .map-legend {
+      width: min(100%, 540px);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 4px;
+      color: var(--ash);
+      font-size: 10px;
+    }
+    .legend-item { display: inline-flex; align-items: center; gap: 5px; white-space: nowrap; }
+    .legend-dot { width: 8px; height: 8px; border-radius: 50%; border: 1px solid currentColor; display: inline-block; }
+    .legend-dot.stat { color: var(--bone); }
+    .legend-dot.active { color: var(--aether); }
+    .legend-dot.passive { color: var(--lilac); }
+    .legend-dot.corner { color: var(--gold); }
+    .inspect-panel {
+      display: flex;
+      flex-direction: column;
+      padding: 6px 0 0;
+      position: relative;
+    }
+    .panel-tabs {
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      margin-bottom: 15px;
+    }
+    .panel-tab {
+      border: 0;
+      padding: 4px 0;
+      background: transparent;
+      color: var(--ash);
+      font-size: 11px;
+    }
+    .panel-tab[aria-pressed="true"] { color: var(--bone); }
+    .inspect-content { min-height: 0; }
+    .node-step {
+      color: var(--gold);
+      font: 12px/1.1 var(--data);
+      margin-bottom: 9px;
+    }
+    .node-name { font: 400 25px/1.04 var(--display); margin: 0 0 8px; overflow-wrap: anywhere; }
+    .node-kind { color: var(--ash); font-size: 11px; margin-bottom: 14px; }
+    .node-facts { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 14px; margin: 0; }
+    .node-facts div { min-width: 0; }
+    .node-facts dt { color: var(--dim); font-size: 10px; margin-bottom: 2px; }
+    .node-facts dd { margin: 0; color: var(--bone); font-size: 12px; }
+    .panel-hint { margin: 18px 0 0; color: var(--dim); font-size: 11px; }
+    .detail-close { display: none; }
+    .metric-list { display: grid; grid-template-columns: 1fr; gap: 4px 12px; }
+    .metric-row {
+      min-width: 0;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: baseline;
+      gap: 5px;
+      font-size: 11px;
+      line-height: 1.18;
+    }
+    .metric-row span { min-width: 0; color: var(--ash); overflow-wrap: anywhere; }
+    .metric-row b { color: var(--bone); font: 11px/1.1 var(--data); white-space: nowrap; }
+    .metric-row b i { color: var(--aether); font-style: normal; }
+    .panel-title { font: 400 19px/1.1 var(--display); margin: 0 0 10px; }
+    .panel-note { color: var(--dim); font-size: 10px; line-height: 1.35; margin: 12px 0 0; }
+    .no-route {
+      display: grid;
+      place-items: center;
+      height: 100%;
+      min-height: 260px;
+      text-align: center;
+    }
+    .no-route h2 { margin: 0 0 8px; font: 400 30px/1 var(--display); }
+    .no-route p { max-width: 33ch; margin: 0; color: var(--ash); font-size: 12px; }
+    .budget-bars { width: min(100%, 520px); display: grid; gap: 9px; margin: 8px 0 0; }
+    .budget-bar {
+      display: grid;
+      grid-template-columns: 84px minmax(40px, 1fr) 34px;
+      align-items: center;
+      gap: 10px;
+      color: var(--ash);
+      font-size: 11px;
+    }
+    .budget-bar b { color: var(--bone); text-align: right; font: 11px var(--data); }
+    .budget-bar .track { height: 5px; }
+    .budget-bar .track i { background: var(--gold); }
+    .summary-layout {
+      height: 100%;
+      min-height: 0;
+      display: grid;
+      grid-template-columns: minmax(190px, .75fr) minmax(280px, 1.1fr) minmax(300px, 1.4fr);
+      gap: clamp(20px, 4vw, 64px);
+      padding: 20px var(--page-pad) 12px;
+    }
+    .summary-intro h2 { font: 400 clamp(29px, 4vw, 43px)/1.02 var(--display); margin: 0 0 12px; }
+    .summary-intro p { margin: 0; max-width: 34ch; color: var(--ash); font-size: 12px; line-height: 1.5; }
+    .summary-intro .budget-readout { margin-top: 24px; justify-content: flex-start; gap: 11px; }
+    .summary-intro .budget-readout strong { font-size: 38px; }
+    .summary-value { margin-top: 10px; color: var(--gold); font: 15px var(--data); }
+    .summary-data { min-height: 0; display: flex; flex-direction: column; gap: 15px; }
+    .summary-data section { min-height: 0; }
+    .summary-data h3 { margin: 0 0 8px; color: var(--bone); font: 400 20px/1.1 var(--display); }
+    .summary-data .metric-list { grid-template-columns: 1fr 1fr; gap: 5px 16px; }
+    .summary-data .metric-row { font-size: 11px; }
+    .summary-data .metric-row b { font-size: 10px; }
+    .summary-warning {
+      color: var(--ash);
+      font-size: 11px;
+      max-width: 31ch;
+      margin-top: auto;
+      padding-top: 14px;
+    }
+    .ref-layout {
+      height: 100%;
+      min-height: 0;
+      padding: 18px var(--page-pad) 10px;
+      display: grid;
+      grid-template-columns: minmax(200px, .68fr) minmax(350px, 1.32fr);
+      gap: clamp(24px, 5vw, 72px);
+    }
+    .ref-left h2, .weights-heading h2 { margin: 0 0 15px; font: 400 36px/1.05 var(--display); }
+    .ref-left p { max-width: 32ch; color: var(--ash); font-size: 12px; }
+    .reference-controls { display: grid; gap: 14px; margin-top: 18px; }
+    .reference-controls label { display: block; color: var(--ash); font-size: 11px; margin-bottom: 5px; }
+    .ref-content { min-height: 0; display: flex; flex-direction: column; justify-content: center; }
+    .ref-board-header { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+    .ref-board-header h3 { margin: 0; font: 400 29px/1 var(--display); }
+    .ref-board-header span { color: var(--gold); font: 12px var(--data); }
+    .ref-stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px 20px; margin: 20px 0; }
+    .ref-stats dt { color: var(--dim); font-size: 10px; }
+    .ref-stats dd { margin: 3px 0 0; color: var(--bone); font-size: 12px; }
+    .corner-list { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 16px; color: var(--ash); font-size: 11px; }
+    .corner-list span::before { content: "◆"; color: var(--gold); margin-right: 7px; font-size: 8px; }
+    .ref-rules { display: grid; grid-template-columns: 1fr 1fr; gap: 13px 22px; margin-top: 20px; }
+    .ref-rule { color: var(--ash); font-size: 11px; max-width: 34ch; }
+    .ref-rule b { display: block; color: var(--bone); font-weight: 500; margin-bottom: 3px; }
+    .position-table, .weight-table { border-collapse: collapse; width: 100%; font-size: 12px; }
+    .position-table th, .position-table td, .weight-table th, .weight-table td { text-align: left; padding: 8px 10px 8px 0; vertical-align: middle; }
+    .position-table th, .weight-table th { color: var(--ash); font-weight: 500; }
+    .position-table td { color: var(--bone); }
+    .position-table td:first-child { color: var(--aether); }
+    .position-table-wrap { margin-top: 22px; }
+    .position-note { color: var(--dim); font-size: 10px; margin-top: 12px; }
+    .weights-layout {
+      height: 100%;
+      min-height: 0;
+      padding: 11px var(--page-pad) 4px;
+      display: grid;
+      grid-template-rows: auto minmax(0,1fr) auto;
+      gap: 8px;
+    }
+    .weights-heading { display: flex; justify-content: space-between; align-items: end; gap: 18px; }
+    .weights-heading h2 { margin: 0; font-size: 32px; }
+    .weight-switch { display: flex; align-items: center; gap: 14px; }
+    .text-switch {
+      border: 0;
+      background: transparent;
+      color: var(--ash);
+      padding: 5px 0;
+      font-size: 11px;
+    }
+    .text-switch[aria-pressed="true"] { color: var(--bone); }
+    .weight-table-wrap { min-height: 0; overflow: hidden; }
+    .weight-table { table-layout: fixed; font-size: clamp(10px, 1vw, 12px); line-height: 1.05; }
+    .weight-table thead th { height: 26px; color: var(--ash); }
+    .weight-table tbody tr { height: clamp(17px, 2.4vh, 22px); }
+    .weight-table th:first-child, .weight-table td:first-child { width: 40%; }
+    .weight-table td { padding: 3px 10px 3px 0; color: var(--bone); }
+    .weight-table td:first-child { color: var(--ash); }
+    .weight-cell { display: flex; align-items: center; gap: 7px; }
+    .weight-cell span { width: 28px; font: 10px var(--data); }
+    .weight-cell i { display: block; height: 3px; min-width: 1px; background: var(--aether); }
+    .weight-table tbody tr:nth-child(4n+1) td:first-child { color: var(--bone); }
+    .weight-note { margin: 0; color: var(--dim); font-size: 10px; }
+    .app-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+      padding: 0 var(--page-pad);
+      color: var(--dim);
+      font-size: 10px;
+      min-width: 0;
+    }
+    .app-footer a { color: var(--ash); text-underline-offset: 2px; }
+    .footer-tools { display: flex; align-items: center; gap: 16px; white-space: nowrap; }
+    .motion-toggle {
+      padding: 2px 0;
+      background: transparent;
+      border: 0;
+      color: var(--ash);
+      font-size: 10px;
+    }
+    .quiet-motion *, .quiet-motion *::before, .quiet-motion *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+    @media (max-width: 900px) {
+      #app { grid-template-rows: 58px minmax(0,1fr) 23px; }
+      .masthead { gap: 9px; }
+      .brand { gap: 8px; }
+      .brand-sub { display: none; }
+      .page-nav { gap: 13px; }
+      .nav-button { font-size: 11px; }
+      .path-layout { grid-template-columns: minmax(160px,.7fr) minmax(265px,1.3fr) minmax(175px,.75fr); gap: 12px; }
+      .map-shell { width: min(100%, 480px, calc(100dvh - 205px)); }
+      .node-name { font-size: 21px; }
+      .summary-layout { grid-template-columns: minmax(160px,.65fr) minmax(220px,.95fr) minmax(270px,1.3fr); gap: 20px; }
+    }
+    @media (max-width: 700px) {
+      body { font-size: 12px; }
+      #app { grid-template-rows: 49px minmax(0,1fr) 22px; }
+      .masthead { padding-left: 12px; padding-right: 12px; }
+      h1 { font-size: 25px; }
+      .page-nav { gap: clamp(6px, 2vw, 13px); }
+      .nav-button { font-size: 10px; padding: 5px 0; }
+      .nav-wide { display: none; }
+      .nav-compact { display: inline; }
+      .nav-button[aria-selected="true"]::before { width: 5px; height: 5px; margin-right: 4px; }
+      .path-layout {
+        position: relative;
+        grid-template-columns: 1fr;
+        grid-template-rows: auto minmax(0,1fr) auto;
+        gap: 2px;
+        padding: 5px 10px 3px;
+      }
+      .build-rail {
+        display: grid;
+        grid-template-columns: 1.15fr .85fr;
+        grid-template-rows: auto auto;
+        gap: 5px 9px;
+        align-content: start;
+        padding: 0;
+      }
+      .build-rail .control-block label { font-size: 10px; margin-bottom: 3px; }
+      .control-block select { min-height: 32px; padding: 5px 20px 5px 7px; font-size: 11px; }
+      .build-rail .profile-readout { grid-column: 1 / -1; display: flex; align-items: baseline; justify-content: space-between; gap: 10px; }
+      .build-rail .profile-readout .build-name { font-size: 19px; margin: 0; }
+      .build-rail .profile-readout .build-note { margin: 0; text-align: right; font-size: 10px; max-width: 30ch; }
+      .build-rail .budget-block { display: none; }
+      .route-copy { display: none; }
+      .board-stage { justify-content: center; }
+      .board-heading { width: 100%; margin: 0 0 2px; }
+      .board-heading h2 { font-size: 18px; }
+      .board-heading p { font-size: 9px; }
+      .map-shell { width: min(100%, 390px, calc(100dvh - 323px)); }
+      .map-grid { grid-template-columns: 16px repeat(var(--cols), minmax(0,1fr)); grid-template-rows: 16px repeat(var(--rows), minmax(0,1fr)); gap: 1px; }
+      .axis { font-size: 7px; }
+      .node-dot { width: 3px; height: 3px; }
+      .route-node { min-width: 9px; min-height: 9px; font-size: clamp(6px, 1.8vw, 8px); border-width: 1px; }
+      .start-node { width: 10px; height: 10px; font-size: 6px; }
+      .start-node::after { inset: -4px; }
+      .map-legend { gap: 8px; margin-top: 2px; font-size: 8px; }
+      .legend-dot { width: 6px; height: 6px; }
+      .inspect-panel { min-height: 72px; padding: 0 0 2px; }
+      .panel-tabs { gap: 13px; margin: 0 0 5px; }
+      .panel-tab { font-size: 10px; padding: 2px 0; }
+      .node-step { font-size: 9px; margin: 0 0 2px; }
+      .node-name { font-size: 17px; margin: 0 0 2px; }
+      .node-kind { font-size: 9px; margin: 0; }
+      .node-facts { display: flex; gap: 12px; }
+      .node-facts dt { display: none; }
+      .node-facts dd { font-size: 9px; }
+      .panel-hint { display: none; }
+      .detail-close { display: inline; margin-left: auto; }
+      .inspect-panel[data-mode="skills"], .inspect-panel[data-mode="stats"] {
+        position: absolute;
+        z-index: 5;
+        inset: 4px 3px;
+        padding: 14px;
+        background: #050708;
+        border: 1px solid #394145;
+      }
+      .inspect-panel[data-mode="skills"] .metric-list, .inspect-panel[data-mode="stats"] .metric-list { grid-template-columns: 1fr 1fr; gap: 8px 17px; }
+      .inspect-panel[data-mode="skills"] .metric-row, .inspect-panel[data-mode="stats"] .metric-row { font-size: 11px; line-height: 1.2; }
+      .inspect-panel[data-mode="skills"] .metric-row b, .inspect-panel[data-mode="stats"] .metric-row b { font-size: 10px; }
+      .inspect-panel[data-mode="skills"] .panel-title, .inspect-panel[data-mode="stats"] .panel-title { font-size: 23px; }
+      .no-route h2 { font-size: 25px; }
+      .no-route p { font-size: 11px; }
+      .summary-layout {
+        grid-template-columns: minmax(0, .8fr) minmax(0, 1fr);
+        grid-template-rows: auto minmax(0,1fr);
+        gap: 8px 16px;
+        padding: 10px 13px 7px;
+      }
+      .summary-intro { grid-column: 1 / -1; display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 5px 10px; }
+      .summary-intro h2 { font-size: 25px; margin: 0; }
+      .summary-intro p { font-size: 10px; max-width: 52ch; }
+      .summary-intro .budget-readout { margin: 0; grid-column: 2; grid-row: 1; }
+      .summary-intro .budget-readout strong { font-size: 26px; }
+      .summary-intro .budget-readout span { font-size: 9px; }
+      .summary-value { grid-column: 2; grid-row: 2; margin: 0; font-size: 10px; }
+      .summary-data { gap: 10px; }
+      .summary-data h3 { font-size: 17px; margin-bottom: 5px; }
+      .summary-data .metric-list { grid-template-columns: 1fr; gap: 4px; }
+      .summary-data .metric-row { font-size: 9px; grid-template-columns: minmax(0,1fr) auto; }
+      .summary-data .metric-row b { font-size: 9px; }
+      .summary-warning { font-size: 9px; padding-top: 4px; }
+      .ref-layout { grid-template-columns: minmax(125px,.65fr) minmax(0,1.35fr); gap: 14px; padding: 12px 12px 6px; }
+      .ref-left h2, .weights-heading h2 { font-size: 27px; margin-bottom: 8px; }
+      .ref-left p { font-size: 10px; }
+      .reference-controls { gap: 8px; margin-top: 10px; }
+      .reference-controls label { font-size: 9px; }
+      .reference-controls select { min-height: 30px; font-size: 10px; padding: 4px 18px 4px 6px; }
+      .ref-board-header h3 { font-size: 21px; }
+      .ref-board-header span { font-size: 9px; }
+      .ref-stats { grid-template-columns: 1fr 1fr; gap: 8px; margin: 12px 0; }
+      .ref-stats dt { font-size: 8px; }
+      .ref-stats dd { font-size: 9px; }
+      .corner-list { grid-template-columns: 1fr; gap: 5px; font-size: 9px; }
+      .ref-rules { grid-template-columns: 1fr; gap: 8px; margin-top: 10px; }
+      .ref-rule { font-size: 9px; }
+      .position-table-wrap { margin-top: 10px; }
+      .position-table { font-size: 9px; }
+      .position-table th, .position-table td { padding: 5px 4px 5px 0; }
+      .position-note { font-size: 8px; margin-top: 7px; }
+      .weights-layout { padding: 7px 10px 2px; gap: 4px; }
+      .weights-heading { align-items: center; }
+      .weights-heading h2 { font-size: 23px; margin: 0; }
+      .weight-switch { gap: 10px; }
+      .text-switch { font-size: 9px; }
+      .weight-table { font-size: 8px; }
+      .weight-table thead th { height: 19px; }
+      .weight-table tbody tr { height: clamp(12px, 2.05vh, 17px); }
+      .weight-table th:first-child, .weight-table td:first-child { width: 46%; }
+      .weight-table th, .weight-table td { padding-right: 4px; }
+      .weight-cell { gap: 3px; }
+      .weight-cell span { width: 19px; font-size: 8px; }
+      .weight-cell i { height: 2px; }
+      .weight-note { font-size: 8px; }
+      .app-footer { padding: 0 10px; font-size: 8px; }
+      .footer-tools { gap: 9px; }
+      .motion-toggle { font-size: 8px; }
+    }
+    @media (max-width: 370px) {
+      h1 { font-size: clamp(20px, 6.2vw, 23px); }
+      .page-nav { gap: 5px; }
+      .nav-button { font-size: 9px; }
+      .nav-button[aria-selected="true"]::before { margin-right: 3px; }
+      .map-shell { width: min(100%, 360px, calc(100dvh - 316px)); }
+      .inspect-panel[data-mode="skills"] .metric-list, .inspect-panel[data-mode="stats"] .metric-list { grid-template-columns: 1fr; gap: 5px; }
+      .summary-intro p { display: none; }
+    }
+    @media (max-height: 650px) and (max-width: 700px) {
+      #app { grid-template-rows: 43px minmax(0,1fr) 20px; }
+      h1 { font-size: 22px; }
+      .build-rail { gap: 3px 7px; }
+      .build-rail .profile-readout .build-note { display: none; }
+      .map-shell { width: min(100%, 280px, calc(100dvh - 285px)); }
+      .inspect-panel { min-height: 56px; }
+      .ref-layout { padding-top: 6px; }
+      .summary-layout { padding-top: 6px; }
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <header class="masthead">
+      <div class="brand">
+        <h1>Cleric Daevanion</h1>
+        <span class="brand-sub">Aion 2 build maps</span>
+      </div>
+      <nav class="page-nav" role="tablist" aria-label="Guide views">
+        <button class="nav-button" role="tab" aria-label="Build paths" aria-selected="true" data-view="paths"><span class="nav-wide">Build paths</span><span class="nav-compact" aria-hidden="true">Paths</span></button>
+        <button class="nav-button" role="tab" aria-label="Board atlas" aria-selected="false" data-view="reference"><span class="nav-wide">Board atlas</span><span class="nav-compact" aria-hidden="true">Boards</span></button>
+        <button class="nav-button" role="tab" aria-label="Priority weights" aria-selected="false" data-view="weights"><span class="nav-wide">Priority weights</span><span class="nav-compact" aria-hidden="true">Weights</span></button>
+        <button class="nav-button" role="tab" aria-label="316-point builds" aria-selected="false" data-view="full"><span class="nav-wide">316-point builds</span><span class="nav-compact" aria-hidden="true">316</span></button>
+      </nav>
+    </header>
+
+    <main id="paths" class="page-view" role="tabpanel">
+      <div class="path-layout">
+        <aside class="build-rail" aria-label="Build controls and allocation">
+          <div class="control-block">
+            <label for="pathBuild">Build</label>
+            <select id="pathBuild"></select>
+          </div>
+          <div class="control-block">
+            <label for="pathBoard">Board</label>
+            <select id="pathBoard"></select>
+          </div>
+          <div class="profile-readout">
+            <h2 class="build-name" id="pathBuildName"></h2>
+            <p class="build-note" id="pathBuildNote"></p>
+          </div>
+          <div class="budget-block">
+            <div class="budget-readout"><strong id="pathBudget"></strong><span>points spent</span></div>
+            <div class="value-readout"><span>Source priority value</span><b id="pathValue"></b></div>
+            <div class="allocation" id="pathAllocation"></div>
+          </div>
+          <p class="route-copy" id="pathFootnote"></p>
+        </aside>
+
+        <section class="board-stage" aria-label="Selected build board">
+          <div id="boardHeading" class="board-heading"></div>
+          <div id="mapShell" class="map-shell"></div>
+          <div class="map-legend" aria-label="Node legend">
+            <span class="legend-item"><i class="legend-dot stat"></i>Stat</span>
+            <span class="legend-item"><i class="legend-dot active"></i>Active skill</span>
+            <span class="legend-item"><i class="legend-dot passive"></i>Passive skill</span>
+            <span class="legend-item"><i class="legend-dot corner"></i>Corner</span>
+          </div>
+        </section>
+
+        <aside class="inspect-panel" id="inspectPanel" data-mode="node" aria-label="Node and build details">
+          <div class="panel-tabs" role="group" aria-label="Build details">
+            <button class="panel-tab" data-panel="node" aria-pressed="true">Selected node</button>
+            <button class="panel-tab" data-panel="skills" aria-pressed="false">Skills</button>
+            <button class="panel-tab" data-panel="stats" aria-pressed="false">Stats</button>
+            <button class="panel-tab detail-close" data-panel="node" aria-label="Close details">Close</button>
+          </div>
+          <div class="inspect-content" id="inspectContent"></div>
+        </aside>
+      </div>
+    </main>
+
+    <main id="reference" class="page-view" role="tabpanel" hidden>
+      <div class="ref-layout">
+        <section class="ref-left">
+          <h2>Board atlas</h2>
+          <p>Unlock levels, crystal pools, corner effects, node costs, and Cleric skill locations.</p>
+          <div class="reference-controls">
+            <div><label for="refMode">Reference</label><select id="refMode"><option value="board">Board rules</option><option value="skill">Skill positions</option></select></div>
+            <div id="refBoardControl"><label for="refBoard">Board</label><select id="refBoard"></select></div>
+            <div id="refSkillControl" hidden><label for="refSkill">Cleric skill</label><select id="refSkill"></select></div>
+          </div>
+        </section>
+        <section class="ref-content" id="refContent" aria-live="polite"></section>
+      </div>
+    </main>
+
+    <main id="weights" class="page-view" role="tabpanel" hidden>
+      <div class="weights-layout">
+        <div class="weights-heading">
+          <h2 id="weightTitle">Skill weights</h2>
+          <div class="weight-switch" role="group" aria-label="Weight table">
+            <button class="text-switch" data-weight="skills" aria-pressed="true">Skills</button>
+            <button class="text-switch" data-weight="stats" aria-pressed="false">Stats</button>
+          </div>
+        </div>
+        <div class="weight-table-wrap" id="weightTable"></div>
+        <p class="weight-note">These are priority values per skill level or typical stat node. They rank choices. They are not measured healing or damage.</p>
+      </div>
+    </main>
+
+    <main id="full" class="page-view" role="tabpanel" hidden>
+      <div class="summary-layout">
+        <section class="summary-intro">
+          <div>
+            <h2 id="summaryTitle"></h2>
+            <p id="summaryDesc"></p>
+          </div>
+          <div class="control-block">
+            <label for="summaryBuild">Allocation</label>
+            <select class="summary-select" id="summaryBuild"></select>
+          </div>
+          <div class="budget-readout"><strong id="summaryBudget"></strong><span>points spent</span></div>
+          <div class="summary-value" id="summaryValue"></div>
+        </section>
+        <section class="summary-data">
+          <section>
+            <h3>Board allocation</h3>
+            <div class="budget-bars" id="summaryAllocation"></div>
+          </section>
+          <p class="summary-warning" id="summaryWarning"></p>
+        </section>
+        <section class="summary-data">
+          <section>
+            <h3>Skill levels</h3>
+            <div class="metric-list" id="summarySkills"></div>
+          </section>
+          <section>
+            <h3>Stat totals</h3>
+            <div class="metric-list" id="summaryStats"></div>
+          </section>
+        </section>
+      </div>
+    </main>
+
+    <footer class="app-footer">
+      <a href="https://aion2.grimvane.app/companion/wiki/daevanion-cleric/" target="_blank" rel="noreferrer">Source: Aion 2 Companion, Cleric Daevanion board build</a>
+      <div class="footer-tools">
+        <span>Black field · numbered board paths</span>
+        <button id="motionToggle" class="motion-toggle" aria-pressed="false">Quiet motion</button>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    "use strict";
+
+    const SOURCE = "https://aion2.grimvane.app/companion/wiki/daevanion-cleric/";
+    const boardOrder = ["Nezekan", "Zikel", "Vaizel", "Triniel", "Azphel"];
+    const skillKinds = {
+      "Earth's Retribution":"active", "Judgment Thunder":"active", "Debilitating Mark":"active",
+      "Divine Aura":"active", "Chain of Torment":"active", "Lightning Strike Scattershot":"active",
+      "Light of Regeneration":"active", "Condemnation":"active", "Healing Light":"active",
+      "Radiant Recovery":"active", "Bolt":"active", "Defiance":"active",
+      "Warm Benediction":"passive", "Empyrean Lords' Benediction":"passive",
+      "Empyrean Lord's Grace":"passive", "Healing Enhancement":"passive",
+      "Immortal Veil":"passive", "Heal Block":"passive", "Prayer of Concentration":"passive",
+      "Earth's Grace":"passive", "Survival Willpower":"passive", "Radiant Benediction":"passive"
+    };
+    const cornerNames = new Set([
+      "Combat Speed +1.5%", "Cooldown Reduction +1.5%", "Damage Boost +1.5%",
+      "Damage Tolerance +1.5%", "Critical Damage Boost +1.5%",
+      "Critical Damage Tolerance +1.5%", "Multi-Hit Chance +1.5%",
+      "Multi-Hit Resist +1.5%", "PvP Damage Boost +1.5%", "PvP Damage Tolerance +1.5%"
+    ]);
+
+    const boardShapes = {
+      Nezekan: ["000000000000000","000000000000000","001110111011100","001011101110100","001110111011100","000100101010100","001111111111100","001001010100100","001111111111100","001010101001000","001110111011100","001011101110100","001110111011100","000000000000000","000000000000000"],
+      Zikel: ["000000000000000","000000000000000","001111111111100","001010100100100","001110111111100","001011101010100","001110101111100","000100111001000","001111101011100","001010101110100","001111111011100","001001001010100","001111111111100","000000000000000","000000000000000"],
+      Vaizel: ["000000000000000","000000000000000","001110111111100","001011101010100","001110111111100","000100101001000","001111111111100","001001010100100","001111111111100","000100101001000","001111111011100","001010101110100","001111111011100","000000000000000","000000000000000"],
+      Triniel: ["000000000000000","011100111001110","010111101111010","010100111001010","011111101111110","000101000100100","011111111111110","010101010101010","011111111111110","001001000101000","011111101111110","010100111001010","010111101111010","011100111001110","000000000000000"],
+      Azphel: ["111101110111111","100111010100101","111101111111111","001000101010100","111011111111100","101110100100111","100011111111101","111001010100111","101111111110001","111001001011101","001111111110111","001010101000100","111111111101111","101001010111001","111111011101111"]
+    };
+    const boardInfo = {
+      Nezekan: { unlock:12, nodes:"66 stat, 22 skill, start", fill:134, pool:"Daevanion Crystal", rows:[3,13], cols:[3,13], corners:["2 Combat Speed","2 Cooldown Reduction"] },
+      Zikel: { unlock:20, nodes:"66 stat, 22 skill, start", fill:134, pool:"Daevanion Crystal", rows:[3,13], cols:[3,13], corners:["2 Damage Boost","2 Damage Tolerance"] },
+      Vaizel: { unlock:30, nodes:"66 stat, 22 skill, start", fill:134, pool:"Daevanion Crystal", rows:[3,13], cols:[3,13], corners:["2 Critical Damage Boost","2 Critical Damage Tolerance"] },
+      Triniel: { unlock:40, nodes:"94 stat, 22 skill, start", fill:168, pool:"Daevanion Crystal", rows:[2,14], cols:[2,14], corners:["3 Multi-Hit Chance","3 Multi-Hit Resist"] },
+      Azphel: { unlock:45, nodes:"152 stat, start", fill:232, pool:"Azphel crystals", rows:[1,15], cols:[1,15], corners:["4 PvP Damage Boost","4 PvP Damage Tolerance"] }
+    };
+
+    function route(names, coords, costList) {
+      const nameList = names.split("|");
+      const posList = coords.split("|").map(function (pair) {
+        const xy = pair.split(",");
+        return { row:Number(xy[0]), col:Number(xy[1]) };
+      });
+      if (nameList.length !== posList.length) throw new Error("Route position count mismatch");
+      const steps = nameList.map(function (name, index) {
+        return { step:index + 1, name:name, row:posList[index].row, col:posList[index].col, cost:null, spent:null };
+      });
+      let sourceCosts = null;
+      if (costList === "unknown") {
+        sourceCosts = "unknown";
+      } else if (typeof costList === "string" && costList.trim()) {
+        const costs = costList.trim().split(/\s+/).map(Number);
+        if (costs.length !== steps.length) throw new Error("Route cost count mismatch");
+        sourceCosts = "listed";
+        steps.forEach(function (node, index) { node.cost = costs[index]; });
+      } else {
+        sourceCosts = "rule";
+        steps.forEach(function (node) {
+          if (cornerNames.has(node.name)) node.cost = 4;
+          else {
+            const baseName = node.name.replace(/ \+1$/, "");
+            node.cost = skillKinds[baseName] === "active" ? 3 : skillKinds[baseName] === "passive" ? 2 : 1;
+          }
+        });
+      }
+      let total = 0;
+      steps.forEach(function (node) {
+        if (node.cost !== null) { total += node.cost; node.spent = total; }
+      });
+      return { steps:steps, costSource:sourceCosts, total:sourceCosts === "unknown" ? null : total };
+    }
+
+    const routeCoords = {
+      healN:"9,8|9,7|9,6|9,5|10,5|11,5|7,8|7,9|6,9|5,9|4,9|3,9|7,10|7,11|6,11|5,11|5,12|5,13|9,9|10,9|11,9|12,9|13,9|12,10|12,11|4,13|3,13",
+      healZ:"8,9|9,9|10,9|11,9|11,8|11,7|10,10|10,11|9,11|7,9|7,10|11,11|11,12|11,13|11,6|11,5|11,4|12,13|13,13|11,3|10,3|9,3",
+      healV:"7,8|7,9|7,10|8,10|9,10|9,11|9,12|10,12|11,12|6,9|5,9|5,8|5,7|5,10|5,11|4,7|4,6|4,5|3,5",
+      healT:"9,8|9,9|9,10|8,10|7,10|6,10|5,10|5,11|5,12|5,13|5,14|9,7|9,6|9,5|9,4|9,3|9,2|8,2|8,6|7,6|10,6|11,6|9,11|9,12|10,12|11,12|11,11|8,12|7,12",
+      damageN:"7,8|7,7|7,6|7,5|7,4|6,4|5,4|5,5|4,5|9,8|9,9|9,10|8,10|7,10|7,11|6,11|5,11|9,11|4,11|3,11|3,12|3,13|3,5|3,4|3,3|9,7|10,7|11,7|11,8|12,7|13,7|12,6|12,5|13,5|13,4|13,3",
+      damageZ:"8,7|7,7|6,7|6,6|6,5|7,5|7,4|8,4|9,4|9,3|10,3|11,3|12,3|13,3|13,4|13,5|5,7|5,8|5,9|5,10|4,10|3,10|3,11|3,12|3,13|4,13|5,13|6,13|7,13",
+      damageV:"7,8|7,9|7,10|7,11|7,12|6,12|5,12|5,11|6,9|9,8|9,7|9,6|9,5|9,4|10,4|11,4|11,5|7,13|8,13",
+      damageT:"7,8|7,7|7,6|9,8|9,9|9,10|7,5",
+      pvpN:"7,8|7,9|7,10|7,11|6,11|5,11|4,11|3,11|5,12|5,13|9,8|9,7|9,6|9,5|9,4|9,3|8,3|10,3|11,3|10,5|11,5|12,5|13,5|12,6|12,7|13,7|13,8|13,9",
+      pvpZ:"8,7|9,7|9,6|10,7|11,7|8,9|7,9|7,10|7,11|6,11|5,11|5,12|11,8|11,9|12,9|13,9|13,10|13,11|13,12|13,13",
+      pvpV:"7,8|7,7|7,6|9,8|9,9|10,9|11,9|12,9|13,9|13,8|13,7|13,6|7,9|7,10|7,11|7,12|6,12|5,12|5,11|4,11|3,11|3,10|5,13|3,12|3,13",
+      pvpT:"9,8|9,9|9,10|10,10|11,10|11,11|11,12|11,13|11,14|11,9|12,9|13,9|9,7|9,6|8,6|7,6|9,5|9,4|9,3|10,3|11,3|11,2|9,2|8,2",
+      azphel40:"7,8|7,9|7,10|9,8|9,7|9,6|10,6|11,6|11,7|12,7|13,7|13,8|14,8|15,8|11,5|11,4|11,3|12,3|13,3|14,3|15,3|15,4|15,2|15,1"
+    };
+
+    const profiles = [
+      {
+        id:"heal149", label:"PvE healer", budget:149, value:"299.8",
+        note:"Healing Light and Radiant Recovery lead; the long corner walks lose value.",
+        allocation:{Nezekan:42,Zikel:36,Vaizel:28,Triniel:43},
+        skills:[["Chain of Torment",11,1],["Light of Regeneration",13,3],["Condemnation",14,4],["Healing Light",14,4],["Radiant Recovery",14,4],["Warm Benediction",13,3],["Healing Enhancement",13,3],["Immortal Veil",12,2],["Prayer of Concentration",13,3],["Earth's Grace",11,1],["Radiant Benediction",12,2]],
+        stats:[["Attack Bonus","+39"],["Critical Hit","+50"],["Critical Hit Resist","+25"],["Defense Bonus","+270"],["HP","+1700"],["MP","+550"],["Cooldown Reduction","+1.5%"],["Damage Tolerance","+1.5%"]],
+        routes:{
+          Nezekan:route("Defense Bonus +30|Critical Hit +5|Healing Enhancement +1|HP +100|Defense Bonus +30|Healing Light +1|Attack Bonus +3|Critical Hit Resist +5|Defense Bonus +30|HP +100|MP +50|Radiant Recovery +1|Immortal Veil +1|MP +50|Attack Bonus +3|Condemnation +1|HP +100|Healing Enhancement +1|HP +100|Critical Hit +5|Critical Hit Resist +5|Attack Bonus +3|Warm Benediction +1|HP +100|Light of Regeneration +1|MP +50|Cooldown Reduction +1.5%","9,8|9,7|9,6|9,5|10,5|11,5|7,8|7,9|6,9|5,9|4,9|3,9|7,10|7,11|6,11|5,11|5,12|5,13|9,9|10,9|11,9|12,9|13,9|12,10|12,11|4,13|3,13","1 1 2 1 1 3 1 1 1 1 1 3 2 1 1 3 1 2 1 1 1 1 2 1 3 1 4"),
+          Zikel:route("Attack Bonus +3|Critical Hit Resist +5|Radiant Benediction +1|Defense Bonus +30|HP +100|Healing Light +1|Critical Hit +5|HP +100|Radiant Recovery +1|MP +50|Prayer of Concentration +1|Attack Bonus +3|MP +50|Light of Regeneration +1|Critical Hit +5|HP +100|Prayer of Concentration +1|Defense Bonus +30|Damage Tolerance +1.5%|Defense Bonus +30|Critical Hit +5|Condemnation +1",routeCoords.healZ,"1 1 2 1 1 3 1 1 3 1 2 1 1 3 1 1 2 1 4 1 1 3"),
+          Vaizel:route("Attack Bonus +3|Critical Hit Resist +5|Defense Bonus +30|HP +100|Radiant Benediction +1|Attack Bonus +3|HP +100|Critical Hit +5|Healing Light +1|Earth's Grace +1|MP +50|Critical Hit +5|Radiant Recovery +1|HP +100|Condemnation +1|MP +50|Critical Hit +5|Attack Bonus +3|Warm Benediction +1",routeCoords.healV,"1 1 1 1 2 1 1 1 3 2 1 1 3 1 3 1 1 1 2"),
+          Triniel:route("Attack Bonus +3|HP +100|Chain of Torment +1|Attack Bonus +3|MP +50|HP +100|Healing Light +1|Critical Hit +5|HP +100|MP +50|Healing Enhancement +1|Critical Hit +5|HP +100|Critical Hit Resist +5|Immortal Veil +1|Attack Bonus +3|HP +100|Radiant Recovery +1|Defense Bonus +30|Condemnation +1|MP +50|Light of Regeneration +1|Defense Bonus +30|MP +50|Attack Bonus +3|HP +100|Warm Benediction +1|Attack Bonus +3|Prayer of Concentration +1",routeCoords.healT,"1 1 3 1 1 1 3 1 1 1 2 1 1 1 2 1 1 3 1 3 1 3 1 1 1 1 2 1 2")
+        }
+      },
+      {
+        id:"damage149", label:"PvE damage", budget:149, value:"263.5",
+        note:"Chain of Torment and Condemnation reach 14; damage corners join the route.",
+        allocation:{Nezekan:60,Zikel:48,Vaizel:30,Triniel:11},
+        skills:[["Earth's Retribution",12,2],["Judgment Thunder",13,3],["Debilitating Mark",11,1],["Divine Aura",12,2],["Chain of Torment",14,4],["Condemnation",14,4],["Bolt",13,3],["Empyrean Lord's Grace",12,2],["Immortal Veil",11,1],["Earth's Grace",12,2]],
+        stats:[["Attack Bonus","+51"],["Critical Hit","+45"],["Critical Hit Resist","+45"],["Defense Bonus","+300"],["HP","+800"],["MP","+450"],["Combat Speed","+1.5%"],["Cooldown Reduction","+3%"],["Damage Boost","+3%"]],
+        routes:{
+          Nezekan:route("Attack Bonus +3|MP +50|HP +100|Judgment Thunder +1|Attack Bonus +3|HP +100|Defense Bonus +30|HP +100|Chain of Torment +1|Defense Bonus +30|HP +100|MP +50|Attack Bonus +3|Immortal Veil +1|MP +50|Attack Bonus +3|Condemnation +1|Earth's Retribution +1|Critical Hit Resist +5|Empyrean Lord's Grace +1|Critical Hit +5|Cooldown Reduction +1.5%|Critical Hit Resist +5|Attack Bonus +3|Combat Speed +1.5%|Critical Hit +5|Attack Bonus +3|MP +50|Divine Aura +1|HP +100|Bolt +1|Attack Bonus +3|Critical Hit +5|Empyrean Lord's Grace +1|Critical Hit Resist +5|Cooldown Reduction +1.5%",routeCoords.damageN),
+          Zikel:route("Defense Bonus +30|Critical Hit +5|Earth's Grace +1|Critical Hit Resist +5|MP +50|Divine Aura +1|HP +100|Attack Bonus +3|Defense Bonus +30|Condemnation +1|Critical Hit +5|Defense Bonus +30|Critical Hit Resist +5|Damage Boost +1.5%|Attack Bonus +3|Chain of Torment +1|Attack Bonus +3|MP +50|Debilitating Mark +1|Critical Hit Resist +5|MP +50|Attack Bonus +3|Bolt +1|Defense Bonus +30|Damage Boost +1.5%|Critical Hit +5|Attack Bonus +3|Critical Hit Resist +5|Judgment Thunder +1",routeCoords.damageZ),
+          Vaizel:route("Attack Bonus +3|Critical Hit Resist +5|Defense Bonus +30|Chain of Torment +1|HP +100|Critical Hit Resist +5|Attack Bonus +3|Condemnation +1|Earth's Grace +1|Defense Bonus +30|Critical Hit +5|Attack Bonus +3|Bolt +1|MP +50|Critical Hit +5|Defense Bonus +30|Judgment Thunder +1|Critical Hit +5|Earth's Retribution +1",routeCoords.damageV),
+          Triniel:route("Defense Bonus +30|MP +50|Condemnation +1|Attack Bonus +3|HP +100|Chain of Torment +1|Attack Bonus +3",routeCoords.damageT)
+        }
+      },
+      {
+        id:"pvp149", label:"PvP", budget:149, value:"280.9",
+        note:"Defiance, Empyrean Lord's Grace, Immortal Veil, and Survival Willpower lead.",
+        allocation:{Nezekan:43,Zikel:30,Vaizel:40,Triniel:36},
+        skills:[["Divine Aura",11,1],["Chain of Torment",12,2],["Condemnation",13,3],["Healing Light",12,2],["Radiant Recovery",11,1],["Bolt",11,1],["Defiance",14,4],["Warm Benediction",12,2],["Empyrean Lord's Grace",14,4],["Healing Enhancement",13,3],["Immortal Veil",14,4],["Prayer of Concentration",11,1],["Survival Willpower",14,4]],
+        stats:[["Attack Bonus","+30"],["Critical Hit","+55"],["Critical Hit Resist","+55"],["Defense Bonus","+300"],["HP","+1600"],["MP","+250"],["Damage Tolerance","+1.5%"],["Critical Damage Tolerance","+1.5%"]],
+        routes:{
+          Nezekan:route("Attack Bonus +3|Critical Hit Resist +5|Immortal Veil +1|MP +50|Attack Bonus +3|Condemnation +1|Critical Hit Resist +5|Empyrean Lord's Grace +1|HP +100|Healing Enhancement +1|Defense Bonus +30|Critical Hit +5|Healing Enhancement +1|HP +100|Critical Hit Resist +5|Critical Hit +5|Defiance +1|Attack Bonus +3|Immortal Veil +1|Defense Bonus +30|Healing Light +1|Critical Hit +5|Empyrean Lord's Grace +1|Attack Bonus +3|HP +100|Bolt +1|Critical Hit +5|Warm Benediction +1",routeCoords.pvpN),
+          Zikel:route("Defense Bonus +30|HP +100|Survival Willpower +1|Critical Hit Resist +5|Healing Light +1|Attack Bonus +3|MP +50|Prayer of Concentration +1|HP +100|Critical Hit +5|MP +50|Survival Willpower +1|HP +100|Defense Bonus +30|MP +50|Defiance +1|Critical Hit +5|HP +100|Critical Hit Resist +5|Damage Tolerance +1.5%",routeCoords.pvpZ),
+          Vaizel:route("Attack Bonus +3|HP +100|Survival Willpower +1|Defense Bonus +30|MP +50|Critical Hit Resist +5|Divine Aura +1|HP +100|Critical Hit +5|Defiance +1|Defense Bonus +30|Healing Enhancement +1|Critical Hit Resist +5|Defense Bonus +30|Chain of Torment +1|HP +100|Critical Hit Resist +5|Attack Bonus +3|Condemnation +1|Defense Bonus +30|Critical Hit Resist +5|Empyrean Lord's Grace +1|Immortal Veil +1|HP +100|Critical Damage Tolerance +1.5%",routeCoords.pvpV),
+          Triniel:route("Attack Bonus +3|HP +100|Chain of Torment +1|Critical Hit Resist +5|Critical Hit +5|Warm Benediction +1|HP +100|Critical Hit +5|Defiance +1|Defense Bonus +30|Attack Bonus +3|Survival Willpower +1|Critical Hit +5|HP +100|Defense Bonus +30|Condemnation +1|Critical Hit Resist +5|Immortal Veil +1|Attack Bonus +3|Critical Hit +5|HP +100|Empyrean Lord's Grace +1|HP +100|Radiant Recovery +1",routeCoords.pvpT)
+        }
+      },
+      {
+        id:"azphel40", label:"Azphel · 40 points", budget:40, value:"40.2",
+        note:"Sample PvP allocation on Azphel's separate crystal pool.",
+        allocation:{Azphel:40},
+        skills:[],
+        stats:[["HP","+200"],["MP","+50"],["PvP Attack","+12"],["PvP Defense","+120"],["PvP Critical Hit Resist","+15"],["PvP Accuracy","+10"],["PvP Evasion","+12"],["Status Effect Resist","+4%"],["PvP Damage Boost","+1.5%"],["PvP Damage Tolerance","+1.5%"]],
+        routes:{
+          Azphel:route("HP +100|PvP Attack +3|Status Effect Resist +1%|MP +50|PvP Attack +3|Status Effect Resist +1%|PvP Accuracy +5|PvP Attack +3, PvP Defense +30|PvP Critical Hit Resist +5|PvP Evasion +3|PvP Defense +30|HP +100|PvP Evasion +3|PvP Damage Tolerance +1.5%|PvP Evasion +3|PvP Defense +30|Status Effect Resist +1%|PvP Critical Hit Resist +5|PvP Accuracy +5, PvP Evasion +3|PvP Defense +30|PvP Critical Hit Resist +5|Status Effect Resist +1%|PvP Attack +3|PvP Damage Boost +1.5%",routeCoords.azphel40,"unknown")
+        }
+      }
+    ];
+
+    const fullProfiles = [
+      {
+        id:"heal316", label:"PvE healer", budget:316, value:"503.5",
+        allocation:{Nezekan:87,Zikel:88,Vaizel:73,Triniel:68},
+        skills:[["Earth's Retribution",11,1],["Judgment Thunder",13,3],["Debilitating Mark",11,1],["Chain of Torment",14,4],["Light of Regeneration",14,4],["Condemnation",14,4],["Healing Light",14,4],["Radiant Recovery",14,4],["Warm Benediction",14,4],["Empyrean Lord's Grace",14,4],["Healing Enhancement",14,4],["Immortal Veil",14,4],["Prayer of Concentration",14,4],["Earth's Grace",14,4],["Survival Willpower",12,2],["Radiant Benediction",14,4]],
+        stats:[["Attack Bonus","+120"],["Critical Hit","+60"],["Critical Hit Resist","+95"],["Defense Bonus","+750"],["HP","+3900"],["MP","+700"],["Combat Speed","+3%"],["Cooldown Reduction","+3%"],["Damage Boost","+3%"],["Damage Tolerance","+3%"]]
+      },
+      {
+        id:"damage316", label:"PvE damage", budget:316, value:"431.1",
+        allocation:{Nezekan:79,Zikel:68,Vaizel:76,Triniel:93},
+        skills:[["Earth's Retribution",14,4],["Judgment Thunder",14,4],["Debilitating Mark",14,4],["Divine Aura",14,4],["Chain of Torment",14,4],["Condemnation",14,4],["Healing Light",12,2],["Radiant Recovery",12,2],["Bolt",14,4],["Empyrean Lords' Benediction",11,1],["Empyrean Lord's Grace",14,4],["Earth's Grace",14,4],["Radiant Benediction",11,1]],
+        stats:[["Attack Bonus","+126"],["Critical Hit","+175"],["Critical Hit Resist","+95"],["Defense Bonus","+570"],["HP","+2000"],["MP","+1050"],["Combat Speed","+3%"],["Cooldown Reduction","+3%"],["Damage Boost","+3%"],["Critical Damage Boost","+3%"],["Multi-Hit Chance","+4.5%"]]
+      },
+      {
+        id:"pvp316", label:"PvP", budget:316, value:"533.7",
+        allocation:{Nezekan:94,Zikel:84,Vaizel:71,Triniel:67},
+        skills:[["Earth's Retribution",14,4],["Debilitating Mark",12,2],["Divine Aura",14,4],["Chain of Torment",14,4],["Condemnation",14,4],["Healing Light",13,3],["Radiant Recovery",14,4],["Bolt",14,4],["Defiance",14,4],["Warm Benediction",14,4],["Empyrean Lords' Benediction",13,3],["Empyrean Lord's Grace",14,4],["Healing Enhancement",14,4],["Immortal Veil",14,4],["Heal Block",13,3],["Prayer of Concentration",14,4],["Earth's Grace",13,3],["Survival Willpower",14,4]],
+        stats:[["Attack Bonus","+66"],["Critical Hit","+115"],["Critical Hit Resist","+105"],["Defense Bonus","+330"],["HP","+2400"],["MP","+900"],["Combat Speed","+3%"],["Cooldown Reduction","+1.5%"],["Damage Boost","+1.5%"],["Damage Tolerance","+3%"],["Critical Damage Tolerance","+3%"]]
+      },
+      {
+        id:"azphel100", label:"Azphel · 100 points", budget:100, value:"97.4",
+        allocation:{Azphel:100}, skills:[],
+        stats:[["HP","+400"],["MP","+150"],["PvP Attack","+21"],["PvP Defense","+210"],["PvP Critical Hit","+25"],["PvP Critical Hit Resist","+50"],["PvP Accuracy","+40"],["PvP Evasion","+24"],["Status Effect Resist","+8%"],["PvP Damage Boost","+6%"],["PvP Damage Tolerance","+3%"]]
+      }
+    ];
+
+    const skillPositions = [
+      ["Earth's Retribution","active","1 down 3 right","3 up 5 left","5 right","5 down 4 right"],
+      ["Judgment Thunder","active","1 up 3 left","1 up 5 right","3 down 3 left","5 up 4 right"],
+      ["Debilitating Mark","active","3 up","3 up 1 right","3 up 4 left","5 down 4 left"],
+      ["Divine Aura","active","3 down","1 up 3 left","3 down 1 right","5 up 4 left"],
+      ["Chain of Torment","active","4 up 3 left","5 down 3 left","1 up 3 right","1 down 2 right"],
+      ["Lightning Strike Scattershot","active","5 right","5 up 1 left","5 up","3 up 6 left"],
+      ["Light of Regeneration","active","4 down 3 right","3 down 5 right","5 left","3 down 2 left"],
+      ["Condemnation","active","3 up 3 right","1 down 5 left","3 up 3 right","1 up 2 left"],
+      ["Healing Light","active","3 down 3 left","3 down 1 left","3 down 4 right","3 up 2 right"],
+      ["Radiant Recovery","active","5 up 1 right","1 down 3 right","3 up 1 left","6 left"],
+      ["Bolt","active","5 down 1 left","5 up 3 right","1 down 3 left","6 right"],
+      ["Defiance","active","5 left","5 down 1 right","5 down","3 down 6 right"],
+      ["Warm Benediction","passive","3 up 5 left; 5 down 1 right","none","5 up 3 left","3 down 3 right"],
+      ["Empyrean Lords' Benediction","passive","5 up 1 left; 3 down 5 right","none","5 down 3 right","3 up 3 left"],
+      ["Empyrean Lord's Grace","passive","5 up 3 right; 5 down 3 left","none","5 up 2 right","3 down 6 left"],
+      ["Healing Enhancement","passive","3 up 5 right; 1 down 2 left","none","5 down 2 left","3 up 6 right"],
+      ["Immortal Veil","passive","1 up 2 right; 3 down 5 left","none","3 up 5 right","1 down 4 left"],
+      ["Heal Block","passive","none","5 up 1 right; 5 down 1 left","2 down 1 left","5 up 1 right"],
+      ["Prayer of Concentration","passive","none","1 up 2 right; 3 down 4 left","3 down 5 left","1 up 4 right"],
+      ["Earth's Grace","passive","none","2 up 1 left; 4 down 3 right","2 up 1 right","5 down 1 left"],
+      ["Survival Willpower","passive","none","3 up 4 right; 1 down 2 left","1 up 2 left","5 down 1 right"],
+      ["Radiant Benediction","passive","none","4 up 3 left; 2 down 1 right","1 down 2 right","5 up 1 left"]
+    ];
+    const skillWeights = [
+      ["Earth's Retribution",2,5,6],["Judgment Thunder",2,9,3],["Debilitating Mark",2,3,4],
+      ["Divine Aura",1.5,6,6],["Chain of Torment",4,12,6],["Lightning Strike Scattershot",.5,2,1],
+      ["Light of Regeneration",7,1,2],["Condemnation",7,14,8],["Healing Light",12,2,6],
+      ["Radiant Recovery",12,2,6],["Bolt",1.5,6,6],["Defiance",1,.5,9],
+      ["Warm Benediction",7,1,6],["Empyrean Lords' Benediction",1,.5,3],
+      ["Empyrean Lord's Grace",2,4,6],["Healing Enhancement",9,1,6],
+      ["Immortal Veil",3,.5,5],["Heal Block",0,0,3],["Prayer of Concentration",5,.5,4],
+      ["Earth's Grace",3,4,3],["Survival Willpower",1.5,.5,9],["Radiant Benediction",6,1,1]
+    ];
+    const statWeights = [
+      ["Attack Bonus +3",1.2,1.2,.8],["Critical Hit +5",.3,.8,.7],["Critical Hit Resist +5",.5,.3,1.2],
+      ["Defense Bonus +30",.6,.3,.2],["HP +100",1.2,.5,1],["MP +50",.4,.3,.2],
+      ["Combat Speed +1.5%",7.5,7,8],["Cooldown Reduction +1.5%",8,6.5,5],
+      ["Damage Boost +1.5%",4,6.5,5],["Damage Tolerance +1.5%",7.5,3,9],
+      ["Critical Damage Boost +1.5%",1.5,5,3],["Critical Damage Tolerance +1.5%",3,1.5,8],
+      ["Multi-Hit Chance +1.5%",1.5,4.5,2],["Multi-Hit Resist +1.5%",2.5,1,4],
+      ["PvP Attack +3",0,0,.8],["PvP Defense +30",0,0,.6],["PvP Critical Hit +5",0,0,.6],
+      ["PvP Critical Hit Resist +5",0,0,.8],["PvP Accuracy +5",0,0,.5],["PvP Evasion +3",0,0,.5],
+      ["Status Effect Chance +1%",0,0,2],["Status Effect Resist +1%",0,0,4],
+      ["PvP Damage Boost +1.5%",0,0,5],["PvP Damage Tolerance +1.5%",0,0,6]
+    ];
+
+    const $ = function (selector, root) { return (root || document).querySelector(selector); };
+    const $$ = function (selector, root) { return Array.from((root || document).querySelectorAll(selector)); };
+    const escapeHtml = function (value) {
+      return String(value).replace(/[&<>"']/g, function (ch) {
+        return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch];
+      });
+    };
+    let currentProfile = profiles[0];
+    let currentBoard = "Nezekan";
+    let currentStep = 1;
+    let panelMode = "node";
+    let referenceMode = "board";
+    let weightMode = "skills";
+
+    function allocationHTML(allocation, total, maxEach) {
+      return Object.entries(allocation).map(function (entry) {
+        const name = entry[0], points = entry[1];
+        const width = maxEach ? Math.min(100, points / maxEach * 100) : points / total * 100;
+        return '<div class="allocation-row"><span>' + escapeHtml(name) + '</span><div class="track"><i style="width:' + width + '%"></i></div><b>' + points + '</b></div>';
+      }).join("");
+    }
+    function profileById(id) { return profiles.find(function (item) { return item.id === id; }); }
+    function routeFor(profile, board) { return profile.routes[board] || null; }
+    function nodeKind(label) {
+      if (cornerNames.has(label)) return "corner";
+      const key = label.replace(/ \+1$/, "");
+      return skillKinds[key] || "stat";
+    }
+    function locationText(row, col) {
+      const parts = [];
+      const down = row - 8, right = col - 8;
+      if (down < 0) parts.push(Math.abs(down) + " up");
+      if (down > 0) parts.push(down + " down");
+      if (right < 0) parts.push(Math.abs(right) + " left");
+      if (right > 0) parts.push(right + " right");
+      return parts.length ? parts.join(", ") : "start";
+    }
+    function typeLabel(kind) {
+      return kind === "active" ? "Active skill" : kind === "passive" ? "Passive skill" : kind === "corner" ? "Corner stat" : "Stat";
+    }
+    function validateData() {
+      const errors = [];
+      profiles.forEach(function (profile) {
+        Object.entries(profile.routes).forEach(function (entry) {
+          const board = entry[0], routeData = entry[1], expected = profile.allocation[board];
+          if (routeData.costSource !== "unknown" && routeData.total !== expected) {
+            errors.push(profile.label + " / " + board + ": nodes cost " + routeData.total + ", allocation says " + expected);
+          }
+        });
+        const sum = Object.values(profile.allocation).reduce(function (a,b) { return a+b; }, 0);
+        if (sum !== profile.budget) errors.push(profile.label + ": board allocations sum to " + sum + ", budget says " + profile.budget);
+      });
+      fullProfiles.forEach(function (profile) {
+        const sum = Object.values(profile.allocation).reduce(function (a,b) { return a+b; }, 0);
+        if (sum !== profile.budget) errors.push(profile.label + ": board allocations sum to " + sum + ", budget says " + profile.budget);
+      });
+      if (errors.length) console.error("Source data checks:", errors);
+    }
+
+    function renderProfileControls() {
+      const pathBuild = $("#pathBuild");
+      pathBuild.innerHTML = profiles.map(function (item) {
+        return '<option value="' + item.id + '">' + escapeHtml(item.label) + ' · ' + item.budget + '</option>';
+      }).join("");
+      pathBuild.value = currentProfile.id;
+      renderBoardOptions();
+    }
+    function renderBoardOptions() {
+      const options = Object.keys(currentProfile.routes);
+      $("#pathBoard").innerHTML = options.map(function (board) {
+        return '<option value="' + escapeHtml(board) + '">' + escapeHtml(board) + '</option>';
+      }).join("");
+      if (!options.includes(currentBoard)) currentBoard = options[0];
+      $("#pathBoard").value = currentBoard;
+    }
+    function renderPathSummary() {
+      $("#pathBuildName").textContent = currentProfile.label;
+      $("#pathBuildNote").textContent = currentProfile.note;
+      $("#pathBudget").textContent = currentProfile.budget + " / " + currentProfile.budget;
+      $("#pathValue").textContent = currentProfile.value;
+      $("#pathAllocation").innerHTML = allocationHTML(currentProfile.allocation, currentProfile.budget, Math.max.apply(null, Object.values(currentProfile.allocation)));
+      $("#pathFootnote").textContent = currentProfile.id === "azphel40"
+        ? "Azphel uses its own crystals. The source gives route order and totals, but not individual node costs."
+        : "Every click touches a node already owned. Coordinates use the board's 15 by 15 grid.";
+    }
+    function boardShapeHas(board, row, col) {
+      const line = boardShapes[board][row - 1];
+      return !!line && line[col - 1] === "1";
+    }
+    function renderMap() {
+      const routeData = routeFor(currentProfile, currentBoard);
+      if (!routeData) {
+        $("#boardHeading").innerHTML = "";
+        $("#mapShell").innerHTML = '<div class="no-route"><div><h2>Allocation summary</h2><p>This profile has no node-by-node route on the source page. See its 316-point allocation and totals in the full build view.</p></div></div>';
+        return;
+      }
+      const info = boardInfo[currentBoard];
+      const rowMin = info.rows[0], rowMax = info.rows[1], colMin = info.cols[0], colMax = info.cols[1];
+      const rowCount = rowMax - rowMin + 1, colCount = colMax - colMin + 1;
+      const byPosition = new Map();
+      routeData.steps.forEach(function (node) { byPosition.set(node.row + "," + node.col, node); });
+      $("#boardHeading").innerHTML = '<div><h2>' + escapeHtml(currentBoard) + '</h2></div><p>' + routeData.steps.length + ' clicks<br>' + (routeData.total === null ? '40 points · node costs not itemized' : routeData.total + ' points on this board') + '</p>';
+      let html = '<div class="map-grid" id="mapGrid" role="grid" aria-label="' + escapeHtml(currentBoard) + ' board route, coordinates shown on both axes" style="--cols:' + colCount + ';--rows:' + rowCount + '"><span class="axis" aria-hidden="true"></span>';
+      for (let col=colMin; col<=colMax; col++) html += '<span class="axis" aria-hidden="true">' + col + '</span>';
+      for (let row=rowMin; row<=rowMax; row++) {
+        html += '<span class="axis" aria-hidden="true">' + row + '</span>';
+        for (let col=colMin; col<=colMax; col++) {
+          const node = byPosition.get(row + "," + col);
+          const hasSlot = boardShapeHas(currentBoard,row,col);
+          if (node) {
+            const kind = nodeKind(node.name), cssKind = kind === "active" ? "active-skill" : kind === "passive" ? "passive-skill" : kind;
+            const selected = node.step === currentStep;
+            const costText = node.cost === null ? "cost not itemized" : node.cost + " point" + (node.cost === 1 ? "" : "s");
+            const aria = "Click " + node.step + ", " + node.name + ", " + typeLabel(kind) + ", " + costText + ", from start " + locationText(row,col);
+            html += '<span class="map-cell"><button type="button" role="gridcell" class="route-node ' + cssKind + (selected ? ' selected' : '') + '" data-step="' + node.step + '" tabindex="' + (selected ? '0' : '-1') + '" aria-pressed="' + selected + '" aria-label="' + escapeHtml(aria) + '" title="' + escapeHtml(aria) + '">' + node.step + '</button></span>';
+          } else if (row === 8 && col === 8) {
+            html += '<span class="map-cell"><span class="start-node" role="gridcell" aria-label="Free start node">S</span></span>';
+          } else if (hasSlot) {
+            html += '<span class="map-cell" role="gridcell" aria-label="Unbought board node"><i class="node-dot"></i></span>';
+          } else {
+            html += '<span class="map-cell empty" aria-hidden="true"></span>';
+          }
+        }
+      }
+      html += '</div>';
+      $("#mapShell").innerHTML = html;
+      $("#mapGrid").addEventListener("click", function (event) {
+        const button = event.target.closest("button[data-step]");
+        if (!button) return;
+        currentStep = Number(button.dataset.step);
+        panelMode = "node";
+        $$(".panel-tab").forEach(function (tab) { tab.setAttribute("aria-pressed", String(tab.dataset.panel === "node")); });
+        renderMap();
+        renderInspector();
+        const selected = $('#mapGrid button[data-step="' + currentStep + '"]');
+        if (selected) selected.focus();
+      });
+      $("#mapGrid").addEventListener("keydown", function (event) {
+        const directions = { ArrowUp:[-1,0],ArrowDown:[1,0],ArrowLeft:[0,-1],ArrowRight:[0,1] };
+        if (!directions[event.key]) return;
+        const focused = event.target.closest("button[data-step]");
+        if (!focused) return;
+        event.preventDefault();
+        const node = routeData.steps.find(function (item) { return item.step === Number(focused.dataset.step); });
+        const delta = directions[event.key];
+        const candidates = routeData.steps.filter(function (item) {
+          return delta[0] ? (item.col === node.col && (item.row - node.row) * delta[0] > 0) : (item.row === node.row && (item.col - node.col) * delta[1] > 0);
+        }).sort(function (a,b) {
+          return delta[0] ? Math.abs(a.row-node.row)-Math.abs(b.row-node.row) : Math.abs(a.col-node.col)-Math.abs(b.col);
+        });
+        if (!candidates.length) return;
+        currentStep = candidates[0].step;
+        renderMap();
+        renderInspector();
+        const next = $('#mapGrid button[data-step="' + currentStep + '"]');
+        if (next) next.focus();
+      });
+    }
+    function renderMetricRows(items, skills) {
+      if (!items || !items.length) return '<p class="panel-note">This board has no skill nodes.</p>';
+      return '<div class="metric-list">' + items.map(function (item) {
+        if (skills) return '<div class="metric-row"><span>' + escapeHtml(item[0]) + '</span><b>' + item[1] + ' <i>+' + item[2] + '</i></b></div>';
+        return '<div class="metric-row"><span>' + escapeHtml(item[0]) + '</span><b>' + escapeHtml(item[1]) + '</b></div>';
+      }).join("") + '</div>';
+    }
+    function currentNode() {
+      const routeData = routeFor(currentProfile,currentBoard);
+      return routeData ? routeData.steps.find(function (node) { return node.step === currentStep; }) : null;
+    }
+    function renderInspector() {
+      const panel = $("#inspectPanel");
+      panel.dataset.mode = panelMode;
+      const routeData = routeFor(currentProfile,currentBoard);
+      const node = currentNode();
+      let html = "";
+      if (panelMode === "skills") {
+        html = '<h3 class="panel-title">Skill levels</h3>' + renderMetricRows(currentProfile.skills,true) + '<p class="panel-note">Parentheses show Daevanion levels added in the source allocation.</p>';
+      } else if (panelMode === "stats") {
+        html = '<h3 class="panel-title">Stat totals</h3>' + renderMetricRows(currentProfile.stats,false);
+      } else if (!routeData) {
+        html = '<h3 class="panel-title">Full allocation</h3><p class="panel-note">This profile has summary totals only. Open the 316-point builds view for every skill level and stat total.</p>';
+      } else if (!node) {
+        html = '<p class="panel-note">Select a numbered node to inspect its value and location.</p>';
+      } else {
+        const kind = nodeKind(node.name);
+        const costText = node.cost === null ? "Not listed per node" : node.cost + (node.cost === 1 ? " point" : " points");
+        const spentText = node.spent === null ? "Not itemized" : node.spent + " points";
+        html = '<div class="node-step">CLICK ' + String(node.step).padStart(2,"0") + ' OF ' + routeData.steps.length + '</div>' +
+          '<h3 class="node-name">' + escapeHtml(node.name) + '</h3>' +
+          '<div class="node-kind">' + typeLabel(kind) + '</div>' +
+          '<dl class="node-facts"><div><dt>Node cost</dt><dd>' + costText + '</dd></div><div><dt>Spent through click</dt><dd>' + spentText + '</dd></div>' +
+          '<div><dt>From start</dt><dd>' + escapeHtml(locationText(node.row,node.col)) + '</dd></div><div><dt>Grid position</dt><dd>' + node.row + ', ' + node.col + '</dd></div></dl>' +
+          '<p class="panel-hint">Use arrow keys to move between route nodes. Press Enter to inspect.</p>';
+      }
+      $("#inspectContent").innerHTML = html;
+    }
+    function setPanelMode(mode) {
+      panelMode = mode;
+      $$(".panel-tab").forEach(function (tab) { tab.setAttribute("aria-pressed", String(tab.dataset.panel === mode)); });
+      renderInspector();
+    }
+    function renderPath() {
+      renderProfileControls();
+      renderPathSummary();
+      renderMap();
+      renderInspector();
+    }
+
+    function renderFullProfiles() {
+      const select = $("#summaryBuild");
+      select.innerHTML = fullProfiles.map(function (item) {
+        return '<option value="' + item.id + '">' + escapeHtml(item.label) + ' · ' + item.budget + '</option>';
+      }).join("");
+      renderFullSummary(fullProfiles[0].id);
+    }
+    function renderFullSummary(id) {
+      const item = fullProfiles.find(function (profile) { return profile.id === id; }) || fullProfiles[0];
+      const azphel = item.id === "azphel100";
+      $("#summaryTitle").textContent = azphel ? "Azphel" : "Full board allocation";
+      $("#summaryDesc").textContent = azphel
+        ? "A 100-point sample on Azphel's separate PvP crystal pool."
+        : "316 points across the four stat boards. The source gives final allocations and skill/stat totals, but no click order.";
+      $("#summaryBudget").textContent = item.budget + " / " + item.budget;
+      $("#summaryValue").textContent = "Priority value " + item.value;
+      const max = Math.max.apply(null,Object.values(item.allocation));
+      $("#summaryAllocation").innerHTML = Object.entries(item.allocation).map(function (entry) {
+        const width = entry[1] / max * 100;
+        return '<div class="budget-bar"><span>' + escapeHtml(entry[0]) + '</span><div class="track"><i style="width:' + width + '%"></i></div><b>' + entry[1] + '</b></div>';
+      }).join("");
+      $("#summarySkills").innerHTML = item.skills.length ? renderMetricRows(item.skills,true) : '<p class="panel-note">Azphel has no skill nodes.</p>';
+      $("#summaryStats").innerHTML = renderMetricRows(item.stats,false);
+      $("#summaryWarning").textContent = "Priority value ranks choices in the source model. It is not a measured healing or damage result.";
+    }
+
+    function renderRefControls() {
+      $("#refBoard").innerHTML = boardOrder.map(function (name) { return '<option value="' + name + '">' + name + '</option>'; }).join("");
+      $("#refSkill").innerHTML = skillPositions.map(function (row) { return '<option value="' + escapeHtml(row[0]) + '">' + escapeHtml(row[0]) + '</option>'; }).join("");
+      renderReference();
+    }
+    function renderReference() {
+      const mode = $("#refMode").value;
+      referenceMode = mode;
+      $("#refBoardControl").hidden = mode !== "board";
+      $("#refSkillControl").hidden = mode !== "skill";
+      const root = $("#refContent");
+      if (mode === "board") {
+        const name = $("#refBoard").value || "Nezekan";
+        const info = boardInfo[name];
+        const corners = info.corners.map(function (text) { return '<span>' + escapeHtml(text) + '</span>'; }).join("");
+        root.innerHTML = '<div class="ref-board-header"><h3>' + escapeHtml(name) + '</h3><span>Unlock at ' + info.unlock + '</span></div>' +
+          '<dl class="ref-stats"><div><dt>Nodes</dt><dd>' + info.nodes + '</dd></div><div><dt>Points to fill</dt><dd>' + info.fill + '</dd></div><div><dt>Crystal pool</dt><dd>' + escapeHtml(info.pool) + '</dd></div></dl>' +
+          '<div class="subhead">Corner effects</div><div class="corner-list">' + corners + '</div>' +
+          '<div class="ref-rules"><div class="ref-rule"><b>Buy rule</b>Each node must touch the free start or an owned node. Diagonals do not connect.</div>' +
+          '<div class="ref-rule"><b>Point costs</b>Common 1, passive skill 2, active skill 3, corner 4.</div>' +
+          '<div class="ref-rule"><b>Stat nodes</b>Attack +3, Critical Hit +5, Critical Hit Resist +5, Defense +30, HP +100, or MP +50.</div>' +
+          '<div class="ref-rule"><b>Skill nodes</b>Every Cleric skill appears across the four stat boards. The boards add up to four levels per skill.</div></div>';
+      } else {
+        const skill = $("#refSkill").value || skillPositions[0][0];
+        const data = skillPositions.find(function (row) { return row[0] === skill; });
+        const coords = data.slice(2).map(function (value, index) {
+          return '<tr><td>' + ["Nezekan","Zikel","Vaizel","Triniel"][index] + '</td><td>' + escapeHtml(value) + '</td></tr>';
+        }).join("");
+        root.innerHTML = '<div class="ref-board-header"><h3>' + escapeHtml(data[0]) + '</h3><span>' + (data[1] === "active" ? "Active skill" : "Passive skill") + '</span></div>' +
+          '<div class="position-table-wrap"><table class="position-table"><thead><tr><th>Board</th><th>Position from start</th></tr></thead><tbody>' + coords + '</tbody></table></div>' +
+          '<p class="position-note">A semicolon marks two nodes for that skill on the same board. Coordinates count grid slots, including empty slots.</p>';
+      }
+    }
+
+    function renderWeights() {
+      const skillMode = weightMode === "skills";
+      const rows = skillMode ? skillWeights : statWeights;
+      const title = skillMode ? "Skill weights" : "Stat weights";
+      $("#weightTitle").textContent = title;
+      $$(".text-switch").forEach(function (button) { button.setAttribute("aria-pressed", String(button.dataset.weight === weightMode)); });
+      const max = Math.max.apply(null,rows.reduce(function (acc,row) { return acc.concat(row.slice(1)); },[])) || 1;
+      let html = '<table class="weight-table"><thead><tr><th>' + (skillMode ? "Skill, per level" : "Stat, per typical node") + '</th><th>PvE healer</th><th>PvE damage</th><th>PvP</th></tr></thead><tbody>';
+      rows.forEach(function (row) {
+        html += '<tr><td>' + escapeHtml(row[0]) + '</td>';
+        row.slice(1).forEach(function (value) {
+          html += '<td><div class="weight-cell"><span>' + value + '</span><i style="width:' + Math.max(value === 0 ? 0 : 2, value/max*100) + '%"></i></div></td>';
+        });
+        html += '</tr>';
+      });
+      html += '</tbody></table>';
+      $("#weightTable").innerHTML = html;
+    }
+    function setView(viewName) {
+      $$(".nav-button").forEach(function (button) { button.setAttribute("aria-selected", String(button.dataset.view === viewName)); });
+      $$(".page-view").forEach(function (panel) { panel.hidden = panel.id !== viewName; });
+    }
+
+    $("#pathBuild").addEventListener("change", function (event) {
+      currentProfile = profileById(event.target.value);
+      currentBoard = Object.keys(currentProfile.routes)[0];
+      currentStep = 1;
+      panelMode = "node";
+      renderPath();
+    });
+    $("#pathBoard").addEventListener("change", function (event) {
+      currentBoard = event.target.value;
+      currentStep = 1;
+      panelMode = "node";
+      renderMap();
+      renderInspector();
+    });
+    $$(".panel-tab").forEach(function (button) {
+      button.addEventListener("click", function () { setPanelMode(button.dataset.panel); });
+    });
+    $$(".nav-button").forEach(function (button) {
+      button.addEventListener("click", function () { setView(button.dataset.view); });
+    });
+    $("#summaryBuild").addEventListener("change", function (event) { renderFullSummary(event.target.value); });
+    $("#refMode").addEventListener("change",renderReference);
+    $("#refBoard").addEventListener("change",renderReference);
+    $("#refSkill").addEventListener("change",renderReference);
+    $$(".text-switch").forEach(function (button) {
+      button.addEventListener("click",function () { weightMode = button.dataset.weight; renderWeights(); });
+    });
+    $("#motionToggle").addEventListener("click",function () {
+      const active = document.body.classList.toggle("quiet-motion");
+      this.setAttribute("aria-pressed",String(active));
+      this.textContent = active ? "Restore motion" : "Quiet motion";
+    });
+
+    validateData();
+    renderPath();
+    renderFullProfiles();
+    renderRefControls();
+    renderWeights();
+  </script>
+</body>
+</html>
