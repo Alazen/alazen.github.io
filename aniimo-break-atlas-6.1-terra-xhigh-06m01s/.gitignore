@@ -1,0 +1,5 @@
+﻿.playwright-cli/
+dist/
+build/
+node_modules/
+*.log

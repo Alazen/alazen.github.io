@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#e9f9ff">
+  <meta name="description" content="Explore a fan-made Aniimo BREAK tier list, filter by element, and compare base stats.">
+  <title>BREAK Guide | Aniimo Field Notes</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#rankings">Skip to the rankings</a>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="#top" aria-label="Aniimo BREAK Guide home">
+        <img src="assets/aniimo-logo.webp" alt="Aniimo">
+        <span class="brand-divider"></span>
+        <span class="brand-label">BREAK GUIDE<small>an unofficial field guide</small></span>
+      </a>
+      <nav class="main-nav" aria-label="Main navigation">
+        <a class="nav-active" href="#rankings">Rankings</a>
+        <a href="#about">About BREAK</a>
+        <a href="#sources">Sources</a>
+      </nav>
+      <a class="nav-cta" href="#rankings">Explore the list <span aria-hidden="true">&#8599;</span></a>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-image" aria-hidden="true"></div>
+      <div class="hero-shade" aria-hidden="true"></div>
+      <div class="hero-inner">
+        <div class="hero-copy">
+          <div class="hero-kicker"><span class="sparkle" aria-hidden="true">&#10022;</span> YOUR GUIDE TO IDYLL</div>
+          <h1 id="hero-title">Meet the<br><span>breakers.</span></h1>
+          <p>Find the Aniimo that crack enemy guards and open the way for your team.</p>
+          <a class="primary-button" href="#rankings">Explore the rankings <span aria-hidden="true">&#8594;</span></a>
+          <div class="hero-caption"><span class="caption-line"></span> A LITTLE HELP FOR YOUR NEXT ADVENTURE</div>
+        </div>
+        <div class="hero-stamp" aria-hidden="true"><span>MADE FOR</span><strong>Pathfinders</strong><span>EVERYWHERE</span></div>
+      </div>
+      <div class="hero-wave" aria-hidden="true"></div>
+    </section>
+
+    <section class="overview-strip" aria-label="Guide overview">
+      <div class="overview-inner">
+        <div class="overview-intro"><span class="compass-icon" aria-hidden="true">&#10022;</span><div><strong>A field guide to BREAK</strong><span>Find your team's next great partner.</span></div></div>
+        <div class="overview-stats">
+          <div><strong>13</strong><span>featured Aniimo</span></div>
+          <div><strong>5</strong><span>tiers to explore</span></div>
+          <div><strong>1</strong><span>upcoming pick</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="rankings-section" id="rankings" aria-labelledby="rankings-title">
+      <div class="section-wrap">
+        <div class="section-heading">
+          <div><div class="section-kicker"><span></span> THE BREAK RANKINGS</div><h2 id="rankings-title">Find your standout.</h2><p>Explore the tier list, then choose an Aniimo to see what makes it tick.</p></div>
+          <div class="update-note"><span class="update-dot"></span><div><strong>Guide snapshot</strong><span>October 27, 2026</span></div></div>
+        </div>
+
+        <div class="ranking-shell">
+          <div class="controls">
+            <div class="controls-top">
+              <div class="view-control" role="group" aria-label="Ranking view">
+                <button class="view-button is-active" type="button" data-view="tier" aria-pressed="true"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 4h4v4H3zM10 4h7M3 12h4v4H3zM10 12h7"/></svg> Tier list</button>
+                <button class="view-button" type="button" data-view="stats" aria-pressed="false"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 16V9m6 7V4m6 12v-5"/></svg> Base BREAK</button>
+              </div>
+              <label class="search-box"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.3"/><path d="m12.5 12.5 4 4"/></svg><span class="sr-only">Search Aniimo</span><input id="search" type="search" placeholder="Search Aniimo..." autocomplete="off"></label>
+            </div>
+            <div class="filter-line"><span class="filter-label">Element</span><div class="element-filters" id="element-filters" role="group" aria-label="Filter by element"></div></div>
+          </div>
+
+          <div class="ranking-body">
+            <div class="board-column">
+              <div class="board-heading"><div><h3 id="board-title">The tier list</h3><p id="board-description">Grouped by overall BREAK utility. Select an Aniimo to learn more.</p></div><span class="result-count" id="result-count" aria-live="polite"></span></div>
+              <div id="ranking-board" class="ranking-board" aria-live="polite"></div>
+              <div class="board-footnote"><span aria-hidden="true">&#9432;</span><p>The 13 picks follow Mobalytics' September 29 tier list. Same-tier order is not ranked. Wavwal was upcoming on October 27.</p></div>
+            </div>
+            <aside class="detail-panel" id="detail-panel" aria-label="Selected Aniimo details"></aside>
+          </div>
+        </div>
+        <div class="below-note"><span class="little-star" aria-hidden="true">&#10022;</span> Tiers are a starting point. Element matchups, your team, and playstyle all matter.</div>
+      </div>
+    </section>
+
+    <section class="about-section" id="about" aria-labelledby="about-title">
+      <div class="about-inner">
+        <div class="about-art" aria-hidden="true"><span class="about-orbit"></span><span class="about-symbol">&#10022;</span><span class="about-small one"></span><span class="about-small two"></span></div>
+        <div class="about-copy"><div class="section-kicker"><span></span> A QUICK FIELD NOTE</div><h2 id="about-title">What does BREAK do?</h2><p>BREAK Aniimo wear down an enemy's guard. Once it breaks, your team gets an opening to deal damage and make a catch easier.</p><a href="https://dailyaniimo.com/aniimo/role/break" target="_blank" rel="noopener noreferrer">Learn more about the role <span aria-hidden="true">&#8599;</span></a></div>
+        <div class="about-tip"><span>PATHFINDER TIP</span><strong>Match the moment.</strong><p>A creature's skills and elemental matchup can matter more than its base stat.</p></div>
+      </div>
+    </section>
+  </main>
+
+  <footer id="sources">
+    <div class="footer-inner"><div><img src="assets/aniimo-logo.webp" alt="Aniimo" class="footer-logo"><p>A fan-made field guide for fellow Pathfinders.<br>Not affiliated with the creators of Aniimo.</p></div><div class="footer-links"><strong>Sources &amp; credits</strong><a href="https://mobalytics.gg/gamebase/guides/aniimo-break-tier-list" target="_blank" rel="noopener noreferrer">Mobalytics tier list</a><a href="https://dailyaniimo.com/aniimo/stats" target="_blank" rel="noopener noreferrer">Daily Aniimo base stats</a><a href="https://dailyaniimo.com/guides/whisperwake-isles" target="_blank" rel="noopener noreferrer">Whisperwake Isles update</a><a href="https://www.aniimo.com/" target="_blank" rel="noopener noreferrer">Official Aniimo website</a></div><div class="footer-note">Creature artwork via <a href="https://lum.gg/aniimo" target="_blank" rel="noopener noreferrer">LUM.GG</a> and <a href="https://mobalytics.gg/gamebase/guides/aniimo-break-tier-list" target="_blank" rel="noopener noreferrer">Mobalytics</a>. Hero artwork from the official website. Aniimo and its artwork belong to their respective owners.</div></div>
+  </footer>
+</body>
+</html>

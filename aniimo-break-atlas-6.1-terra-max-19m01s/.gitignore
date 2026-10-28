@@ -1,0 +1,11 @@
+node_modules/
+dist/
+build/
+coverage/
+output/
+*.log
+*.zip
+*.exe
+*.tmp
+cache/
+.cache/
