@@ -1,0 +1,308 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="dark">
+<meta name="description" content="Interactive comparison of OSWorld 2.0 and 2.1 accuracy and cost for eight model series, including GPT-6.1 Sol, GPT-6.1 Terra, GPT-6 Luna, GPT-6 Sol, Claude Haiku 5.5 and Claude Sonnet 5.5.">
+<title>OSWorld 2.0 + 2.1 | Accuracy vs cost</title>
+<style>
+  :root {color-scheme:dark;--bg:#000;--text:#f3f3f5;--muted:#a7a7ae;--sub:#c8c8cd;--grid:#242428;--edge:#46464c}
+  *{box-sizing:border-box}
+  html{background:var(--bg)}
+  body{margin:0;min-height:100vh;background:var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;font-size:15px;line-height:1.58;-webkit-font-smoothing:antialiased}
+  main{max-width:1280px;margin:auto;padding:clamp(44px,6.3vw,94px) clamp(20px,5.25vw,78px) 85px}
+  h1{margin:0;letter-spacing:-.057em;font-size:clamp(34px,5.3vw,67px);font-weight:560;line-height:1.07}
+  .lead{color:#b9b9c0;max-width:760px;margin:24px 0 50px;font-size:clamp(14px,1.5vw,17px);line-height:1.65}
+  .legend{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px 28px;margin:0 0 34px;padding:0}
+  .series-toggle{appearance:none;display:flex;align-items:flex-start;gap:11px;padding:0;border:0;background:transparent;min-width:0;min-height:38px;color:var(--text);text-align:left;font:inherit;cursor:pointer;transition:opacity .16s ease}
+  .series-toggle .key-line{flex:0 0 34px;margin-top:3px}
+  .series-toggle .key-name{display:block;font-size:14px;font-weight:565;line-height:1.36}
+  .series-toggle small{display:block;font-weight:420;font-size:12px;line-height:1.3;color:#929299;margin-top:3px}
+  .series-toggle[aria-pressed=false]{opacity:.33}
+  .series-toggle:focus-visible,summary:focus-visible,.reset:focus-visible{outline:2px solid #fff;outline-offset:5px}
+  .selection-status{margin:-17px 0 22px;color:#b0b0b7;font-size:12px;line-height:1.6}
+  .chart-shell{position:relative;width:100%}
+  .plot{display:block;width:100%;height:auto;overflow:visible;touch-action:pan-y}
+  .tooltip{position:absolute;z-index:5;visibility:hidden;opacity:0;pointer-events:none;border:1px solid #515159;background:#17171a;color:#f4f4f6;box-shadow:0 12px 34px #000c;padding:13px 15px;width:max-content;min-width:198px;max-width:min(258px,calc(100vw - 40px));font-size:12px;line-height:1.5}
+  .tooltip.visible{visibility:visible;opacity:1}
+  .tip-name{font-weight:700;font-size:14px;line-height:1.4}
+  .tip-source{color:#b8b8bf;margin:2px 0 10px}
+  .tip-row{display:flex;gap:24px;justify-content:space-between;align-items:baseline}
+  .tip-row span{color:#c6c6cb}
+  .tip-row strong{font-weight:650;font-variant-numeric:tabular-nums}
+  .underplot{display:flex;gap:14px 25px;align-items:baseline;justify-content:space-between;flex-wrap:wrap;margin:10px 0 68px}
+  .underplot p{color:#96969f;font-size:12px;line-height:1.65;margin:0;max-width:780px}
+  .reset{padding:0;background:none;border:0;color:#e4e4e8;font:inherit;font-size:12px;cursor:pointer;text-decoration:underline;text-underline-offset:4px}
+  .caution{max-width:870px;margin:0 0 56px}
+  .caution h2,.details-heading{font-weight:540;letter-spacing:-.036em;font-size:clamp(21px,2.65vw,30px);line-height:1.25;margin:0 0 15px}
+  .caution p{max-width:820px;color:#ababaf;font-size:14px;line-height:1.7;margin:10px 0}
+  .caution strong{font-weight:600;color:#ededf0}
+  details{color:var(--sub);font-size:14px}
+  summary{cursor:pointer;width:max-content;max-width:100%;text-decoration:underline;text-underline-offset:4px;padding:7px 0}
+  .table-scroll{width:100%;overflow-x:auto;margin:16px 0 0}
+  table{border-collapse:collapse;font-size:13px;font-variant-numeric:tabular-nums;width:100%;min-width:620px}
+  th,td{padding:9px 13px 9px 0;border-bottom:1px solid #222226;text-align:left;white-space:nowrap}
+  th{font-size:12px;font-weight:550;color:#aaaab0}
+  th:nth-last-child(-n+2),td:nth-last-child(-n+2){text-align:right}
+  .sources{max-width:920px;margin:44px 0 0;font-size:12px;line-height:1.85;color:#9999a1}
+  a{color:#c9c9cf;text-decoration:underline;text-underline-offset:3px}
+  a:hover{color:#fff}
+  @media(max-width:850px){.legend{grid-template-columns:repeat(2,minmax(0,1fr))}}
+  @media(max-width:540px){
+    main{padding-top:48px;padding-bottom:55px}
+    .lead{margin:18px 0 35px}
+    .legend{grid-template-columns:repeat(2,minmax(0,1fr));column-gap:12px;row-gap:19px;margin-bottom:17px}
+    .series-toggle{gap:6px}
+    .series-toggle .key-line{flex-basis:23px;width:23px;margin-top:2px}
+    .series-toggle .key-name{font-size:12px}
+    .series-toggle small{font-size:10.5px}
+    .selection-status{margin:-4px 0 17px}
+    .underplot{margin-bottom:52px}
+    .caution{margin-bottom:45px}
+  }
+  @media(max-width:360px){.legend{grid-template-columns:1fr;row-gap:10px}.series-toggle .key-name{font-size:13px}}
+  @media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<main>
+<header>
+  <h1>OSWorld: accuracy vs cost</h1>
+  <p class="lead">One chart for OSWorld 2.0 and 2.1, showing 40 reported results across eight series. Each line connects five reasoning-effort settings. Click a model to highlight it, then click other models to compare them. Selecting all eight restores the default view.</p>
+</header>
+<nav class="legend" aria-label="Select multiple model series to highlight">
+<button type="button" class="series-toggle" data-id="sol61" aria-pressed="true" aria-label="Highlight GPT-6.1 Sol, OSWorld 2.1, OpenAI">
+  <svg class="key-line" width="34" height="16" viewBox="0 0 34 16" aria-hidden="true"><path d="M1 8H33" fill="none" stroke="#8DB7F5" stroke-width="3" stroke-linecap="round" /><circle cx="17" cy="8" r="3.5" fill="#8DB7F5" stroke="#000" stroke-width="1.4"/></svg>
+  <span class="key-name">GPT-6.1 Sol<small>OSWorld 2.1 · OpenAI</small></span>
+</button>
+<button type="button" class="series-toggle" data-id="terra61" aria-pressed="true" aria-label="Highlight GPT-6.1 Terra, OSWorld 2.1, OpenAI">
+  <svg class="key-line" width="34" height="16" viewBox="0 0 34 16" aria-hidden="true"><path d="M1 8H33" fill="none" stroke="#F0C07F" stroke-width="3" stroke-linecap="round" /><circle cx="17" cy="8" r="3.5" fill="#F0C07F" stroke="#000" stroke-width="1.4"/></svg>
+  <span class="key-name">GPT-6.1 Terra<small>OSWorld 2.1 · OpenAI</small></span>
+</button>
+<button type="button" class="series-toggle" data-id="luna21" aria-pressed="true" aria-label="Highlight GPT-6 Luna, OSWorld 2.1, OpenAI">
+  <svg class="key-line" width="34" height="16" viewBox="0 0 34 16" aria-hidden="true"><path d="M1 8H33" fill="none" stroke="#C3A3FF" stroke-width="3" stroke-linecap="round" /><circle cx="17" cy="8" r="3.5" fill="#C3A3FF" stroke="#000" stroke-width="1.4"/></svg>
+  <span class="key-name">GPT-6 Luna<small>OSWorld 2.1 · OpenAI</small></span>
+</button>
+<button type="button" class="series-toggle" data-id="sol20" aria-pressed="true" aria-label="Highlight GPT-6 Sol, OSWorld 2.0, OpenAI">
+  <svg class="key-line" width="34" height="16" viewBox="0 0 34 16" aria-hidden="true"><path d="M1 8H33" fill="none" stroke="#64C5C4" stroke-width="3" stroke-linecap="round" stroke-dasharray="9 6"/><circle cx="17" cy="8" r="3.5" fill="#64C5C4" stroke="#000" stroke-width="1.4"/></svg>
+  <span class="key-name">GPT-6 Sol<small>OSWorld 2.0 · OpenAI</small></span>
+</button>
+<button type="button" class="series-toggle" data-id="luna20" aria-pressed="true" aria-label="Highlight GPT-6 Luna, OSWorld 2.0, OpenAI">
+  <svg class="key-line" width="34" height="16" viewBox="0 0 34 16" aria-hidden="true"><path d="M1 8H33" fill="none" stroke="#C3A3FF" stroke-width="3" stroke-linecap="round" stroke-dasharray="9 6"/><circle cx="17" cy="8" r="3.5" fill="#C3A3FF" stroke="#000" stroke-width="1.4"/></svg>
+  <span class="key-name">GPT-6 Luna<small>OSWorld 2.0 · OpenAI</small></span>
+</button>
+<button type="button" class="series-toggle" data-id="luna21anthropic" aria-pressed="true" aria-label="Highlight GPT-6 Luna, OSWorld 2.1 offline subset, Anthropic">
+  <svg class="key-line" width="34" height="16" viewBox="0 0 34 16" aria-hidden="true"><path d="M1 8H33" fill="none" stroke="#C3A3FF" stroke-width="3" stroke-linecap="round" stroke-dasharray="2.5 6"/><circle cx="17" cy="8" r="3.5" fill="#C3A3FF" stroke="#000" stroke-width="1.4"/></svg>
+  <span class="key-name">GPT-6 Luna<small>OSWorld 2.1 · Anthropic</small></span>
+</button>
+<button type="button" class="series-toggle" data-id="haiku55" aria-pressed="true" aria-label="Highlight Claude Haiku 5.5, OSWorld 2.1, Anthropic">
+  <svg class="key-line" width="34" height="16" viewBox="0 0 34 16" aria-hidden="true"><path d="M1 8H33" fill="none" stroke="#C7E78C" stroke-width="3" stroke-linecap="round" stroke-dasharray="2.5 6"/><circle cx="17" cy="8" r="3.5" fill="#C7E78C" stroke="#000" stroke-width="1.4"/></svg>
+  <span class="key-name">Claude Haiku 5.5<small>OSWorld 2.1 · Anthropic</small></span>
+</button>
+<button type="button" class="series-toggle" data-id="sonnet55" aria-pressed="true" aria-label="Highlight Claude Sonnet 5.5, OSWorld 2.1, Anthropic">
+  <svg class="key-line" width="34" height="16" viewBox="0 0 34 16" aria-hidden="true"><path d="M1 8H33" fill="none" stroke="#F09DB0" stroke-width="3" stroke-linecap="round" stroke-dasharray="2.5 6"/><circle cx="17" cy="8" r="3.5" fill="#F09DB0" stroke="#000" stroke-width="1.4"/></svg>
+  <span class="key-name">Claude Sonnet 5.5<small>OSWorld 2.1 · Anthropic</small></span>
+</button>
+</nav>
+<p id="selection-status" class="selection-status" role="status" aria-live="polite">All eight series visible. Click one to isolate it, then click others to add them.</p>
+<section aria-label="Interactive benchmark chart">
+  <div class="chart-shell" id="chart-shell">
+    <svg class="plot" id="plot" role="img" aria-label="OSWorld accuracy versus cost per task or attempt. Eight model series from OSWorld 2.0 and 2.1, with five data points per series."></svg>
+    <div class="tooltip" id="tooltip" aria-hidden="true">
+      <div class="tip-name"></div><div class="tip-source"></div>
+      <div class="tip-row"><span>Reasoning effort</span><strong class="tip-effort"></strong></div>
+      <div class="tip-row"><span>Accuracy</span><strong class="tip-score"></strong></div>
+      <div class="tip-row"><span>Cost per attempt</span><strong class="tip-cost"></strong></div>
+    </div>
+  </div>
+  <div class="underplot"><p>Horizontal axis: reported cost per task or attempt (USD, logarithmic scale). Vertical axis: reported accuracy. Solid: OpenAI 2.1. Dashed: OpenAI 2.0. Dotted: Anthropic 2.1 offline subset.</p><button type="button" class="reset" id="reset">Show all series</button></div>
+</section>
+<section class="caution" aria-labelledby="comparability">
+  <h2 id="comparability">Read these scores in context</h2>
+  <p><strong>OSWorld 2.0 and 2.1 are not identical tests.</strong> Scores from different benchmark versions should not be treated as a head-to-head ranking.</p>
+  <p>Even within version 2.1, the published evaluation sets differ. OpenAI reports <strong>55.5%</strong> for GPT-6 Luna on its offline set, while Anthropic reports <strong>48.9%</strong> for the same model on its offline subset. The dotted GPT-6 Luna line and the Claude lines use Anthropic’s evaluation; the solid OpenAI lines use OpenAI’s evaluation. Costs are the publishers’ reported averages, not API token rates.</p>
+</section>
+<section aria-labelledby="details-heading">
+  <h2 id="details-heading" class="details-heading">Underlying data</h2>
+  <details><summary>View all 40 data points</summary>
+    <div class="table-scroll"><table>
+      <thead><tr><th>Model</th><th>OSWorld</th><th>Reported by</th><th>Effort</th><th>Accuracy</th><th>Cost</th></tr></thead>
+      <tbody>
+<tr><td>GPT-6.1 Sol</td><td>2.1</td><td>OpenAI</td><td>Low</td><td>60.9%</td><td>$0.38</td></tr>
+<tr><td>GPT-6.1 Sol</td><td>2.1</td><td>OpenAI</td><td>Medium</td><td>73.5%</td><td>$0.65</td></tr>
+<tr><td>GPT-6.1 Sol</td><td>2.1</td><td>OpenAI</td><td>High</td><td>75.5%</td><td>$0.90</td></tr>
+<tr><td>GPT-6.1 Sol</td><td>2.1</td><td>OpenAI</td><td>Xhigh</td><td>75.9%</td><td>$0.95</td></tr>
+<tr><td>GPT-6.1 Sol</td><td>2.1</td><td>OpenAI</td><td>Max</td><td>78.0%</td><td>$1.15</td></tr>
+<tr><td>GPT-6.1 Terra</td><td>2.1</td><td>OpenAI</td><td>Low</td><td>53.8%</td><td>$0.36</td></tr>
+<tr><td>GPT-6.1 Terra</td><td>2.1</td><td>OpenAI</td><td>Medium</td><td>66.7%</td><td>$0.50</td></tr>
+<tr><td>GPT-6.1 Terra</td><td>2.1</td><td>OpenAI</td><td>High</td><td>68.7%</td><td>$0.51</td></tr>
+<tr><td>GPT-6.1 Terra</td><td>2.1</td><td>OpenAI</td><td>Xhigh</td><td>71.3%</td><td>$0.62</td></tr>
+<tr><td>GPT-6.1 Terra</td><td>2.1</td><td>OpenAI</td><td>Max</td><td>74.2%</td><td>$1.19</td></tr>
+<tr><td>GPT-6 Luna</td><td>2.1</td><td>OpenAI</td><td>Low</td><td>7.5%</td><td>$0.02</td></tr>
+<tr><td>GPT-6 Luna</td><td>2.1</td><td>OpenAI</td><td>Medium</td><td>26.3%</td><td>$0.079</td></tr>
+<tr><td>GPT-6 Luna</td><td>2.1</td><td>OpenAI</td><td>High</td><td>39.7%</td><td>$0.14</td></tr>
+<tr><td>GPT-6 Luna</td><td>2.1</td><td>OpenAI</td><td>Xhigh</td><td>44.6%</td><td>$0.19</td></tr>
+<tr><td>GPT-6 Luna</td><td>2.1</td><td>OpenAI</td><td>Max</td><td>55.5%</td><td>$0.30</td></tr>
+<tr><td>GPT-6 Sol</td><td>2.0</td><td>OpenAI</td><td>Low</td><td>43.9%</td><td>$0.97</td></tr>
+<tr><td>GPT-6 Sol</td><td>2.0</td><td>OpenAI</td><td>Medium</td><td>54.0%</td><td>$1.32</td></tr>
+<tr><td>GPT-6 Sol</td><td>2.0</td><td>OpenAI</td><td>High</td><td>58.3%</td><td>$1.64</td></tr>
+<tr><td>GPT-6 Sol</td><td>2.0</td><td>OpenAI</td><td>Xhigh</td><td>60.5%</td><td>$2.21</td></tr>
+<tr><td>GPT-6 Sol</td><td>2.0</td><td>OpenAI</td><td>Max</td><td>64.4%</td><td>$3.25</td></tr>
+<tr><td>GPT-6 Luna</td><td>2.0</td><td>OpenAI</td><td>Low</td><td>8.3%</td><td>$0.03</td></tr>
+<tr><td>GPT-6 Luna</td><td>2.0</td><td>OpenAI</td><td>Medium</td><td>31.5%</td><td>$0.062</td></tr>
+<tr><td>GPT-6 Luna</td><td>2.0</td><td>OpenAI</td><td>High</td><td>41.4%</td><td>$0.12</td></tr>
+<tr><td>GPT-6 Luna</td><td>2.0</td><td>OpenAI</td><td>Xhigh</td><td>46.7%</td><td>$0.16</td></tr>
+<tr><td>GPT-6 Luna</td><td>2.0</td><td>OpenAI</td><td>Max</td><td>52.7%</td><td>$0.27</td></tr>
+<tr><td>GPT-6 Luna</td><td>2.1</td><td>Anthropic</td><td>Low</td><td>19.2%</td><td>$0.038</td></tr>
+<tr><td>GPT-6 Luna</td><td>2.1</td><td>Anthropic</td><td>Medium</td><td>37.5%</td><td>$0.1261</td></tr>
+<tr><td>GPT-6 Luna</td><td>2.1</td><td>Anthropic</td><td>High</td><td>42.3%</td><td>$0.1435</td></tr>
+<tr><td>GPT-6 Luna</td><td>2.1</td><td>Anthropic</td><td>Xhigh</td><td>44.8%</td><td>$0.1672</td></tr>
+<tr><td>GPT-6 Luna</td><td>2.1</td><td>Anthropic</td><td>Max</td><td>48.9%</td><td>$0.205</td></tr>
+<tr><td>Claude Haiku 5.5</td><td>2.1</td><td>Anthropic</td><td>Low</td><td>42.0%</td><td>$0.07</td></tr>
+<tr><td>Claude Haiku 5.5</td><td>2.1</td><td>Anthropic</td><td>Medium</td><td>53.3%</td><td>$0.13</td></tr>
+<tr><td>Claude Haiku 5.5</td><td>2.1</td><td>Anthropic</td><td>High</td><td>61.3%</td><td>$0.18</td></tr>
+<tr><td>Claude Haiku 5.5</td><td>2.1</td><td>Anthropic</td><td>Xhigh</td><td>67.6%</td><td>$0.28</td></tr>
+<tr><td>Claude Haiku 5.5</td><td>2.1</td><td>Anthropic</td><td>Max</td><td>72.4%</td><td>$0.61</td></tr>
+<tr><td>Claude Sonnet 5.5</td><td>2.1</td><td>Anthropic</td><td>Low</td><td>57.9%</td><td>$0.68</td></tr>
+<tr><td>Claude Sonnet 5.5</td><td>2.1</td><td>Anthropic</td><td>Medium</td><td>66.0%</td><td>$0.93</td></tr>
+<tr><td>Claude Sonnet 5.5</td><td>2.1</td><td>Anthropic</td><td>High</td><td>73.2%</td><td>$1.38</td></tr>
+<tr><td>Claude Sonnet 5.5</td><td>2.1</td><td>Anthropic</td><td>Xhigh</td><td>81.1%</td><td>$2.22</td></tr>
+<tr><td>Claude Sonnet 5.5</td><td>2.1</td><td>Anthropic</td><td>Max</td><td>83.9%</td><td>$5.73</td></tr>
+      </tbody>
+    </table></div>
+  </details>
+</section>
+<footer class="sources">Original benchmark sources: <a href="https://openai.com/index/introducing-gpt-6-1-terra/" target="_blank" rel="noopener noreferrer">OpenAI · OSWorld 2.1</a>, <a href="https://openai.com/index/introducing-gpt-6-sol-and-luna/" target="_blank" rel="noopener noreferrer">OpenAI · OSWorld 2.0</a>, and <a href="https://www.anthropic.com/claude-haiku-5-5" target="_blank" rel="noopener noreferrer">Anthropic · OSWorld 2.1 (offline subset)</a>. Exact chart points cross-checked with <a href="https://checknet.uk/ai-models/gpt-6-1-terra" target="_blank" rel="noopener noreferrer">CheckNet (OpenAI 2.1)</a>, <a href="https://aicatchup.com/news/openai-gpt-6-sol-luna" target="_blank" rel="noopener noreferrer">AI Catchup (OpenAI 2.0)</a>, and <a href="https://checknet.uk/ai-models/claude-haiku-5-5" target="_blank" rel="noopener noreferrer">CheckNet (Anthropic 2.1)</a>.</footer>
+</main>
+<script>
+(() => {
+  'use strict';
+  const SERIES = [{"id":"sol61","model":"GPT-6.1 Sol","version":"2.1","publisher":"OpenAI","subset":"Offline set","color":"#8DB7F5","dash":"","points":[[0.38,60.9],[0.65,73.5],[0.9,75.5],[0.95,75.9],[1.15,78.0]]},{"id":"terra61","model":"GPT-6.1 Terra","version":"2.1","publisher":"OpenAI","subset":"Offline set","color":"#F0C07F","dash":"","points":[[0.36,53.8],[0.5,66.7],[0.51,68.7],[0.62,71.3],[1.19,74.2]]},{"id":"luna21","model":"GPT-6 Luna","version":"2.1","publisher":"OpenAI","subset":"Offline set","color":"#C3A3FF","dash":"","points":[[0.02,7.5],[0.079,26.3],[0.14,39.7],[0.19,44.6],[0.3,55.5]]},{"id":"sol20","model":"GPT-6 Sol","version":"2.0","publisher":"OpenAI","subset":"Offline, partial-credit","color":"#64C5C4","dash":"9 6","points":[[0.97,43.9],[1.32,54.0],[1.64,58.3],[2.21,60.5],[3.25,64.4]]},{"id":"luna20","model":"GPT-6 Luna","version":"2.0","publisher":"OpenAI","subset":"Offline, partial-credit","color":"#C3A3FF","dash":"9 6","points":[[0.03,8.3],[0.062,31.5],[0.12,41.4],[0.16,46.7],[0.27,52.7]]},{"id":"luna21anthropic","model":"GPT-6 Luna","version":"2.1","publisher":"Anthropic","subset":"Offline subset","color":"#C3A3FF","dash":"2.5 6","points":[[0.038,19.2],[0.1261,37.5],[0.1435,42.3],[0.1672,44.8],[0.205,48.9]]},{"id":"haiku55","model":"Claude Haiku 5.5","version":"2.1","publisher":"Anthropic","subset":"Offline subset","color":"#C7E78C","dash":"2.5 6","points":[[0.07,42.0],[0.13,53.3],[0.18,61.3],[0.28,67.6],[0.61,72.4]]},{"id":"sonnet55","model":"Claude Sonnet 5.5","version":"2.1","publisher":"Anthropic","subset":"Offline subset","color":"#F09DB0","dash":"2.5 6","points":[[0.68,57.9],[0.93,66.0],[1.38,73.2],[2.22,81.1],[5.73,83.9]]}];
+  const EFFORT = ['Low','Medium','High','Xhigh','Max'];
+  const NS = 'http://www.w3.org/2000/svg';
+  const shell = document.querySelector('#chart-shell');
+  const plot = document.querySelector('#plot');
+  const tip = document.querySelector('#tooltip');
+  const toggles = [...document.querySelectorAll('.series-toggle')];
+  const selected = new Set();
+  let layers = new Map();
+  let activeTip = null;
+  let lastWidth = -1;
+  const toScore = v => v.toFixed(1)+'%';
+  const toCost = v => '$'+(Math.abs(v*100-Math.round(v*100))>0.000001 ? v.toFixed(4).replace(/0+$/,'').replace(/\.$/,'') : v.toFixed(2));
+  function el(tag, attrs, parent, text) {
+    const node = document.createElementNS(NS,tag);
+    Object.entries(attrs||{}).forEach(([key,value])=>node.setAttribute(key,String(value)));
+    if (text!==undefined) node.textContent = text;
+    parent.append(node);
+    return node;
+  }
+  function dismissTip() {tip.classList.remove('visible');tip.setAttribute('aria-hidden','true');activeTip=null;}
+  function showTip(model, point, effortIndex, x, y) {
+    tip.querySelector('.tip-name').textContent = model.model;
+    tip.querySelector('.tip-source').textContent = `OSWorld ${model.version} · ${model.publisher} · ${model.subset}`;
+    tip.querySelector('.tip-effort').textContent = EFFORT[effortIndex];
+    tip.querySelector('.tip-score').textContent = toScore(point[1]);
+    tip.querySelector('.tip-cost').textContent = toCost(point[0]);
+    tip.classList.add('visible');tip.setAttribute('aria-hidden','false');
+    const width=shell.clientWidth, tw=tip.offsetWidth, th=tip.offsetHeight;
+    const desiredLeft=x+16+tw <=width-4 ? x+16 : x-tw-16;
+    tip.style.left=Math.max(2,Math.min(width-tw-2,desiredLeft))+'px';
+    tip.style.top=Math.max(2, y-th-15)+'px';
+    activeTip={model:model.id,i:effortIndex};
+  }
+  function syncSelection() {
+    // An empty set is the default, all-visible state. Otherwise multiple
+    // models can be highlighted together, with the remaining series dimmed.
+    const focused = selected.size > 0;
+    for(const model of SERIES){
+      const layer=layers.get(model.id);
+      if(!layer) continue;
+      const visible = !focused || selected.has(model.id);
+      layer.setAttribute('opacity',visible?'1':'0.10');
+      layer.style.pointerEvents=visible?'auto':'none';
+    }
+    toggles.forEach(toggle=>{
+      const visible = !focused || selected.has(toggle.dataset.id);
+      toggle.setAttribute('aria-pressed',String(visible));
+    });
+    document.querySelector('#selection-status').textContent = focused
+      ? `${selected.size} of ${SERIES.length} series highlighted. Click a selected model to remove it; selecting all returns to the default view.`
+      : `All ${SERIES.length} series visible. Click one to isolate it, then click others to add them.`;
+    dismissTip();
+  }
+  toggles.forEach(toggle=>toggle.addEventListener('click',()=>{
+    const id=toggle.dataset.id;
+    if(selected.has(id)) selected.delete(id);
+    else selected.add(id);
+    if(selected.size===SERIES.length) selected.clear();
+    syncSelection();
+  }));
+  document.querySelector('#reset').addEventListener('click',()=>{selected.clear();syncSelection()});
+  function draw() {
+    const width = Math.max(290,Math.round(shell.getBoundingClientRect().width));
+    if(width===lastWidth) return;
+    lastWidth=width;
+    dismissTip();
+    const mobile=width<620;
+    const height=mobile ? Math.max(418,Math.min(560,width*1.18)) : Math.max(495,Math.min(640,width*.57));
+    const margin={left:mobile?45:64,right:mobile?16:27,top:mobile?20:25,bottom:mobile?65:74};
+    const left=margin.left,right=width-margin.right,top=margin.top,bottom=height-margin.bottom;
+    const xMin=.018,xMax=8,yMax=90;
+    const minLog=Math.log10(xMin),logSpan=Math.log10(xMax)-minLog;
+    const X=c=>left+(Math.log10(c)-minLog)/logSpan*(right-left);
+    const Y=s=>bottom-s/yMax*(bottom-top);
+    plot.replaceChildren();
+    plot.setAttribute('viewBox',`0 0 ${width} ${height}`);
+    plot.setAttribute('width',String(width));
+    plot.setAttribute('height',String(height));
+    plot.style.height=height+'px';
+    el('title',{},plot,'OSWorld 2.0 and 2.1: performance versus cost');
+    el('desc',{},plot,'Eight distinct curves, five reasoning effort levels per curve. Horizontal logarithmic axis shows US dollars per task or attempt; vertical axis shows score in percent. Solid, dashed and dotted strokes distinguish evaluation groups.');
+    for(const tick of [0,20,40,60,80]) {
+      const y=Y(tick);
+      el('line',{x1:left,y1:y,x2:right,y2:y,stroke:'#29292d','stroke-width':1},plot);
+      el('text',{x:left-12,y:y+4,'text-anchor':'end',fill:'#a8a8b0','font-size':mobile?10:12},plot,`${tick}%`);
+    }
+    const tickCosts=mobile ? [.02,.1,.5,2,8] : [.02,.05,.1,.2,.5,1,2,5,8];
+    for(const tick of tickCosts){
+      const x=X(tick);
+      el('line',{x1:x,y1:top,x2:x,y2:bottom,stroke:'#202023','stroke-width':1},plot);
+      const text=tick<1 ? tick.toString() : String(tick);
+      el('text',{x,y:bottom+23,'text-anchor':'middle',fill:'#a8a8b0','font-size':mobile?10:12},plot,text);
+    }
+    el('text',{x:(left+right)/2,y:height-13,'text-anchor':'middle',fill:'#b2b2b9','font-size':mobile?11:13},plot,mobile?'Cost (USD · log scale)':'Cost per task / attempt (USD · log scale)');
+    el('text',{x:15,y:(top+bottom)/2,transform:`rotate(-90 15 ${(top+bottom)/2})`,'text-anchor':'middle',fill:'#b2b2b9','font-size':mobile?11:13},plot,'Accuracy');
+    layers=new Map();
+    const drawOrder=['luna20','luna21','luna21anthropic','sol20','terra61','sol61','haiku55','sonnet55'];
+    for(const id of drawOrder){
+      const model=SERIES.find(item=>item.id===id);
+      const group=el('g',{'data-series':model.id},plot);
+      layers.set(model.id,group);
+      const d=model.points.map((p,i)=>`${i?'L':'M'}${X(p[0]).toFixed(2)},${Y(p[1]).toFixed(2)}`).join(' ');
+      const pathAttrs={d,fill:'none',stroke:model.color,'stroke-width':mobile?2.4:2.8,'stroke-linecap':'round','stroke-linejoin':'round'};
+      if(model.dash)pathAttrs['stroke-dasharray']=model.dash;
+      el('path',pathAttrs,group);
+      model.points.forEach((point,i)=>{
+        const x=X(point[0]),y=Y(point[1]);
+        el('circle',{cx:x,cy:y,r:mobile?4.2:5,fill:model.color,stroke:'#000','stroke-width':1.6},group);
+        const hit=el('circle',{cx:x,cy:y,r:mobile?12:14,fill:'transparent',tabindex:0,role:'button','aria-label':`${model.model}, OSWorld ${model.version}, reported by ${model.publisher}, ${EFFORT[i]} effort, ${toScore(point[1])} accuracy, ${toCost(point[0])} per attempt`},group);
+        hit.style.cursor='pointer';
+        hit.addEventListener('pointerenter',e=>{if(e.pointerType!=='touch')showTip(model,point,i,x,y)});
+        hit.addEventListener('pointerleave',e=>{if(e.pointerType!=='touch')dismissTip()});
+        hit.addEventListener('focus',()=>showTip(model,point,i,x,y));
+        hit.addEventListener('blur',dismissTip);
+        hit.addEventListener('click',()=>{if(activeTip?.model===model.id&&activeTip.i===i)dismissTip();else showTip(model,point,i,x,y)});
+        hit.addEventListener('keydown',e=>{if(e.key==='Escape')dismissTip(); if(e.key==='Enter'||e.key===' '){e.preventDefault();showTip(model,point,i,x,y)}});
+      });
+    }
+    syncSelection();
+  }
+  document.addEventListener('pointerdown',e=>{if(!shell.contains(e.target))dismissTip()});
+  if('ResizeObserver' in window){const ro=new ResizeObserver(draw);ro.observe(shell);}else{window.addEventListener('resize',draw);}
+  draw();
+})();
+</script>
+</body>
+</html>
