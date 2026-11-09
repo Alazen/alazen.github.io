@@ -27,13 +27,27 @@
     .search:focus { border-color: #fff; outline: 0; }
     .search::placeholder { color: #777; }
     .count { white-space: nowrap; font-size: 13px; color: #838383; padding-bottom: 14px; }
-    .entries { list-style: none; margin: 38px 0 0; padding: 0; }
-    .entry { margin: 0; }
-    .entry a { display: grid; grid-template-columns: 40px minmax(0, 1fr) 24px; gap: 18px; align-items: baseline; padding: 24px 0; text-decoration: none; transition: color .2s, transform .2s; }
+    .entries, .children { list-style: none; margin: 0; padding: 0; }
+    .entries { margin-top: 36px; }
+    .children { margin: 0 0 18px 23px; padding-left: 23px; border-left: 1px solid #262626; }
+    .folder > details > summary { display: grid; grid-template-columns: 24px minmax(0,1fr) auto; align-items: center; gap: 16px; padding: 22px 0; list-style: none; cursor: pointer; user-select: none; }
+    .folder > details > summary::-webkit-details-marker { display: none; }
+    .folder > details > summary::marker { content: ""; }
+    .folder > details > summary:focus-visible { outline: 2px solid #fafafa; outline-offset: 5px; }
+    .folder-name { font-size: clamp(21px, 3.2vw, 35px); font-weight: 480; letter-spacing: -.045em; line-height: 1.25; overflow-wrap: anywhere; }
+    .folder-count { font-size: 13px; color: #858585; white-space: nowrap; }
+    .folder-caret { display: block; width: 9px; height: 9px; margin-left: 5px; border-right: 1px solid #aaa; border-bottom: 1px solid #aaa; transform: rotate(-45deg); transition: transform .18s; }
+    .folder > details[open] > summary .folder-caret { transform: rotate(45deg); }
+    .folder > details > summary:hover .folder-name { color: #bcbcbc; }
+    .children .folder-name { font-size: clamp(18px, 2.3vw, 27px); }
+    .children .folder > details > summary { padding: 18px 0; }
+    .children .children { margin-left: 12px; padding-left: 24px; }
+    .entry { list-style: none; }
+    .entry a { display: grid; grid-template-columns: 34px minmax(0,1fr) 24px; gap: 16px; align-items: baseline; padding: 19px 0; text-decoration: none; transition: color .2s, transform .2s; }
     .entry a:hover { color: #b8b8b8; transform: translateX(4px); }
     .number, .arrow { color: #777; font-size: 14px; font-weight: 400; }
     .arrow { text-align: right; font-size: 20px; }
-    .entry-title { font-size: clamp(20px, 3.5vw, 37px); line-height: 1.3; font-weight: 460; letter-spacing: -.04em; overflow-wrap: anywhere; }
+    .entry-title { font-size: clamp(17px, 2.2vw, 25px); line-height: 1.35; font-weight: 460; letter-spacing: -.035em; overflow-wrap: anywhere; }
     .empty { padding: 38px 0; color: #999; line-height: 1.6; }
     .status { margin: 64px 0 0; color: #777; font-size: 12px; line-height: 1.7; }
     .status a { text-underline-offset: 3px; }
@@ -46,7 +60,10 @@
       .search { width: 100%; }
       .count { padding: 0; }
       .entries { margin-top: 20px; }
-      .entry a { grid-template-columns: 26px minmax(0,1fr) 20px; gap: 12px; padding: 22px 0; }
+      .children { margin-left: 14px; padding-left: 15px; }
+      .folder > details > summary { grid-template-columns: 22px minmax(0,1fr) auto; gap: 9px; padding: 20px 0; }
+      .folder-count { font-size: 11px; }
+      .entry a { grid-template-columns: 24px minmax(0,1fr) 18px; gap: 9px; padding: 17px 0; }
       .number { font-size: 12px; }
     }
     @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { transition: none !important; } }
@@ -63,14 +80,38 @@
       <div class="controls">
         <label class="sr-only" for="filter">Search projects</label>
         <input id="filter" class="search" type="search" placeholder="Find a project..." autocomplete="off" spellcheck="false">
-        <div id="count" class="count" role="status" aria-live="polite">2 projects</div>
+        <div id="count" class="count" role="status" aria-live="polite">28 projects</div>
       </div>
-      <nav aria-label="Published projects">
-        <ol id="entries" class="entries">
-          <li class="entry"><a href="/aniimo-break-atlas-4-argon-high-43m00s/"><span class="number">01</span><span class="entry-title">Aniimo Break Atlas 4 Argon High 43m00s</span><span class="arrow" aria-hidden="true">↗</span></a></li>
-          <li class="entry"><a href="/aniimo-break-atlas-6.1-sol-max-40m01s-30.1-percent/"><span class="number">02</span><span class="entry-title">Aniimo Break Atlas 6.1 Sol Max 40m01s 30.1 Percent</span><span class="arrow" aria-hidden="true">↗</span></a></li>
-        </ol>
-      </nav>
+      <nav aria-label="Published projects"><ul id="entries" class="entries">
+<li class="folder"><details data-path="aion-2"><summary><span class="folder-caret" aria-hidden="true"></span><span class="folder-name">Aion 2</span><span class="folder-count">18 projects</span></summary><ul class="children"><li class="entry"><a href="/aion-2/aion-2-daevanion-cleric-5.6-luna-max-frontend-20261021-205700/"><span class="number">01</span><span class="entry-title">Aion 2 Daevanion Cleric 5.6 Luna Max Frontend 20261021 205700</span><span class="arrow" aria-hidden="true">↗</span></a></li>
+<li class="entry"><a href="/aion-2/aion-2-daevanion-cleric-5.6-sol-high-frontend-20261021-205700/"><span class="number">02</span><span class="entry-title">Aion 2 Daevanion Cleric 5.6 Sol High Frontend 20261021 205700</span><span class="arrow" aria-hidden="true">↗</span></a></li>
+<li class="entry"><a href="/aion-2/aion-2-daevanion-cleric-6-astra-xhigh-35-percent-frontend-20261021-205700/"><span class="number">03</span><span class="entry-title">Aion 2 Daevanion Cleric 6 Astra Xhigh 35 Percent Frontend 20261021 205700</span><span class="arrow" aria-hidden="true">↗</span></a></li>
+<li class="entry"><a href="/aion-2/aion-2-daevanion-cleric-6-chat-high-frontend-20261021-205700_001/"><span class="number">04</span><span class="entry-title">Aion 2 Daevanion Cleric 6 Chat High Frontend 20261021 205700 001</span><span class="arrow" aria-hidden="true">↗</span></a></li>
+<li class="entry"><a href="/aion-2/aion-2-daevanion-cleric-6-chat-high-frontend-20261021-205700_002/"><span class="number">05</span><span class="entry-title">Aion 2 Daevanion Cleric 6 Chat High Frontend 20261021 205700 002</span><span class="arrow" aria-hidden="true">↗</span></a></li>
+<li class="entry"><a href="/aion-2/aion-2-daevanion-cleric-6-chat-high-frontend-20261021-205700-lightning/"><span class="number">06</span><span class="entry-title">Aion 2 Daevanion Cleric 6 Chat High Frontend 20261021 205700 Lightning</span><span class="arrow" aria-hidden="true">↗</span></a></li>
+<li class="entry"><a href="/aion-2/aion-2-daevanion-cleric-6-chat-high-frontend-20261021-205700-plan-first/"><span class="number">07</span><span class="entry-title">Aion 2 Daevanion Cleric 6 Chat High Frontend 20261021 205700 Plan First</span><span class="arrow" aria-hidden="true">↗</span></a></li>
+<li class="entry"><a href="/aion-2/aion-2-daevanion-cleric-6-luna-max-frontend-20261021-205700/"><span class="number">08</span><span class="entry-title">Aion 2 Daevanion Cleric 6 Luna Max Frontend 20261021 205700</span><span class="arrow" aria-hidden="true">↗</span></a></li>
+<li class="entry"><a href="/aion-2/aion-2-daevanion-cleric-6-sol-high-frontend-20261021-205700/"><span class="number">09</span><span class="entry-title">Aion 2 Daevanion Cleric 6 Sol High Frontend 20261021 205700</span><span class="arrow" aria-hidden="true">↗</span></a></li>
+<li class="entry"><a href="/aion-2/aion-2-daevanion-cleric-6-sol-max-frontend-20261021-205700/"><span class="number">10</span><span class="entry-title">Aion 2 Daevanion Cleric 6 Sol Max Frontend 20261021 205700</span><span class="arrow" aria-hidden="true">↗</span></a></li>
+<li class="entry"><a href="/aion-2/aion-2-daevanion-cleric-6.1-sol-high-frontenddesignadaptedv1/"><span class="number">11</span><span class="entry-title">Aion 2 Daevanion Cleric 6.1 Sol High Frontenddesignadaptedv1</span><span class="arrow" aria-hidden="true">↗</span></a></li>
+<li class="entry"><a href="/aion-2/aion-2-daevanion-cleric-6.1-sol-high-material3/"><span class="number">12</span><span class="entry-title">Aion 2 Daevanion Cleric 6.1 Sol High Material3</span><span class="arrow" aria-hidden="true">↗</span></a></li>
+<li class="entry"><a href="/aion-2/aion-2-daevanion-cleric-6.1-sol-mid-frontend-20261021-205700/"><span class="number">13</span><span class="entry-title">Aion 2 Daevanion Cleric 6.1 Sol Mid Frontend 20261021 205700</span><span class="arrow" aria-hidden="true">↗</span></a></li>
+<li class="entry"><a href="/aion-2/aion-2-daevanion-cleric-6.1-sol-uiuxpromax/"><span class="number">14</span><span class="entry-title">Aion 2 Daevanion Cleric 6.1 Sol Uiuxpromax</span><span class="arrow" aria-hidden="true">↗</span></a></li>
+<li class="entry"><a href="/aion-2/aion-2-daevanion-cleric-haiku-5.5-xhigh-frontend-20261021-205700/"><span class="number">15</span><span class="entry-title">Aion 2 Daevanion Cleric Haiku 5.5 Xhigh Frontend 20261021 205700</span><span class="arrow" aria-hidden="true">↗</span></a></li>
+<li class="entry"><a href="/aion-2/aion-2-daevanion-cleric-sonnet-5.5-high-frontend-20261021-205700/"><span class="number">16</span><span class="entry-title">Aion 2 Daevanion Cleric Sonnet 5.5 High Frontend 20261021 205700</span><span class="arrow" aria-hidden="true">↗</span></a></li>
+<li class="entry"><a href="/aion-2/aion-2-daevanion-cleric-sonnet-5.5-xhigh-frontend-20261021-205700/"><span class="number">17</span><span class="entry-title">Aion 2 Daevanion Cleric Sonnet 5.5 Xhigh Frontend 20261021 205700</span><span class="arrow" aria-hidden="true">↗</span></a></li>
+<li class="entry"><a href="/aion-2/aion-2-daevanion-cleric-sonnet-6-chat-high-frontend-20261021-205700/"><span class="number">18</span><span class="entry-title">Aion 2 Daevanion Cleric Sonnet 6 Chat High Frontend 20261021 205700</span><span class="arrow" aria-hidden="true">↗</span></a></li></ul></details></li>
+<li class="folder"><details data-path="aniimo"><summary><span class="folder-caret" aria-hidden="true"></span><span class="folder-name">Aniimo</span><span class="folder-count">7 projects</span></summary><ul class="children"><li class="entry"><a href="/aniimo/aniimo-break-atlas-3.8-flash-high-26m37s-aistudio/"><span class="number">01</span><span class="entry-title">Aniimo Break Atlas 3.8 Flash High 26m37s Aistudio</span><span class="arrow" aria-hidden="true">↗</span></a></li>
+<li class="entry"><a href="/aniimo/aniimo-break-atlas-3.8-flash-high-57m01s-aistudio/"><span class="number">02</span><span class="entry-title">Aniimo Break Atlas 3.8 Flash High 57m01s Aistudio</span><span class="arrow" aria-hidden="true">↗</span></a></li>
+<li class="entry"><a href="/aniimo/aniimo-break-atlas-4-argon-high-43m00s/"><span class="number">03</span><span class="entry-title">Aniimo Break Atlas 4 Argon High 43m00s</span><span class="arrow" aria-hidden="true">↗</span></a></li>
+<li class="entry"><a href="/aniimo/aniimo-break-atlas-6.1-sol-max-40m01s-30.1-percent/"><span class="number">04</span><span class="entry-title">Aniimo Break Atlas 6.1 Sol Max 40m01s 30.1 Percent</span><span class="arrow" aria-hidden="true">↗</span></a></li>
+<li class="entry"><a href="/aniimo/aniimo-break-atlas-6.1-terra-max-19m01s/"><span class="number">05</span><span class="entry-title">Aniimo Break Atlas 6.1 Terra Max 19m01s</span><span class="arrow" aria-hidden="true">↗</span></a></li>
+<li class="entry"><a href="/aniimo/aniimo-break-atlas-6.1-terra-xhigh-06m01s/"><span class="number">06</span><span class="entry-title">Aniimo Break Atlas 6.1 Terra Xhigh 06m01s</span><span class="arrow" aria-hidden="true">↗</span></a></li>
+<li class="entry"><a href="/aniimo/aniimo-break-atlas-6.1-terra-xhigh-07m01s/"><span class="number">07</span><span class="entry-title">Aniimo Break Atlas 6.1 Terra Xhigh 07m01s</span><span class="arrow" aria-hidden="true">↗</span></a></li></ul></details></li>
+<li class="folder"><details data-path="usa"><summary><span class="folder-caret" aria-hidden="true"></span><span class="folder-name">Usa</span><span class="folder-count">2 projects</span></summary><ul class="children"><li class="entry"><a href="/usa/usa-michigan-4-argon-high/"><span class="number">01</span><span class="entry-title">Usa Michigan 4 Argon High</span><span class="arrow" aria-hidden="true">↗</span></a></li>
+<li class="entry"><a href="/usa/usa-michigan-haiku-5.5-xhigh/"><span class="number">02</span><span class="entry-title">Usa Michigan Haiku 5.5 Xhigh</span><span class="arrow" aria-hidden="true">↗</span></a></li></ul></details></li>
+<li class="entry"><a href="/benchmark-osworld/"><span class="number">04</span><span class="entry-title">Benchmark Osworld</span><span class="arrow" aria-hidden="true">↗</span></a></li>
+</ul></nav>
       <p id="status" class="status" role="status" aria-live="polite" hidden></p>
       <noscript><p class="status">Enable JavaScript to discover newly added folders automatically. Existing links above remain available.</p></noscript>
     </main>
@@ -78,76 +119,166 @@
   <script>
     (() => {
       "use strict";
+      // Discover every folder containing an index.html, at any nesting depth.
       const api = "https://api.github.com/repos/Alazen/alazen.github.io/git/trees/main?recursive=1";
-      const cacheKey = "alazen-project-directory-v1";
+      const cacheKey = "alazen-project-directory-v2";
       const knownPaths = [
-        "aniimo-break-atlas-4-argon-high-43m00s",
-        "aniimo-break-atlas-6.1-sol-max-40m01s-30.1-percent"
-      ];
+        "aion-2/aion-2-daevanion-cleric-5.6-luna-max-frontend-20261021-205700",
+        "aion-2/aion-2-daevanion-cleric-5.6-sol-high-frontend-20261021-205700",
+        "aion-2/aion-2-daevanion-cleric-6-astra-xhigh-35-percent-frontend-20261021-205700",
+        "aion-2/aion-2-daevanion-cleric-6-chat-high-frontend-20261021-205700_001",
+        "aion-2/aion-2-daevanion-cleric-6-chat-high-frontend-20261021-205700_002",
+        "aion-2/aion-2-daevanion-cleric-6-chat-high-frontend-20261021-205700-lightning",
+        "aion-2/aion-2-daevanion-cleric-6-chat-high-frontend-20261021-205700-plan-first",
+        "aion-2/aion-2-daevanion-cleric-6-luna-max-frontend-20261021-205700",
+        "aion-2/aion-2-daevanion-cleric-6-sol-high-frontend-20261021-205700",
+        "aion-2/aion-2-daevanion-cleric-6-sol-max-frontend-20261021-205700",
+        "aion-2/aion-2-daevanion-cleric-6.1-sol-high-frontenddesignadaptedv1",
+        "aion-2/aion-2-daevanion-cleric-6.1-sol-high-material3",
+        "aion-2/aion-2-daevanion-cleric-6.1-sol-mid-frontend-20261021-205700",
+        "aion-2/aion-2-daevanion-cleric-6.1-sol-uiuxpromax",
+        "aion-2/aion-2-daevanion-cleric-haiku-5.5-xhigh-frontend-20261021-205700",
+        "aion-2/aion-2-daevanion-cleric-sonnet-5.5-high-frontend-20261021-205700",
+        "aion-2/aion-2-daevanion-cleric-sonnet-5.5-xhigh-frontend-20261021-205700",
+        "aion-2/aion-2-daevanion-cleric-sonnet-6-chat-high-frontend-20261021-205700",
+        "aniimo/aniimo-break-atlas-3.8-flash-high-26m37s-aistudio",
+        "aniimo/aniimo-break-atlas-3.8-flash-high-57m01s-aistudio",
+        "aniimo/aniimo-break-atlas-4-argon-high-43m00s",
+        "aniimo/aniimo-break-atlas-6.1-sol-max-40m01s-30.1-percent",
+        "aniimo/aniimo-break-atlas-6.1-terra-max-19m01s",
+        "aniimo/aniimo-break-atlas-6.1-terra-xhigh-06m01s",
+        "aniimo/aniimo-break-atlas-6.1-terra-xhigh-07m01s",
+        "benchmark-osworld",
+        "usa/usa-michigan-4-argon-high",
+        "usa/usa-michigan-haiku-5.5-xhigh"
+];
       const list = document.getElementById("entries");
       const input = document.getElementById("filter");
-      const count = document.getElementById("count");
+      const countDisplay = document.getElementById("count");
       const status = document.getElementById("status");
+      const expanded = new Set();
       let paths = knownPaths;
 
       function label(segment) {
         return segment.replace(/[-_]+/g, " ").replace(/\s+/g, " ").trim()
           .replace(/\b[a-z]/g, letter => letter.toUpperCase());
       }
-
-      function projectUrl(path) {
+      function pageUrl(path) {
         return "/" + path.split("/").map(encodeURIComponent).join("/") + "/";
       }
-
-      function render() {
-        const query = input.value.trim().toLocaleLowerCase();
-        const matches = paths.filter(path => path.toLocaleLowerCase().includes(query) ||
-          path.split("/").map(label).join(" ").toLocaleLowerCase().includes(query));
-        const fragment = document.createDocumentFragment();
-        matches.forEach((path, i) => {
-          const item = document.createElement("li");
-          item.className = "entry";
-          const link = document.createElement("a");
-          link.href = projectUrl(path);
-          const number = document.createElement("span");
-          number.className = "number";
-          number.textContent = String(i + 1).padStart(2, "0");
-          const title = document.createElement("span");
-          title.className = "entry-title";
-          title.textContent = path.split("/").map(label).join(" / ");
-          const arrow = document.createElement("span");
-          arrow.className = "arrow";
-          arrow.setAttribute("aria-hidden", "true");
-          arrow.textContent = "↗";
-          link.append(number, title, arrow);
-          item.append(link);
-          fragment.append(item);
+      function compareNodes(a, b) {
+        return Number(b.children.size > 0) - Number(a.children.size > 0) ||
+          a.name.localeCompare(b.name, undefined, { numeric: true, sensitivity: "base" });
+      }
+      function createTree(pagePaths) {
+        const root = { name: "", path: "", children: new Map(), isPage: false, total: 0 };
+        for (const path of pagePaths) {
+          let current = root;
+          let directory = "";
+          for (const name of path.split("/")) {
+            directory = directory ? directory + "/" + name : name;
+            if (!current.children.has(name)) {
+              current.children.set(name, { name, path: directory, children: new Map(), isPage: false, total: 0 });
+            }
+            current = current.children.get(name);
+          }
+          current.isPage = true;
+        }
+        function totalFor(node) {
+          node.total = Number(node.isPage);
+          for (const child of node.children.values()) node.total += totalFor(child);
+          return node.total;
+        }
+        totalFor(root);
+        return root;
+      }
+      function projectLink(path, title, index) {
+        const item = document.createElement("li");
+        item.className = "entry";
+        const link = document.createElement("a");
+        link.href = pageUrl(path);
+        const number = document.createElement("span");
+        number.className = "number";
+        number.textContent = String(index).padStart(2, "0");
+        const name = document.createElement("span");
+        name.className = "entry-title";
+        name.textContent = title;
+        const arrow = document.createElement("span");
+        arrow.className = "arrow";
+        arrow.setAttribute("aria-hidden", "true");
+        arrow.textContent = "↗";
+        link.append(number, name, arrow);
+        item.append(link);
+        return item;
+      }
+      function renderNodes(nodes, parent, searching) {
+        const sorted = [...nodes].sort(compareNodes);
+        sorted.forEach((node, index) => {
+          if (!node.children.size) {
+            if (node.isPage) parent.append(projectLink(node.path, label(node.name), index + 1));
+            return;
+          }
+          const li = document.createElement("li");
+          li.className = "folder";
+          const details = document.createElement("details");
+          details.dataset.path = node.path;
+          details.open = searching || expanded.has(node.path);
+          const summary = document.createElement("summary");
+          const caret = document.createElement("span");
+          caret.className = "folder-caret";
+          caret.setAttribute("aria-hidden", "true");
+          const name = document.createElement("span");
+          name.className = "folder-name";
+          name.textContent = label(node.name);
+          const total = document.createElement("span");
+          total.className = "folder-count";
+          total.textContent = node.total + (node.total === 1 ? " project" : " projects");
+          summary.append(caret, name, total);
+          const children = document.createElement("ul");
+          children.className = "children";
+          if (node.isPage) children.append(projectLink(node.path, "Overview", 0));
+          renderNodes(node.children.values(), children, searching);
+          details.append(summary, children);
+          details.addEventListener("toggle", () => {
+            if (input.value.trim() || !details.isConnected) return;
+            if (details.open) expanded.add(node.path);
+            else expanded.delete(node.path);
+          });
+          li.append(details);
+          parent.append(li);
         });
-        if (!matches.length) {
+      }
+      function render() {
+        const search = input.value.trim().toLocaleLowerCase();
+        const matching = paths.filter(path =>
+          path.toLocaleLowerCase().includes(search) ||
+          path.split("/").map(label).join(" ").toLocaleLowerCase().includes(search)
+        );
+        const fragment = document.createDocumentFragment();
+        if (matching.length) {
+          renderNodes(createTree(matching).children.values(), fragment, Boolean(search));
+        } else {
           const empty = document.createElement("li");
           empty.className = "empty";
           empty.textContent = "No projects match your search.";
           fragment.append(empty);
         }
         list.replaceChildren(fragment);
-        count.textContent = query
-          ? matches.length + " of " + paths.length + " projects"
+        countDisplay.textContent = search
+          ? matching.length + " of " + paths.length + " projects"
           : paths.length + (paths.length === 1 ? " project" : " projects");
       }
-
       function readCache() {
         try {
-          const cached = JSON.parse(localStorage.getItem(cacheKey) || "null");
-          if (Array.isArray(cached) && cached.every(path => typeof path === "string")) return cached;
+          const saved = JSON.parse(localStorage.getItem(cacheKey) || "null");
+          if (Array.isArray(saved) && saved.every(p => typeof p === "string" && p)) return saved;
         } catch (_) {}
         return null;
       }
-
       const cached = readCache();
       if (cached) paths = cached;
       render();
       input.addEventListener("input", render);
-
       async function refresh() {
         try {
           const response = await fetch(api, {
@@ -158,26 +289,25 @@
           if (!response.ok) throw new Error("GitHub API returned " + response.status);
           const result = await response.json();
           if (!Array.isArray(result.tree) || result.truncated) throw new Error("Incomplete directory listing");
-          const discovered = result.tree
+          const found = result.tree
             .filter(entry => entry.type === "blob" && entry.path.endsWith("/index.html"))
             .map(entry => entry.path.slice(0, -"/index.html".length))
-            .filter(path => path.split("/").every(part => part && !part.startsWith(".")))
+            .filter(path => path.split("/").every(segment => segment && !segment.startsWith(".")))
             .sort((a, b) => a.localeCompare(b, undefined, { numeric: true, sensitivity: "base" }));
-          paths = [...new Set(discovered)];
+          paths = [...new Set(found)];
           try { localStorage.setItem(cacheKey, JSON.stringify(paths)); } catch (_) {}
           render();
-          status.textContent = "";
           status.hidden = true;
+          status.textContent = "";
         } catch (_) {
           status.hidden = false;
-          status.textContent = "GitHub directory lookup is temporarily unavailable. Showing saved links. Browse all files on GitHub: ";
+          status.textContent = "GitHub lookup unavailable. Showing saved projects. ";
           const link = document.createElement("a");
           link.href = "https://github.com/Alazen/alazen.github.io/tree/main";
-          link.textContent = "View repository ↗";
+          link.textContent = "View repository";
           status.append(link);
         }
       }
-
       refresh();
     })();
   </script>
