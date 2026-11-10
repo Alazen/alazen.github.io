@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="color-scheme" content="dark">
-<meta name="description" content="Interactive comparison of OSWorld 2.0 and 2.1 accuracy and cost for eight model series, including GPT-6.1 Sol, GPT-6.1 Terra, GPT-6 Luna, GPT-6 Sol, Claude Haiku 5.5 and Claude Sonnet 5.5.">
-<title>OSWorld 2.0 + 2.1 | Accuracy vs cost</title>
+<meta name="description" content="Interactive comparison of OSWorld 2.0 and 2.1 accuracy and cost for nine model series, including Gemini 3.8 Flash, GPT-6.1 Sol, GPT-6.1 Terra, GPT-6 Luna, GPT-6 Sol, Claude Haiku 5.5 and Claude Sonnet 5.5.">
+<title>OSWorld 2.0 + 2.1 | Partial score vs cost</title>
 <style>
   :root {color-scheme:dark;--bg:#000;--text:#f3f3f5;--muted:#a7a7ae;--sub:#c8c8cd;--grid:#242428;--edge:#46464c}
   *{box-sizing:border-box}
@@ -68,8 +68,8 @@
 <body>
 <main>
 <header>
-  <h1>OSWorld: accuracy vs cost</h1>
-  <p class="lead">One chart for OSWorld 2.0 and 2.1, showing 40 reported results across eight series. Each line connects five reasoning-effort settings. Click a model to highlight it, then click other models to compare them. Selecting all eight restores the default view.</p>
+  <h1>OSWorld: score vs cost</h1>
+  <p class="lead">One interactive chart for OSWorld 2.0 and 2.1, with 43 plotted results across nine series. The new Gemini 3.8 Flash line has three measured reasoning-effort settings (low, medium, high); the other lines have five each. Click a model to highlight it, then click other models to compare them. Selecting all nine restores the default view.</p>
 </header>
 <nav class="legend" aria-label="Select multiple model series to highlight">
 <button type="button" class="series-toggle" data-id="sol61" aria-pressed="true" aria-label="Highlight GPT-6.1 Sol, OSWorld 2.1, OpenAI">
@@ -96,6 +96,10 @@
   <svg class="key-line" width="34" height="16" viewBox="0 0 34 16" aria-hidden="true"><path d="M1 8H33" fill="none" stroke="#C3A3FF" stroke-width="3" stroke-linecap="round" stroke-dasharray="2.5 6"/><circle cx="17" cy="8" r="3.5" fill="#C3A3FF" stroke="#000" stroke-width="1.4"/></svg>
   <span class="key-name">GPT-6 Luna<small>OSWorld 2.1 · Anthropic</small></span>
 </button>
+<button type="button" class="series-toggle" data-id="gem38k52" aria-pressed="true" aria-label="Highlight Gemini 3.8 Flash, OSWorld 2.0, independent 52-task subset">
+  <svg class="key-line" width="34" height="16" viewBox="0 0 34 16" aria-hidden="true"><path d="M1 8H33" fill="none" stroke="#FF946E" stroke-width="3" stroke-linecap="round" stroke-dasharray="11 4 2 4"/><circle cx="17" cy="8" r="3.5" fill="#FF946E" stroke="#000" stroke-width="1.4"/></svg>
+  <span class="key-name">Gemini 3.8 Flash<small>OSWorld 2.0 · independent K52</small></span>
+</button>
 <button type="button" class="series-toggle" data-id="haiku55" aria-pressed="true" aria-label="Highlight Claude Haiku 5.5, OSWorld 2.1, Anthropic">
   <svg class="key-line" width="34" height="16" viewBox="0 0 34 16" aria-hidden="true"><path d="M1 8H33" fill="none" stroke="#C7E78C" stroke-width="3" stroke-linecap="round" stroke-dasharray="2.5 6"/><circle cx="17" cy="8" r="3.5" fill="#C7E78C" stroke="#000" stroke-width="1.4"/></svg>
   <span class="key-name">Claude Haiku 5.5<small>OSWorld 2.1 · Anthropic</small></span>
@@ -105,29 +109,31 @@
   <span class="key-name">Claude Sonnet 5.5<small>OSWorld 2.1 · Anthropic</small></span>
 </button>
 </nav>
-<p id="selection-status" class="selection-status" role="status" aria-live="polite">All eight series visible. Click one to isolate it, then click others to add them.</p>
+<p id="selection-status" class="selection-status" role="status" aria-live="polite">All nine series visible. Click one to isolate it, then click others to add them.</p>
 <section aria-label="Interactive benchmark chart">
   <div class="chart-shell" id="chart-shell">
-    <svg class="plot" id="plot" role="img" aria-label="OSWorld accuracy versus cost per task or attempt. Eight model series from OSWorld 2.0 and 2.1, with five data points per series."></svg>
+    <svg class="plot" id="plot" role="img" aria-label="OSWorld partial-credit score versus cost per task or attempt. Nine model series from OSWorld 2.0 and 2.1; 43 plotted points, including three Gemini 3.8 Flash points from an independent OSWorld 2.0 52-task subset."></svg>
     <div class="tooltip" id="tooltip" aria-hidden="true">
       <div class="tip-name"></div><div class="tip-source"></div>
       <div class="tip-row"><span>Reasoning effort</span><strong class="tip-effort"></strong></div>
-      <div class="tip-row"><span>Accuracy</span><strong class="tip-score"></strong></div>
+      <div class="tip-row"><span>Partial score</span><strong class="tip-score"></strong></div>
       <div class="tip-row"><span>Cost per attempt</span><strong class="tip-cost"></strong></div>
     </div>
   </div>
-  <div class="underplot"><p>Horizontal axis: reported cost per task or attempt (USD, logarithmic scale). Vertical axis: reported accuracy. Solid: OpenAI 2.1. Dashed: OpenAI 2.0. Dotted: Anthropic 2.1 offline subset.</p><button type="button" class="reset" id="reset">Show all series</button></div>
+  <div class="underplot"><p>Horizontal axis: reported cost per task or attempt (USD, logarithmic scale). Vertical axis: reported partial-credit score. Solid: OpenAI 2.1. Dashed: OpenAI 2.0. Dotted: Anthropic 2.1 offline subset. Dash-dot: independent OSWorld 2.0 52-task subset.</p><button type="button" class="reset" id="reset">Show all series</button></div>
 </section>
 <section class="caution" aria-labelledby="comparability">
   <h2 id="comparability">Read these scores in context</h2>
   <p><strong>OSWorld 2.0 and 2.1 are not identical tests.</strong> Scores from different benchmark versions should not be treated as a head-to-head ranking.</p>
-  <p>Even within version 2.1, the published evaluation sets differ. OpenAI reports <strong>55.5%</strong> for GPT-6 Luna on its offline set, while Anthropic reports <strong>48.9%</strong> for the same model on its offline subset. The dotted GPT-6 Luna line and the Claude lines use Anthropic’s evaluation; the solid OpenAI lines use OpenAI’s evaluation. Costs are the publishers’ reported averages, not API token rates.</p>
+  <p>Even within version 2.1, the published evaluation sets differ. OpenAI reports <strong>55.5%</strong> for GPT-6 Luna on its offline set, while Anthropic reports <strong>48.9%</strong> for the same model on its offline subset. The dotted GPT-6 Luna line and the Claude lines use Anthropic’s evaluation; the solid OpenAI lines use OpenAI’s evaluation. Costs are reported mean model costs per task or attempt, not API token rates.</p>
+  <p><strong>Gemini 3.8 Flash, OSWorld 2.0:</strong> the orange dash-dot curve shows low, medium and high reasoning on 52 representative tasks, independently measured by <a href="https://arxiv.org/html/2609.40284" target="_blank" rel="noopener noreferrer">cua-speedrun</a>. Google's <a href="https://deepmind.google/models/model-cards/gemini-3-8-flash/" target="_blank" rel="noopener noreferrer">official model card</a> separately reports <strong>59.0%</strong> on OSWorld 2.0 with batched tool calls, without an effort breakdown or published cost per task. That official result is listed below but cannot be placed on a cost-versus-accuracy plot without inventing an x-coordinate.</p>
+  <p><strong>No verified OSWorld 2.1 result found for Gemini 3.8 Flash.</strong> Some third-party leaderboards estimate 2.1 scores. Estimated scores are excluded from this chart because they are not measured benchmarks.</p>
 </section>
 <section aria-labelledby="details-heading">
   <h2 id="details-heading" class="details-heading">Underlying data</h2>
-  <details><summary>View all 40 data points</summary>
+  <details><summary>View 43 plotted points and one unpriced reference</summary>
     <div class="table-scroll"><table>
-      <thead><tr><th>Model</th><th>OSWorld</th><th>Reported by</th><th>Effort</th><th>Accuracy</th><th>Cost</th></tr></thead>
+      <thead><tr><th>Model</th><th>OSWorld</th><th>Reported by</th><th>Effort</th><th>Score</th><th>Cost</th></tr></thead>
       <tbody>
 <tr><td>GPT-6.1 Sol</td><td>2.1</td><td>OpenAI</td><td>Low</td><td>60.9%</td><td>$0.38</td></tr>
 <tr><td>GPT-6.1 Sol</td><td>2.1</td><td>OpenAI</td><td>Medium</td><td>73.5%</td><td>$0.65</td></tr>
@@ -159,6 +165,10 @@
 <tr><td>GPT-6 Luna</td><td>2.1</td><td>Anthropic</td><td>High</td><td>42.3%</td><td>$0.1435</td></tr>
 <tr><td>GPT-6 Luna</td><td>2.1</td><td>Anthropic</td><td>Xhigh</td><td>44.8%</td><td>$0.1672</td></tr>
 <tr><td>GPT-6 Luna</td><td>2.1</td><td>Anthropic</td><td>Max</td><td>48.9%</td><td>$0.205</td></tr>
+<tr><td>Gemini 3.8 Flash</td><td>2.0 (K52)</td><td>cua-speedrun</td><td>Low</td><td>35.3%</td><td>$1.875</td></tr>
+<tr><td>Gemini 3.8 Flash</td><td>2.0 (K52)</td><td>cua-speedrun</td><td>Medium</td><td>59.9%</td><td>$2.915</td></tr>
+<tr><td>Gemini 3.8 Flash</td><td>2.0 (K52)</td><td>cua-speedrun</td><td>High</td><td>60.2%</td><td>$5.019</td></tr>
+<tr><td>Gemini 3.8 Flash</td><td>2.0</td><td>Google DeepMind</td><td>Not stated</td><td>59.0%</td><td>Not reported</td></tr>
 <tr><td>Claude Haiku 5.5</td><td>2.1</td><td>Anthropic</td><td>Low</td><td>42.0%</td><td>$0.07</td></tr>
 <tr><td>Claude Haiku 5.5</td><td>2.1</td><td>Anthropic</td><td>Medium</td><td>53.3%</td><td>$0.13</td></tr>
 <tr><td>Claude Haiku 5.5</td><td>2.1</td><td>Anthropic</td><td>High</td><td>61.3%</td><td>$0.18</td></tr>
@@ -173,12 +183,12 @@
     </table></div>
   </details>
 </section>
-<footer class="sources">Original benchmark sources: <a href="https://openai.com/index/introducing-gpt-6-1-terra/" target="_blank" rel="noopener noreferrer">OpenAI · OSWorld 2.1</a>, <a href="https://openai.com/index/introducing-gpt-6-sol-and-luna/" target="_blank" rel="noopener noreferrer">OpenAI · OSWorld 2.0</a>, and <a href="https://www.anthropic.com/claude-haiku-5-5" target="_blank" rel="noopener noreferrer">Anthropic · OSWorld 2.1 (offline subset)</a>. Exact chart points cross-checked with <a href="https://checknet.uk/ai-models/gpt-6-1-terra" target="_blank" rel="noopener noreferrer">CheckNet (OpenAI 2.1)</a>, <a href="https://aicatchup.com/news/openai-gpt-6-sol-luna" target="_blank" rel="noopener noreferrer">AI Catchup (OpenAI 2.0)</a>, and <a href="https://checknet.uk/ai-models/claude-haiku-5-5" target="_blank" rel="noopener noreferrer">CheckNet (Anthropic 2.1)</a>.</footer>
+<footer class="sources">Original benchmark sources: <a href="https://openai.com/index/introducing-gpt-6-1-terra/" target="_blank" rel="noopener noreferrer">OpenAI · OSWorld 2.1</a>, <a href="https://openai.com/index/introducing-gpt-6-sol-and-luna/" target="_blank" rel="noopener noreferrer">OpenAI · OSWorld 2.0</a>, and <a href="https://www.anthropic.com/claude-haiku-5-5" target="_blank" rel="noopener noreferrer">Anthropic · OSWorld 2.1 (offline subset)</a>. Gemini 3.8 Flash: <a href="https://arxiv.org/html/2609.40284" target="_blank" rel="noopener noreferrer">cua-speedrun paper, Table 9 (OSWorld2 K52 scores and cost)</a>, <a href="https://huggingface.co/datasets/anonymousmypcbench/cua-speedrun-trajectories/blob/main/gemini38flash-k52-evaluations-54-56.md" target="_blank" rel="noopener noreferrer">52-task run logs</a>, and <a href="https://deepmind.google/models/model-cards/gemini-3-8-flash/" target="_blank" rel="noopener noreferrer">Google DeepMind model card (official OSWorld 2.0 score)</a>. Exact other chart points cross-checked with <a href="https://checknet.uk/ai-models/gpt-6-1-terra" target="_blank" rel="noopener noreferrer">CheckNet (OpenAI 2.1)</a>, <a href="https://aicatchup.com/news/openai-gpt-6-sol-luna" target="_blank" rel="noopener noreferrer">AI Catchup (OpenAI 2.0)</a>, and <a href="https://checknet.uk/ai-models/claude-haiku-5-5" target="_blank" rel="noopener noreferrer">CheckNet (Anthropic 2.1)</a>.</footer>
 </main>
 <script>
 (() => {
   'use strict';
-  const SERIES = [{"id":"sol61","model":"GPT-6.1 Sol","version":"2.1","publisher":"OpenAI","subset":"Offline set","color":"#8DB7F5","dash":"","points":[[0.38,60.9],[0.65,73.5],[0.9,75.5],[0.95,75.9],[1.15,78.0]]},{"id":"terra61","model":"GPT-6.1 Terra","version":"2.1","publisher":"OpenAI","subset":"Offline set","color":"#F0C07F","dash":"","points":[[0.36,53.8],[0.5,66.7],[0.51,68.7],[0.62,71.3],[1.19,74.2]]},{"id":"luna21","model":"GPT-6 Luna","version":"2.1","publisher":"OpenAI","subset":"Offline set","color":"#C3A3FF","dash":"","points":[[0.02,7.5],[0.079,26.3],[0.14,39.7],[0.19,44.6],[0.3,55.5]]},{"id":"sol20","model":"GPT-6 Sol","version":"2.0","publisher":"OpenAI","subset":"Offline, partial-credit","color":"#64C5C4","dash":"9 6","points":[[0.97,43.9],[1.32,54.0],[1.64,58.3],[2.21,60.5],[3.25,64.4]]},{"id":"luna20","model":"GPT-6 Luna","version":"2.0","publisher":"OpenAI","subset":"Offline, partial-credit","color":"#C3A3FF","dash":"9 6","points":[[0.03,8.3],[0.062,31.5],[0.12,41.4],[0.16,46.7],[0.27,52.7]]},{"id":"luna21anthropic","model":"GPT-6 Luna","version":"2.1","publisher":"Anthropic","subset":"Offline subset","color":"#C3A3FF","dash":"2.5 6","points":[[0.038,19.2],[0.1261,37.5],[0.1435,42.3],[0.1672,44.8],[0.205,48.9]]},{"id":"haiku55","model":"Claude Haiku 5.5","version":"2.1","publisher":"Anthropic","subset":"Offline subset","color":"#C7E78C","dash":"2.5 6","points":[[0.07,42.0],[0.13,53.3],[0.18,61.3],[0.28,67.6],[0.61,72.4]]},{"id":"sonnet55","model":"Claude Sonnet 5.5","version":"2.1","publisher":"Anthropic","subset":"Offline subset","color":"#F09DB0","dash":"2.5 6","points":[[0.68,57.9],[0.93,66.0],[1.38,73.2],[2.22,81.1],[5.73,83.9]]}];
+  const SERIES = [{"id":"sol61","model":"GPT-6.1 Sol","version":"2.1","publisher":"OpenAI","subset":"Offline set","color":"#8DB7F5","dash":"","points":[[0.38,60.9],[0.65,73.5],[0.9,75.5],[0.95,75.9],[1.15,78.0]]},{"id":"terra61","model":"GPT-6.1 Terra","version":"2.1","publisher":"OpenAI","subset":"Offline set","color":"#F0C07F","dash":"","points":[[0.36,53.8],[0.5,66.7],[0.51,68.7],[0.62,71.3],[1.19,74.2]]},{"id":"luna21","model":"GPT-6 Luna","version":"2.1","publisher":"OpenAI","subset":"Offline set","color":"#C3A3FF","dash":"","points":[[0.02,7.5],[0.079,26.3],[0.14,39.7],[0.19,44.6],[0.3,55.5]]},{"id":"sol20","model":"GPT-6 Sol","version":"2.0","publisher":"OpenAI","subset":"Offline, partial-credit","color":"#64C5C4","dash":"9 6","points":[[0.97,43.9],[1.32,54.0],[1.64,58.3],[2.21,60.5],[3.25,64.4]]},{"id":"luna20","model":"GPT-6 Luna","version":"2.0","publisher":"OpenAI","subset":"Offline, partial-credit","color":"#C3A3FF","dash":"9 6","points":[[0.03,8.3],[0.062,31.5],[0.12,41.4],[0.16,46.7],[0.27,52.7]]},{"id":"luna21anthropic","model":"GPT-6 Luna","version":"2.1","publisher":"Anthropic","subset":"Offline subset","color":"#C3A3FF","dash":"2.5 6","points":[[0.038,19.2],[0.1261,37.5],[0.1435,42.3],[0.1672,44.8],[0.205,48.9]]},{"id":"gem38k52","model":"Gemini 3.8 Flash","version":"2.0","publisher":"cua-speedrun","subset":"Representative K52 subset (52 of 63 tasks)","color":"#FF946E","dash":"11 4 2 4","efforts":["Low","Medium","High"],"points":[[1.875,35.3],[2.915,59.9],[5.019,60.2]]},{"id":"haiku55","model":"Claude Haiku 5.5","version":"2.1","publisher":"Anthropic","subset":"Offline subset","color":"#C7E78C","dash":"2.5 6","points":[[0.07,42.0],[0.13,53.3],[0.18,61.3],[0.28,67.6],[0.61,72.4]]},{"id":"sonnet55","model":"Claude Sonnet 5.5","version":"2.1","publisher":"Anthropic","subset":"Offline subset","color":"#F09DB0","dash":"2.5 6","points":[[0.68,57.9],[0.93,66.0],[1.38,73.2],[2.22,81.1],[5.73,83.9]]}];
   const EFFORT = ['Low','Medium','High','Xhigh','Max'];
   const NS = 'http://www.w3.org/2000/svg';
   const shell = document.querySelector('#chart-shell');
@@ -202,7 +212,7 @@
   function showTip(model, point, effortIndex, x, y) {
     tip.querySelector('.tip-name').textContent = model.model;
     tip.querySelector('.tip-source').textContent = `OSWorld ${model.version} · ${model.publisher} · ${model.subset}`;
-    tip.querySelector('.tip-effort').textContent = EFFORT[effortIndex];
+    tip.querySelector('.tip-effort').textContent = (model.efforts || EFFORT)[effortIndex];
     tip.querySelector('.tip-score').textContent = toScore(point[1]);
     tip.querySelector('.tip-cost').textContent = toCost(point[0]);
     tip.classList.add('visible');tip.setAttribute('aria-hidden','false');
@@ -258,8 +268,8 @@
     plot.setAttribute('width',String(width));
     plot.setAttribute('height',String(height));
     plot.style.height=height+'px';
-    el('title',{},plot,'OSWorld 2.0 and 2.1: performance versus cost');
-    el('desc',{},plot,'Eight distinct curves, five reasoning effort levels per curve. Horizontal logarithmic axis shows US dollars per task or attempt; vertical axis shows score in percent. Solid, dashed and dotted strokes distinguish evaluation groups.');
+    el('title',{},plot,'OSWorld 2.0 and 2.1: partial score versus cost');
+    el('desc',{},plot,'Nine distinct curves; three Gemini reasoning effort levels and five for other models. Horizontal logarithmic axis shows US dollars per task or attempt; vertical axis shows score in percent. Solid, dashed and dotted strokes distinguish evaluation groups.');
     for(const tick of [0,20,40,60,80]) {
       const y=Y(tick);
       el('line',{x1:left,y1:y,x2:right,y2:y,stroke:'#29292d','stroke-width':1},plot);
@@ -273,9 +283,9 @@
       el('text',{x,y:bottom+23,'text-anchor':'middle',fill:'#a8a8b0','font-size':mobile?10:12},plot,text);
     }
     el('text',{x:(left+right)/2,y:height-13,'text-anchor':'middle',fill:'#b2b2b9','font-size':mobile?11:13},plot,mobile?'Cost (USD · log scale)':'Cost per task / attempt (USD · log scale)');
-    el('text',{x:15,y:(top+bottom)/2,transform:`rotate(-90 15 ${(top+bottom)/2})`,'text-anchor':'middle',fill:'#b2b2b9','font-size':mobile?11:13},plot,'Accuracy');
+    el('text',{x:15,y:(top+bottom)/2,transform:`rotate(-90 15 ${(top+bottom)/2})`,'text-anchor':'middle',fill:'#b2b2b9','font-size':mobile?11:13},plot,'Partial score');
     layers=new Map();
-    const drawOrder=['luna20','luna21','luna21anthropic','sol20','terra61','sol61','haiku55','sonnet55'];
+    const drawOrder=['luna20','luna21','luna21anthropic','sol20','terra61','sol61','haiku55','sonnet55','gem38k52'];
     for(const id of drawOrder){
       const model=SERIES.find(item=>item.id===id);
       const group=el('g',{'data-series':model.id},plot);
@@ -287,13 +297,13 @@
       model.points.forEach((point,i)=>{
         const x=X(point[0]),y=Y(point[1]);
         el('circle',{cx:x,cy:y,r:mobile?4.2:5,fill:model.color,stroke:'#000','stroke-width':1.6},group);
-        const hit=el('circle',{cx:x,cy:y,r:mobile?12:14,fill:'transparent',tabindex:0,role:'button','aria-label':`${model.model}, OSWorld ${model.version}, reported by ${model.publisher}, ${EFFORT[i]} effort, ${toScore(point[1])} accuracy, ${toCost(point[0])} per attempt`},group);
+        const hit=el('circle',{cx:x,cy:y,r:mobile?12:14,fill:'transparent',tabindex:0,role:'button','aria-label':`${model.model}, OSWorld ${model.version}, reported by ${model.publisher}, ${(model.efforts || EFFORT)[i]} effort, ${toScore(point[1])} partial score, ${toCost(point[0])} per attempt`},group);
         hit.style.cursor='pointer';
         hit.addEventListener('pointerenter',e=>{if(e.pointerType!=='touch')showTip(model,point,i,x,y)});
         hit.addEventListener('pointerleave',e=>{if(e.pointerType!=='touch')dismissTip()});
         hit.addEventListener('focus',()=>showTip(model,point,i,x,y));
         hit.addEventListener('blur',dismissTip);
-        hit.addEventListener('click',()=>{if(activeTip?.model===model.id&&activeTip.i===i)dismissTip();else showTip(model,point,i,x,y)});
+        hit.addEventListener('click',()=>showTip(model,point,i,x,y));
         hit.addEventListener('keydown',e=>{if(e.key==='Escape')dismissTip(); if(e.key==='Enter'||e.key===' '){e.preventDefault();showTip(model,point,i,x,y)}});
       });
     }
