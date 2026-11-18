@@ -28,100 +28,57 @@
     --label: rgba(255, 255, 255, 0.86);
   }
   * { box-sizing: border-box; }
-  html { background: var(--bg); }
-  body {
+  html, body {
+    height: 100%;
     margin: 0;
     background: var(--bg);
+  }
+  body {
     color: var(--text);
     font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
     font-size: 14px;
-    line-height: 1.55;
+    line-height: 1.5;
     -webkit-font-smoothing: antialiased;
   }
   main {
-    max-width: 1120px;
-    margin: 0 auto;
-    padding: clamp(28px, 4.5vw, 56px) clamp(16px, 4vw, 48px) 64px;
+    width: 100%;
+    max-width: none;
+    height: 100%;
+    margin: 0;
+    padding: 12px 20px 14px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
   }
   .chart-header {
     display: flex;
     flex-direction: column;
-    gap: 16px;
-    margin-bottom: 18px;
-  }
-  .title-block {
-    max-width: 74ch;
-  }
-  h1 {
-    margin: 0 0 6px;
-    font-family: Georgia, Cambria, "Times New Roman", Times, serif;
-    font-weight: 400;
-    font-size: clamp(22px, 2.7vw, 30px);
-    line-height: 1.2;
-    letter-spacing: -0.015em;
-    color: var(--text);
-  }
-  .subtitle {
-    margin: 0;
-    max-width: 72ch;
-    color: var(--muted);
-    font-size: 13px;
-    line-height: 1.55;
+    gap: 8px;
+    margin-bottom: 8px;
+    flex-shrink: 0;
   }
   .controls-bar {
     display: flex;
-    flex-wrap: wrap;
     align-items: center;
-    justify-content: space-between;
-    gap: 10px 18px;
-    padding: 10px 0 4px;
-    border-top: 1px solid #18181e;
-  }
-  .axis-controls {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 8px 12px;
-  }
-  .axis-field {
-    display: inline-flex;
-    align-items: center;
-    gap: 7px;
-    font-size: 12px;
-    color: var(--muted);
-  }
-  .axis-field span {
-    white-space: nowrap;
-  }
-  .axis-select {
-    appearance: none;
-    background-color: #0a0a0d;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%239b9ba4' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 10px center;
-    color: var(--text);
-    border: 1px solid var(--surface-border);
-    border-radius: 6px;
-    padding: 6px 28px 6px 10px;
-    font: inherit;
-    font-size: 12px;
-    line-height: 1.25;
-    cursor: pointer;
-    transition: border-color 0.16s ease, background-color 0.16s ease;
-  }
-  .axis-select:hover {
-    border-color: #6b6b76;
-    background-color: #111116;
-  }
-  .axis-select:focus-visible {
-    outline: 2px solid #ffffff;
-    outline-offset: 3px;
+    width: 100%;
+    padding: 0;
   }
   .toolbar {
     display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    justify-content: flex-end;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: clamp(4px, 0.7vw, 8px);
+    width: 100%;
+    min-width: 0;
+    justify-content: flex-start;
+  }
+  .toolbar > .ctrl-btn,
+  .toolbar > .model-picker {
+    flex: 0 1 auto;
+    min-width: 0;
+  }
+  .toolbar > .model-picker > .model-trigger {
+    width: 100%;
   }
   .ctrl-btn {
     appearance: none;
@@ -136,6 +93,16 @@
     cursor: pointer;
     transition: border-color 0.16s ease, color 0.16s ease, background-color 0.16s ease;
     white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .toolbar.is-tight .ctrl-btn {
+    padding: 6px 8px;
+    font-size: 11px;
+  }
+  .toolbar.is-tighter .ctrl-btn {
+    padding: 5px 6px;
+    font-size: 10.5px;
   }
   .ctrl-btn:hover {
     border-color: #6b6b76;
@@ -151,8 +118,9 @@
   }
   .ctrl-btn:focus-visible,
   .legend-btn:focus-visible,
-  summary:focus-visible,
-  .motion-btn:focus-visible,
+  .swap-square-btn:focus-visible,
+  .axis-menu-item:focus-visible,
+  .lock-pill:focus-visible,
   .mp-btn:focus-visible,
   .mp-family-btn:focus-visible,
   .mp-variant-btn:focus-visible,
@@ -167,10 +135,16 @@
   .model-trigger {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
+    justify-content: center;
+    gap: 6px;
+  }
+  .model-trigger span {
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
   .model-trigger .chev {
     color: var(--muted);
+    flex-shrink: 0;
     transition: transform 0.16s ease;
   }
   .model-trigger[aria-expanded="true"] .chev {
@@ -387,24 +361,12 @@
       right: auto;
     }
   }
-  .legend-bar {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    margin-bottom: 12px;
-  }
-  .quadrant-key {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 8px 18px;
-    font-size: 13px;
-    color: var(--text);
-  }
   .quadrant-item {
     display: inline-flex;
     align-items: center;
     gap: 8px;
+    font-size: 13px;
+    color: var(--text);
   }
   .swatch-good {
     width: 16px;
@@ -414,15 +376,19 @@
     border: 1px solid var(--quadrant-border);
     flex-shrink: 0;
   }
-  .quadrant-note {
-    color: var(--muted);
-    font-size: 12px;
+  .swatch-pareto {
+    width: 18px;
+    height: 2px;
+    border-radius: 999px;
+    background: #fbbf24;
+    box-shadow: 0 0 6px rgba(251, 191, 36, 0.45);
+    flex-shrink: 0;
   }
   .creator-row {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 6px 14px;
+    gap: 6px 16px;
   }
   .legend-btn {
     appearance: none;
@@ -454,15 +420,53 @@
     font-size: 12px;
     font-variant-numeric: tabular-nums;
   }
+  .lock-pill {
+    appearance: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 2px 8px;
+    border-radius: 999px;
+    border: 1px solid #484854;
+    background: #14141a;
+    color: var(--sub);
+    font: inherit;
+    font-size: 11.5px;
+    cursor: pointer;
+  }
+  .lock-pill:hover {
+    border-color: #8f8f9b;
+    color: #ffffff;
+  }
+  .lock-pill[hidden] {
+    display: none;
+  }
+  .legend-bar {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    margin-bottom: 4px;
+  }
+  .chart-stage {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+  }
   .chart-shell {
     position: relative;
     width: 100%;
-    margin-top: 4px;
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    margin-top: 2px;
   }
   .plot {
     display: block;
     width: 100%;
-    height: auto;
+    flex: 1 1 0;
+    min-height: 0;
     overflow: visible;
     user-select: none;
   }
@@ -472,6 +476,110 @@
   }
   .plot-point:focus-visible {
     outline: none;
+  }
+  .axis-title-btn {
+    cursor: pointer;
+  }
+  .axis-title-btn .axis-title-bg {
+    fill: transparent;
+    stroke: transparent;
+    transition: fill 0.14s ease, stroke 0.14s ease;
+  }
+  .axis-title-btn:hover .axis-title-bg,
+  .axis-title-btn[aria-expanded="true"] .axis-title-bg,
+  .axis-title-btn:focus-visible .axis-title-bg {
+    fill: #14141b;
+    stroke: #3c3c47;
+  }
+  .axis-title-btn:hover .axis-title-text,
+  .axis-title-btn[aria-expanded="true"] .axis-title-text,
+  .axis-title-btn:focus-visible .axis-title-text {
+    fill: #ffffff;
+  }
+  .axis-title-btn:focus-visible {
+    outline: none;
+  }
+  .axis-menu {
+    position: absolute;
+    z-index: 45;
+    min-width: 228px;
+    max-width: calc(100vw - 24px);
+    background: #0b0b0f;
+    border: 1px solid #3c3c47;
+    border-radius: 8px;
+    box-shadow: 0 18px 44px rgba(0, 0, 0, 0.92);
+    padding: 5px;
+  }
+  .axis-menu[hidden] {
+    display: none;
+  }
+  .axis-menu-title {
+    padding: 4px 8px 6px;
+    font-size: 11px;
+    color: var(--muted);
+    border-bottom: 1px solid #202028;
+    margin-bottom: 4px;
+  }
+  .axis-menu-item {
+    appearance: none;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    background: transparent;
+    border: 0;
+    border-radius: 6px;
+    padding: 7px 9px;
+    color: var(--sub);
+    font: inherit;
+    font-size: 12px;
+    text-align: left;
+    cursor: pointer;
+    transition: background-color 0.12s ease, color 0.12s ease;
+  }
+  .axis-menu-item:hover {
+    background: #17171f;
+    color: #ffffff;
+  }
+  .axis-menu-item[aria-selected="true"] {
+    background: #1c1c26;
+    color: #ffffff;
+    font-weight: 500;
+  }
+  .axis-menu-badge {
+    font-size: 10.5px;
+    color: var(--muted);
+    flex-shrink: 0;
+  }
+  .x-zoom-row {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+    margin-bottom: 10px;
+    height: 24px;
+  }
+  .swap-square-btn {
+    appearance: none;
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    background: #0a0a0d;
+    color: var(--sub);
+    border: 1px solid var(--surface-border);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: border-color 0.16s ease, color 0.16s ease, background-color 0.16s ease;
+  }
+  .swap-square-btn:hover {
+    border-color: #6b6b76;
+    background: #14141a;
+    color: #ffffff;
   }
   .aa-zoom-bar {
     position: relative;
@@ -491,10 +599,9 @@
   }
   .aa-zoom-bar--horizontal {
     height: 20px;
+    flex-shrink: 0;
     display: flex;
     align-items: center;
-    margin-top: 2px;
-    margin-bottom: 14px;
   }
   .aa-zoom-track {
     position: relative;
@@ -696,21 +803,7 @@
   body.reduced-motion .aa-zoom-edge-label {
     transition: none !important;
   }
-  @keyframes frontierPulse {
-    0%, 100% {
-      stroke-opacity: 0.32;
-      fill-opacity: 0.11;
-    }
-    50% {
-      stroke-opacity: 0.62;
-      fill-opacity: 0.18;
-    }
-  }
   .attractive-quadrant {
-    animation: frontierPulse 6.5s ease-in-out infinite;
-  }
-  body.reduced-motion .attractive-quadrant {
-    animation: none;
     stroke-opacity: 0.42;
     fill-opacity: 0.13;
   }
@@ -791,114 +884,6 @@
   .tip-quad.good {
     color: #7ee7a4;
   }
-  .meta-row {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    align-items: baseline;
-    gap: 10px 24px;
-    margin-top: 10px;
-    color: var(--muted);
-    font-size: 12px;
-  }
-  .status-line {
-    margin: 0;
-  }
-  .data-section {
-    margin-top: 34px;
-    border-top: 1px solid #1d1d22;
-    padding-top: 20px;
-  }
-  details summary {
-    cursor: pointer;
-    width: max-content;
-    color: var(--sub);
-    font-size: 13px;
-    text-decoration: underline;
-    text-underline-offset: 4px;
-    padding: 4px 0;
-  }
-  details summary:hover {
-    color: #ffffff;
-  }
-  .table-wrap {
-    width: 100%;
-    overflow-x: auto;
-    margin-top: 14px;
-  }
-  table {
-    width: 100%;
-    min-width: 680px;
-    border-collapse: collapse;
-    font-size: 13px;
-    font-variant-numeric: tabular-nums;
-  }
-  th, td {
-    padding: 9px 14px 9px 0;
-    border-bottom: 1px solid #1e1e24;
-    text-align: left;
-    white-space: nowrap;
-  }
-  th {
-    color: var(--muted);
-    font-size: 12px;
-    font-weight: 500;
-  }
-  th.num, td.num {
-    text-align: right;
-  }
-  th button.sort-btn {
-    appearance: none;
-    background: none;
-    border: 0;
-    padding: 0;
-    color: inherit;
-    font: inherit;
-    cursor: pointer;
-    text-decoration: underline;
-    text-decoration-color: rgba(255, 255, 255, 0.25);
-    text-underline-offset: 4px;
-  }
-  th button.sort-btn:hover {
-    color: #ffffff;
-  }
-  td.quad-good {
-    color: #7ee7a4;
-  }
-  footer {
-    margin-top: 36px;
-    padding-top: 18px;
-    border-top: 1px solid #18181d;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    align-items: center;
-    gap: 12px 24px;
-    color: var(--muted);
-    font-size: 12px;
-  }
-  footer a {
-    color: var(--sub);
-    text-underline-offset: 3px;
-  }
-  footer a:hover {
-    color: #ffffff;
-  }
-  .motion-btn {
-    appearance: none;
-    background: transparent;
-    border: 1px solid #2b2b33;
-    border-radius: 5px;
-    color: var(--muted);
-    padding: 5px 9px;
-    font: inherit;
-    font-size: 11.5px;
-    cursor: pointer;
-  }
-  .motion-btn:hover {
-    color: #ffffff;
-    border-color: #555562;
-  }
   @media (max-width: 720px) {
     .controls-bar {
       align-items: flex-start;
@@ -907,8 +892,17 @@
       justify-content: flex-start;
     }
   }
+  @media (max-height: 540px), (max-width: 639px) and (max-height: 700px) {
+    main {
+      height: auto;
+      min-height: 100%;
+      overflow-y: auto;
+    }
+    .plot {
+      min-height: 360px;
+    }
+  }
   @media (prefers-reduced-motion: reduce) {
-    .attractive-quadrant,
     .points-enter {
       animation: none !important;
     }
@@ -921,36 +915,10 @@
 <body>
 <main>
   <header class="chart-header">
-    <div class="title-block">
-      <h1 id="page-title">AA-Omniscience Accuracy vs. AA-Omniscience Hallucination Rate</h1>
-      <p class="subtitle" id="page-subtitle">
-        AA-Omniscience v1.1 Accuracy (higher is better) measures the proportion of correctly answered questions out of all 3,000 questions. Hallucination Rate (lower is better) measures incorrect answers out of all non-correct responses.
-      </p>
-    </div>
     <div class="controls-bar">
-      <div class="axis-controls" role="group" aria-label="Axis selection">
-        <label class="axis-field">
-          <span>Y axis</span>
-          <select class="axis-select" id="y-axis-select" aria-label="Y axis metric">
-            <option value="accuracy" selected>AA-Omniscience Accuracy</option>
-            <option value="hallucinationRate">AA-Omniscience Hallucination Rate</option>
-            <option value="totalCost">Total Cost to run (USD)</option>
-          </select>
-        </label>
-        <label class="axis-field">
-          <span>X axis</span>
-          <select class="axis-select" id="x-axis-select" aria-label="X axis metric">
-            <option value="accuracy">AA-Omniscience Accuracy</option>
-            <option value="hallucinationRate" selected>AA-Omniscience Hallucination Rate</option>
-            <option value="totalCost">Total Cost to run (USD)</option>
-          </select>
-        </label>
-        <button type="button" class="ctrl-btn" id="swap-axes">Swap axes</button>
-        <button type="button" class="ctrl-btn" id="toggle-cost-scale" aria-pressed="true" hidden>Cost scale: Log</button>
-      </div>
-      <div class="toolbar" role="group" aria-label="Chart display options">
+      <div class="toolbar" id="toolbar" role="group" aria-label="Chart display options">
         <div class="model-picker" id="model-picker">
-          <button type="button" class="ctrl-btn model-trigger" id="model-trigger" aria-haspopup="dialog" aria-expanded="false">
+          <button type="button" class="ctrl-btn model-trigger" id="model-trigger" aria-haspopup="dialog" aria-expanded="false" title="Select models">
             <span id="model-trigger-label">Models (39/39)</span>
             <svg class="chev" width="10" height="6" viewBox="0 0 10 6" aria-hidden="true"><path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </button>
@@ -989,21 +957,15 @@
             </div>
           </div>
         </div>
-        <button type="button" class="ctrl-btn" id="toggle-labels" aria-pressed="false">Hide model names</button>
-        <button type="button" class="ctrl-btn" id="toggle-zoom" aria-pressed="false">Full scale (0% to 100%)</button>
-        <button type="button" class="ctrl-btn" id="toggle-lines" aria-pressed="false">Connect model families</button>
+        <button type="button" class="ctrl-btn" id="toggle-labels" aria-pressed="false" title="Hide model names">Hide model names</button>
+        <button type="button" class="ctrl-btn" id="toggle-zoom" aria-pressed="false" title="Toggle zoom scale">Full scale (0% to 100%)</button>
+        <button type="button" class="ctrl-btn" id="toggle-lines" aria-pressed="false" title="Connect model families">Connect model families</button>
+        <button type="button" class="ctrl-btn" id="toggle-cost-scale" aria-pressed="true" title="Toggle cost scale (Log / Linear)" hidden>Cost scale: Log</button>
       </div>
     </div>
   </header>
 
   <section class="legend-bar" aria-label="Chart legend and creator filters">
-    <div class="quadrant-key">
-      <span class="quadrant-item">
-        <span class="swatch-good" aria-hidden="true"></span>
-        <span>Most attractive quadrant</span>
-      </span>
-      <span class="quadrant-note" id="quadrant-note">Higher accuracy (at least 50%) and lower hallucination rate (at most 50%)</span>
-    </div>
     <div class="creator-row">
       <button type="button" class="legend-btn" data-creator="openai" aria-pressed="true">
         <span class="legend-dot" style="background: var(--openai);" aria-hidden="true"></span>
@@ -1015,15 +977,31 @@
         <span>Google</span>
         <span class="legend-count" id="count-google">(6)</span>
       </button>
-      <span class="quadrant-note" id="filter-hint">Hover a point to inspect metrics, or click to lock its model family.</span>
+      <span class="quadrant-item" id="pareto-legend">
+        <span class="swatch-pareto" aria-hidden="true"></span>
+        <span>Pareto frontier</span>
+      </span>
+      <span class="quadrant-item">
+        <span class="swatch-good" aria-hidden="true"></span>
+        <span>Most attractive quadrant</span>
+      </span>
+      <button type="button" class="lock-pill" id="lock-pill" hidden></button>
     </div>
   </section>
 
-  <section aria-label="Interactive scatter plot">
+  <section class="chart-stage" aria-label="Interactive scatter plot">
     <div class="chart-shell" id="chart-shell">
-      <svg class="plot" id="plot" role="img" aria-label="Scatter plot comparing AA-Omniscience metrics across 39 OpenAI and Google models."></svg>
+      <svg class="plot" id="plot" role="img" aria-label="Scatter plot comparing AA-Omniscience and AA-Briefcase metrics across 39 OpenAI and Google models."></svg>
       <div class="aa-zoom-bar aa-zoom-bar--vertical" id="y-zoom-bar" title="Drag grabbers to zoom Y axis scale (double-click track to reset)"></div>
-      <div class="aa-zoom-bar aa-zoom-bar--horizontal" id="x-zoom-bar" title="Drag grabbers to zoom X axis scale (double-click track to reset)"></div>
+      <div class="x-zoom-row">
+        <button type="button" class="swap-square-btn" id="swap-axes" title="Swap X and Y axes" aria-label="Swap X and Y axes">
+          <svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true">
+            <path d="M5 2.5v10M5 2.5L2.7 4.8M5 2.5l2.3 2.3M11 13.5v-10M11 13.5l-2.3-2.3M11 13.5l2.3-2.3" fill="none" stroke="currentColor" stroke-width="1.45" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <div class="aa-zoom-bar aa-zoom-bar--horizontal" id="x-zoom-bar" title="Drag grabbers to zoom X axis scale (double-click track to reset)"></div>
+      </div>
+      <div class="axis-menu" id="axis-menu" role="listbox" aria-label="Select axis metric" hidden></div>
       <div class="tooltip" id="tooltip" role="status" aria-hidden="true">
         <div class="tip-head">
           <span class="tip-dot" id="tip-dot"></span>
@@ -1032,44 +1010,13 @@
         <div class="tip-creator" id="tip-creator"></div>
         <div class="tip-row"><span>Accuracy</span><strong id="tip-acc"></strong></div>
         <div class="tip-row"><span>Hallucination rate</span><strong id="tip-hal"></strong></div>
-        <div class="tip-row"><span>Total cost to run</span><strong id="tip-cost"></strong></div>
-        <div class="tip-row"><span>Omniscience net score</span><strong id="tip-net"></strong></div>
+        <div class="tip-row"><span>Omniscience cost</span><strong id="tip-cost"></strong></div>
+        <div class="tip-row"><span>Briefcase Elo</span><strong id="tip-brief-elo"></strong></div>
+        <div class="tip-row"><span>Briefcase total cost</span><strong id="tip-brief-cost"></strong></div>
         <div class="tip-quad" id="tip-quad"></div>
       </div>
     </div>
-    <div class="meta-row">
-      <p class="status-line" id="status-line">Showing 39 of 39 selected models (OpenAI and Google).</p>
-    </div>
   </section>
-
-  <section class="data-section" aria-label="Underlying benchmark data">
-    <details id="data-details">
-      <summary>View all 39 model scores</summary>
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th><button type="button" class="sort-btn" data-sort="shortName">Model</button></th>
-              <th><button type="button" class="sort-btn" data-sort="creatorName">Creator</button></th>
-              <th class="num"><button type="button" class="sort-btn" data-sort="accuracy">Accuracy</button></th>
-              <th class="num"><button type="button" class="sort-btn" data-sort="hallucinationRate">Hallucination rate</button></th>
-              <th class="num"><button type="button" class="sort-btn" data-sort="totalCost">Total cost</button></th>
-              <th class="num"><button type="button" class="sort-btn" data-sort="omniscienceNetScore">Net score</button></th>
-              <th>Quadrant</th>
-            </tr>
-          </thead>
-          <tbody id="table-body"></tbody>
-        </table>
-      </div>
-    </details>
-  </section>
-
-  <footer>
-    <span>
-      Data source: <a href="https://artificialanalysis.ai/evaluations/omniscience" target="_blank" rel="noopener noreferrer">Artificial Analysis AA-Omniscience v1.1</a>. OpenAI marker inverted to white for dark contrast.
-    </span>
-    <button type="button" class="motion-btn" id="motion-toggle" aria-pressed="false">Reduce motion</button>
-  </footer>
 </main>
 
 <script>
@@ -1077,76 +1024,70 @@
   'use strict';
 
   const MODELS = [
-    { slug: 'gpt-6-2-astra', family: 'GPT-6.2 Astra', shortName: 'GPT-6.2 Astra (max)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.6856666666666666, hallucinationRate: 0.5906680805938495, netScore: 50, totalCost: 766.9678 },
-    { slug: 'gpt-6-2-astra-xhigh', family: 'GPT-6.2 Astra', shortName: 'GPT-6.2 Astra (xhigh)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.672, hallucinationRate: 0.5772357723577236, netScore: 48.2666666666667, totalCost: 140.1531 },
-    { slug: 'gpt-6-2-astra-high', family: 'GPT-6.2 Astra', shortName: 'GPT-6.2 Astra (high)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.6633333333333333, hallucinationRate: 0.5811881188118811, netScore: 46.7666666666667, totalCost: 73.5467 },
-    { slug: 'gpt-6-2-astra-medium', family: 'GPT-6.2 Astra', shortName: 'GPT-6.2 Astra (medium)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.6416666666666667, hallucinationRate: 0.5413953488372093, netScore: 44.7666666666667, totalCost: 20.2045 },
-    { slug: 'gpt-6-2-astra-low', family: 'GPT-6.2 Astra', shortName: 'GPT-6.2 Astra (low)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.6063333333333333, hallucinationRate: 0.5580016934801016, netScore: 38.6666666666667, totalCost: 8.5378 },
+    { slug: 'gpt-6-2-astra', family: 'GPT-6.2 Astra', shortName: 'GPT-6.2 Astra (max)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.6856666666666666, hallucinationRate: 0.5906680805938495, netScore: 50, totalCost: 766.9678, briefcaseElo: 1643.5, briefcaseTotalCost: 499.4953 },
+    { slug: 'gpt-6-2-astra-xhigh', family: 'GPT-6.2 Astra', shortName: 'GPT-6.2 Astra (xhigh)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.672, hallucinationRate: 0.5772357723577236, netScore: 48.2666666666667, totalCost: 140.1531, briefcaseElo: 1594.37, briefcaseTotalCost: 322.3522 },
+    { slug: 'gpt-6-2-astra-high', family: 'GPT-6.2 Astra', shortName: 'GPT-6.2 Astra (high)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.6633333333333333, hallucinationRate: 0.5811881188118811, netScore: 46.7666666666667, totalCost: 73.5467, briefcaseElo: 1570.41, briefcaseTotalCost: 254.0737 },
+    { slug: 'gpt-6-2-astra-medium', family: 'GPT-6.2 Astra', shortName: 'GPT-6.2 Astra (medium)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.6416666666666667, hallucinationRate: 0.5413953488372093, netScore: 44.7666666666667, totalCost: 20.2045, briefcaseElo: 1408.2, briefcaseTotalCost: 114.8852 },
+    { slug: 'gpt-6-2-astra-low', family: 'GPT-6.2 Astra', shortName: 'GPT-6.2 Astra (low)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.6063333333333333, hallucinationRate: 0.5580016934801016, netScore: 38.6666666666667, totalCost: 8.5378, briefcaseElo: 1038.71, briefcaseTotalCost: 38.2209 },
 
-    { slug: 'gpt-6-astra', family: 'GPT-6 Astra', shortName: 'GPT-6 Astra (max)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.6156666666666667, hallucinationRate: 0.4978317432784042, netScore: 42.4333333333333, totalCost: 296.5485 },
-    { slug: 'gpt-6-astra-xhigh', family: 'GPT-6 Astra', shortName: 'GPT-6 Astra (xhigh)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.6103333333333333, hallucinationRate: 0.44568006843455943, netScore: 43.6666666666667, totalCost: 155.3311 },
-    { slug: 'gpt-6-astra-high', family: 'GPT-6 Astra', shortName: 'GPT-6 Astra (high)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.611, hallucinationRate: 0.4250214224507284, netScore: 44.5666666666667, totalCost: 83.8903 },
-    { slug: 'gpt-6-astra-medium', family: 'GPT-6 Astra', shortName: 'GPT-6 Astra (medium)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.5963333333333334, hallucinationRate: 0.4516928158546656, netScore: 41.4, totalCost: 32.8301 },
-    { slug: 'gpt-6-astra-low', family: 'GPT-6 Astra', shortName: 'GPT-6 Astra (low)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.586, hallucinationRate: 0.4420289855072464, netScore: 40.3, totalCost: 20.9225 },
+    { slug: 'gpt-6-astra', family: 'GPT-6 Astra', shortName: 'GPT-6 Astra (max)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.6156666666666667, hallucinationRate: 0.4978317432784042, netScore: 42.4333333333333, totalCost: 296.5485, briefcaseElo: 1568.82, briefcaseTotalCost: 864.6896 },
+    { slug: 'gpt-6-astra-xhigh', family: 'GPT-6 Astra', shortName: 'GPT-6 Astra (xhigh)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.6103333333333333, hallucinationRate: 0.44568006843455943, netScore: 43.6666666666667, totalCost: 155.3311, briefcaseElo: 1543.65, briefcaseTotalCost: 597.2804 },
+    { slug: 'gpt-6-astra-high', family: 'GPT-6 Astra', shortName: 'GPT-6 Astra (high)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.611, hallucinationRate: 0.4250214224507284, netScore: 44.5666666666667, totalCost: 83.8903, briefcaseElo: 1502.98, briefcaseTotalCost: 433.4808 },
+    { slug: 'gpt-6-astra-medium', family: 'GPT-6 Astra', shortName: 'GPT-6 Astra (medium)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.5963333333333334, hallucinationRate: 0.4516928158546656, netScore: 41.4, totalCost: 32.8301, briefcaseElo: 1462.33, briefcaseTotalCost: 358.5387 },
+    { slug: 'gpt-6-astra-low', family: 'GPT-6 Astra', shortName: 'GPT-6 Astra (low)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.586, hallucinationRate: 0.4420289855072464, netScore: 40.3, totalCost: 20.9225, briefcaseElo: 1256.43, briefcaseTotalCost: 131.3122 },
 
-    { slug: 'gpt-6-2-sol', family: 'GPT-6.2 Sol', shortName: 'GPT-6.2 Sol (max)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.6163333333333333, hallucinationRate: 0.5543006081668115, netScore: 40.3666666666667, totalCost: 158.5068 },
-    { slug: 'gpt-6-2-sol-xhigh', family: 'GPT-6.2 Sol', shortName: 'GPT-6.2 Sol (xhigh)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.607, hallucinationRate: 0.5623409669211196, netScore: 38.6, totalCost: 59.1732 },
-    { slug: 'gpt-6-2-sol-high', family: 'GPT-6.2 Sol', shortName: 'GPT-6.2 Sol (high)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.6143333333333333, hallucinationRate: 0.5998271391529818, netScore: 38.3, totalCost: 19.8496 },
-    { slug: 'gpt-6-2-sol-medium', family: 'GPT-6.2 Sol', shortName: 'GPT-6.2 Sol (medium)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.5916666666666667, hallucinationRate: 0.6114285714285714, netScore: 34.2, totalCost: 6.3615 },
-    { slug: 'gpt-6-2-sol-low', family: 'GPT-6.2 Sol', shortName: 'GPT-6.2 Sol (low)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.5463333333333333, hallucinationRate: 0.6583394562821455, netScore: 24.7666666666667, totalCost: 1.6127 },
+    { slug: 'gpt-6-2-sol', family: 'GPT-6.2 Sol', shortName: 'GPT-6.2 Sol (max)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.6163333333333333, hallucinationRate: 0.5543006081668115, netScore: 40.3666666666667, totalCost: 158.5068, briefcaseElo: 1612.06, briefcaseTotalCost: 142.4645 },
+    { slug: 'gpt-6-2-sol-xhigh', family: 'GPT-6.2 Sol', shortName: 'GPT-6.2 Sol (xhigh)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.607, hallucinationRate: 0.5623409669211196, netScore: 38.6, totalCost: 59.1732, briefcaseElo: 1580.04, briefcaseTotalCost: 91.7455 },
+    { slug: 'gpt-6-2-sol-high', family: 'GPT-6.2 Sol', shortName: 'GPT-6.2 Sol (high)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.6143333333333333, hallucinationRate: 0.5998271391529818, netScore: 38.3, totalCost: 19.8496, briefcaseElo: 1540.79, briefcaseTotalCost: 72.1688 },
+    { slug: 'gpt-6-2-sol-medium', family: 'GPT-6.2 Sol', shortName: 'GPT-6.2 Sol (medium)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.5916666666666667, hallucinationRate: 0.6114285714285714, netScore: 34.2, totalCost: 6.3615, briefcaseElo: 1494.92, briefcaseTotalCost: 47.7534 },
+    { slug: 'gpt-6-2-sol-low', family: 'GPT-6.2 Sol', shortName: 'GPT-6.2 Sol (low)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.5463333333333333, hallucinationRate: 0.6583394562821455, netScore: 24.7666666666667, totalCost: 1.6127, briefcaseElo: 1229.56, briefcaseTotalCost: 16.4388 },
 
-    { slug: 'gpt-6-1-sol', family: 'GPT-6.1 Sol', shortName: 'GPT-6.1 Sol (max)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.6183333333333333, hallucinationRate: 0.5187772925764192, netScore: 42.0333333333333, totalCost: 54.9275 },
-    { slug: 'gpt-6-1-sol-xhigh', family: 'GPT-6.1 Sol', shortName: 'GPT-6.1 Sol (xhigh)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.6106666666666667, hallucinationRate: 0.4803082191780822, netScore: 42.3666666666667, totalCost: 27.5295 },
-    { slug: 'gpt-6-1-sol-high', family: 'GPT-6.1 Sol', shortName: 'GPT-6.1 Sol (high)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.604, hallucinationRate: 0.4898989898989899, netScore: 41, totalCost: 14.7999 },
-    { slug: 'gpt-6-1-sol-medium', family: 'GPT-6.1 Sol', shortName: 'GPT-6.1 Sol (medium)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.596, hallucinationRate: 0.48102310231023104, netScore: 40.1666666666667, totalCost: 6.4589 },
-    { slug: 'gpt-6-1-sol-low', family: 'GPT-6.1 Sol', shortName: 'GPT-6.1 Sol (low)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.5863333333333334, hallucinationRate: 0.49879129734085415, netScore: 38, totalCost: 4.481 },
+    { slug: 'gpt-6-1-sol', family: 'GPT-6.1 Sol', shortName: 'GPT-6.1 Sol (max)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.6183333333333333, hallucinationRate: 0.5187772925764192, netScore: 42.0333333333333, totalCost: 54.9275, briefcaseElo: 1557.04, briefcaseTotalCost: 210.4469 },
+    { slug: 'gpt-6-1-sol-xhigh', family: 'GPT-6.1 Sol', shortName: 'GPT-6.1 Sol (xhigh)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.6106666666666667, hallucinationRate: 0.4803082191780822, netScore: 42.3666666666667, totalCost: 27.5295, briefcaseElo: 1504.23, briefcaseTotalCost: 94.5092 },
+    { slug: 'gpt-6-1-sol-high', family: 'GPT-6.1 Sol', shortName: 'GPT-6.1 Sol (high)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.604, hallucinationRate: 0.4898989898989899, netScore: 41, totalCost: 14.7999, briefcaseElo: 1468.58, briefcaseTotalCost: 76.1605 },
+    { slug: 'gpt-6-1-sol-medium', family: 'GPT-6.1 Sol', shortName: 'GPT-6.1 Sol (medium)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.596, hallucinationRate: 0.48102310231023104, netScore: 40.1666666666667, totalCost: 6.4589, briefcaseElo: 1360.59, briefcaseTotalCost: 42.2577 },
+    { slug: 'gpt-6-1-sol-low', family: 'GPT-6.1 Sol', shortName: 'GPT-6.1 Sol (low)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.5863333333333334, hallucinationRate: 0.49879129734085415, netScore: 38, totalCost: 4.481, briefcaseElo: 1114.73, briefcaseTotalCost: 16.1153 },
 
-    { slug: 'gpt-6-sol', family: 'GPT-6 Sol', shortName: 'GPT-6 Sol (max)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.5113333333333333, hallucinationRate: 0.6084583901773534, netScore: 21.4, totalCost: 70.9166 },
+    { slug: 'gpt-6-sol', family: 'GPT-6 Sol', shortName: 'GPT-6 Sol (max)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.5113333333333333, hallucinationRate: 0.6084583901773534, netScore: 21.4, totalCost: 70.9166, briefcaseElo: 1475.58, briefcaseTotalCost: 238.8124 },
 
-    { slug: 'gpt-6-1-terra', family: 'GPT-6.1 Terra', shortName: 'GPT-6.1 Terra (max)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.47633333333333333, hallucinationRate: 0.3450031826861871, netScore: 29.5666666666667, totalCost: 127.5439 },
-    { slug: 'gpt-6-1-terra-xhigh', family: 'GPT-6.1 Terra', shortName: 'GPT-6.1 Terra (xhigh)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.48033333333333333, hallucinationRate: 0.36754329698524696, netScore: 28.9333333333333, totalCost: 23.8064 },
-    { slug: 'gpt-6-1-terra-high', family: 'GPT-6.1 Terra', shortName: 'GPT-6.1 Terra (high)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.4726666666666667, hallucinationRate: 0.3697850821744627, netScore: 27.7666666666667, totalCost: 8.8566 },
-    { slug: 'gpt-6-1-terra-medium', family: 'GPT-6.1 Terra', shortName: 'GPT-6.1 Terra (medium)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.47433333333333333, hallucinationRate: 0.39632213062777427, netScore: 26.6, totalCost: 4.8677 },
-    { slug: 'gpt-6-1-terra-low', family: 'GPT-6.1 Terra', shortName: 'GPT-6.1 Terra (low)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.45566666666666666, hallucinationRate: 0.41579914268218005, netScore: 22.9333333333333, totalCost: 2.3587 },
-    { slug: 'gpt-6-1-terra-non-reasoning', family: 'GPT-6.1 Terra', shortName: 'GPT-6.1 Terra (non-reasoning)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.4073333333333333, hallucinationRate: 0.7710911136107986, netScore: -4.96666666666667, totalCost: 0.5782 },
+    { slug: 'gpt-6-1-terra', family: 'GPT-6.1 Terra', shortName: 'GPT-6.1 Terra (max)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.47633333333333333, hallucinationRate: 0.3450031826861871, netScore: 29.5666666666667, totalCost: 127.5439, briefcaseElo: 1398.61, briefcaseTotalCost: 73.5076 },
+    { slug: 'gpt-6-1-terra-xhigh', family: 'GPT-6.1 Terra', shortName: 'GPT-6.1 Terra (xhigh)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.48033333333333333, hallucinationRate: 0.36754329698524696, netScore: 28.9333333333333, totalCost: 23.8064, briefcaseElo: 1333.66, briefcaseTotalCost: 36.9327 },
+    { slug: 'gpt-6-1-terra-high', family: 'GPT-6.1 Terra', shortName: 'GPT-6.1 Terra (high)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.4726666666666667, hallucinationRate: 0.3697850821744627, netScore: 27.7666666666667, totalCost: 8.8566, briefcaseElo: 1265.03, briefcaseTotalCost: 25.0763 },
+    { slug: 'gpt-6-1-terra-medium', family: 'GPT-6.1 Terra', shortName: 'GPT-6.1 Terra (medium)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.47433333333333333, hallucinationRate: 0.39632213062777427, netScore: 26.6, totalCost: 4.8677, briefcaseElo: 1190.66, briefcaseTotalCost: 16.7193 },
+    { slug: 'gpt-6-1-terra-low', family: 'GPT-6.1 Terra', shortName: 'GPT-6.1 Terra (low)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.45566666666666666, hallucinationRate: 0.41579914268218005, netScore: 22.9333333333333, totalCost: 2.3587, briefcaseElo: 1031.95, briefcaseTotalCost: 7.7196 },
+    { slug: 'gpt-6-1-terra-non-reasoning', family: 'GPT-6.1 Terra', shortName: 'GPT-6.1 Terra (non-reasoning)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.4073333333333333, hallucinationRate: 0.7710911136107986, netScore: -4.96666666666667, totalCost: 0.5782, briefcaseElo: 1225.88, briefcaseTotalCost: 20.0419 },
 
-    { slug: 'gpt-6-luna', family: 'GPT-6 Luna', shortName: 'GPT-6 Luna (max)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.3963333333333333, hallucinationRate: 0.7934842628382109, netScore: -8.26666666666667, totalCost: 7.0313 },
-    { slug: 'gpt-6-luna-xhigh', family: 'GPT-6 Luna', shortName: 'GPT-6 Luna (xhigh)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.386, hallucinationRate: 0.8398479913137894, netScore: -12.9666666666667, totalCost: 2.6556 },
-    { slug: 'gpt-6-luna-high', family: 'GPT-6 Luna', shortName: 'GPT-6 Luna (high)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.39, hallucinationRate: 0.8491803278688524, netScore: -12.8, totalCost: 1.7202 },
-    { slug: 'gpt-6-luna-medium', family: 'GPT-6 Luna', shortName: 'GPT-6 Luna (medium)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.387, hallucinationRate: 0.8526373028820011, netScore: -13.5666666666667, totalCost: 1.0839 },
-    { slug: 'gpt-6-luna-low', family: 'GPT-6 Luna', shortName: 'GPT-6 Luna (low)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.361, hallucinationRate: 0.8482003129890454, netScore: -18.1, totalCost: 0.5354 },
-    { slug: 'gpt-6-luna-non-reasoning', family: 'GPT-6 Luna', shortName: 'GPT-6 Luna (non-reasoning)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.301, hallucinationRate: 0.7997138769670958, netScore: -25.8, totalCost: 0.063 },
+    { slug: 'gpt-6-luna', family: 'GPT-6 Luna', shortName: 'GPT-6 Luna (max)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.3963333333333333, hallucinationRate: 0.7934842628382109, netScore: -8.26666666666667, totalCost: 7.0313, briefcaseElo: 1336.35, briefcaseTotalCost: 15.4693 },
+    { slug: 'gpt-6-luna-xhigh', family: 'GPT-6 Luna', shortName: 'GPT-6 Luna (xhigh)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.386, hallucinationRate: 0.8398479913137894, netScore: -12.9666666666667, totalCost: 2.6556, briefcaseElo: 1235.4, briefcaseTotalCost: 7.5075 },
+    { slug: 'gpt-6-luna-high', family: 'GPT-6 Luna', shortName: 'GPT-6 Luna (high)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.39, hallucinationRate: 0.8491803278688524, netScore: -12.8, totalCost: 1.7202, briefcaseElo: 1186.54, briefcaseTotalCost: 5.661 },
+    { slug: 'gpt-6-luna-medium', family: 'GPT-6 Luna', shortName: 'GPT-6 Luna (medium)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.387, hallucinationRate: 0.8526373028820011, netScore: -13.5666666666667, totalCost: 1.0839, briefcaseElo: 1096.24, briefcaseTotalCost: 3.0142 },
+    { slug: 'gpt-6-luna-low', family: 'GPT-6 Luna', shortName: 'GPT-6 Luna (low)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.361, hallucinationRate: 0.8482003129890454, netScore: -18.1, totalCost: 0.5354, briefcaseElo: 740.01, briefcaseTotalCost: 0.5538 },
+    { slug: 'gpt-6-luna-non-reasoning', family: 'GPT-6 Luna', shortName: 'GPT-6 Luna (non-reasoning)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.301, hallucinationRate: 0.7997138769670958, netScore: -25.8, totalCost: 0.063, briefcaseElo: 903.24, briefcaseTotalCost: 1.8932 },
 
-    { slug: 'gemini-4-hydrogen', family: 'Gemini 4 Hydrogen', shortName: 'Gemini 4 Hydrogen (xhigh)', creatorSlug: 'google', creatorName: 'Google', accuracy: 0.5046666666666667, hallucinationRate: 0.0847913862718708, netScore: 46.2666666666667, totalCost: 502.5118 },
-    { slug: 'gemini-4-hydrogen-high', family: 'Gemini 4 Hydrogen', shortName: 'Gemini 4 Hydrogen (high)', creatorSlug: 'google', creatorName: 'Google', accuracy: 0.4816666666666667, hallucinationRate: 0.08681672025723473, netScore: 43.6666666666667, totalCost: 42.1897 },
-    { slug: 'gemini-4-hydrogen-medium', family: 'Gemini 4 Hydrogen', shortName: 'Gemini 4 Hydrogen (medium)', creatorSlug: 'google', creatorName: 'Google', accuracy: 0.48333333333333334, hallucinationRate: 0.12451612903225806, netScore: 41.9, totalCost: 26.0944 },
-    { slug: 'gemini-4-hydrogen-low', family: 'Gemini 4 Hydrogen', shortName: 'Gemini 4 Hydrogen (low)', creatorSlug: 'google', creatorName: 'Google', accuracy: 0.4623333333333333, hallucinationRate: 0.1884686918784873, netScore: 36.1, totalCost: 9.9162 },
+    { slug: 'gemini-4-hydrogen', family: 'Gemini 4 Hydrogen', shortName: 'Gemini 4 Hydrogen (xhigh)', creatorSlug: 'google', creatorName: 'Google', accuracy: 0.5046666666666667, hallucinationRate: 0.0847913862718708, netScore: 46.2666666666667, totalCost: 502.5118, briefcaseElo: 1567.52, briefcaseTotalCost: 290.1277 },
+    { slug: 'gemini-4-hydrogen-high', family: 'Gemini 4 Hydrogen', shortName: 'Gemini 4 Hydrogen (high)', creatorSlug: 'google', creatorName: 'Google', accuracy: 0.4816666666666667, hallucinationRate: 0.08681672025723473, netScore: 43.6666666666667, totalCost: 42.1897, briefcaseElo: 1496.74, briefcaseTotalCost: 157.8217 },
+    { slug: 'gemini-4-hydrogen-medium', family: 'Gemini 4 Hydrogen', shortName: 'Gemini 4 Hydrogen (medium)', creatorSlug: 'google', creatorName: 'Google', accuracy: 0.48333333333333334, hallucinationRate: 0.12451612903225806, netScore: 41.9, totalCost: 26.0944, briefcaseElo: 1295.9, briefcaseTotalCost: 59.2182 },
+    { slug: 'gemini-4-hydrogen-low', family: 'Gemini 4 Hydrogen', shortName: 'Gemini 4 Hydrogen (low)', creatorSlug: 'google', creatorName: 'Google', accuracy: 0.4623333333333333, hallucinationRate: 0.1884686918784873, netScore: 36.1, totalCost: 9.9162, briefcaseElo: 946.87, briefcaseTotalCost: 19.0846 },
 
-    { slug: 'gemini-4-argon', family: 'Gemini 4 Argon', shortName: 'Gemini 4 Argon (high)', creatorSlug: 'google', creatorName: 'Google', accuracy: 0.483, hallucinationRate: 0.0425531914893617, netScore: 46.1, totalCost: 27.3283 },
-    { slug: 'gemini-4-argon-medium', family: 'Gemini 4 Argon', shortName: 'Gemini 4 Argon (medium)', creatorSlug: 'google', creatorName: 'Google', accuracy: 0.48966666666666664, hallucinationRate: 0.1541476159372959, netScore: 41.1, totalCost: 3.2475 }
+    { slug: 'gemini-4-argon', family: 'Gemini 4 Argon', shortName: 'Gemini 4 Argon (high)', creatorSlug: 'google', creatorName: 'Google', accuracy: 0.483, hallucinationRate: 0.0425531914893617, netScore: 46.1, totalCost: 27.3283, briefcaseElo: 1485.08, briefcaseTotalCost: 530.3252 },
+    { slug: 'gemini-4-argon-medium', family: 'Gemini 4 Argon', shortName: 'Gemini 4 Argon (medium)', creatorSlug: 'google', creatorName: 'Google', accuracy: 0.48966666666666664, hallucinationRate: 0.1541476159372959, netScore: 41.1, totalCost: 3.2475, briefcaseElo: 1466.63, briefcaseTotalCost: 431.9964 }
   ];
 
   const NS = 'http://www.w3.org/2000/svg';
   const plot = document.getElementById('plot');
   const shell = document.getElementById('chart-shell');
+  const toolbar = document.getElementById('toolbar');
   const yZoomBar = document.getElementById('y-zoom-bar');
   const xZoomBar = document.getElementById('x-zoom-bar');
   const tooltip = document.getElementById('tooltip');
-  const pageTitle = document.getElementById('page-title');
-  const pageSubtitle = document.getElementById('page-subtitle');
-  const quadrantNote = document.getElementById('quadrant-note');
-  const ySelect = document.getElementById('y-axis-select');
-  const xSelect = document.getElementById('x-axis-select');
+  const axisMenu = document.getElementById('axis-menu');
   const swapAxesBtn = document.getElementById('swap-axes');
   const costScaleBtn = document.getElementById('toggle-cost-scale');
   const labelsBtn = document.getElementById('toggle-labels');
   const zoomBtn = document.getElementById('toggle-zoom');
   const linesBtn = document.getElementById('toggle-lines');
-  const motionBtn = document.getElementById('motion-toggle');
-  const filterHint = document.getElementById('filter-hint');
+  const lockPill = document.getElementById('lock-pill');
   const creatorBtns = [...document.querySelectorAll('.legend-btn')];
-  const statusLine = document.getElementById('status-line');
-  const tableBody = document.getElementById('table-body');
   const modelPicker = document.getElementById('model-picker');
   const modelTrigger = document.getElementById('model-trigger');
   const modelTriggerLabel = document.getElementById('model-trigger-label');
@@ -1164,6 +1105,7 @@
 
   const STORAGE_KEY = 'aa-omni-selected-models-v1';
   const MIN_NORM_GAP = 0.025;
+  const AXIS_KEYS = ['accuracy', 'hallucinationRate', 'totalCost', 'briefcaseElo', 'briefcaseTotalCost'];
 
   const state = {
     creators: new Set(['openai', 'google']),
@@ -1174,13 +1116,14 @@
     costScale: 'log',
     showLabels: true,
     zoomed: false,
+    zoomToData: false,
     xRange: [0, 1],
     yRange: [0, 1],
     showFamilyLines: false,
+    showPareto: true,
     lockedFamily: null,
     hoveredSlug: null,
-    sortKey: 'accuracy',
-    sortDir: -1
+    openAxisMenu: null
   };
 
   function svgEl(tag, attrs, parent, text) {
@@ -1203,9 +1146,14 @@
     return '$' + v.toFixed(2);
   }
 
+  function fmtEloExact(v) {
+    return v.toLocaleString('en-US', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+  }
+
   const METRICS = {
     accuracy: {
       key: 'accuracy',
+      unit: 'pct',
       title: 'AA-Omniscience Accuracy',
       shortTitle: 'Accuracy',
       axisTitle: () => 'AA-Omniscience Accuracy',
@@ -1213,13 +1161,12 @@
       threshold: 0.5,
       thresholdLabel: 'at least 50%',
       shortThreshold: '>= 50%',
-      summary: 'Accuracy (higher is better) measures the proportion of correctly answered questions out of all 3,000 questions.',
       baseBounds: () => [0, 1],
-      dataBounds: () => [0.24, 0.76],
       isLog: () => false
     },
     hallucinationRate: {
       key: 'hallucinationRate',
+      unit: 'pct',
       title: 'AA-Omniscience Hallucination Rate',
       shortTitle: 'Hallucination rate',
       axisTitle: () => 'AA-Omniscience Hallucination Rate',
@@ -1227,23 +1174,46 @@
       threshold: 0.5,
       thresholdLabel: 'at most 50%',
       shortThreshold: '<= 50%',
-      summary: 'Hallucination Rate (lower is better) measures incorrect answers out of all non-correct responses.',
       baseBounds: () => [0, 1],
-      dataBounds: () => [0, 0.92],
       isLog: () => false
     },
     totalCost: {
       key: 'totalCost',
-      title: 'Total Cost to run',
-      shortTitle: 'Total cost',
-      axisTitle: () => (state.costScale === 'log' ? 'Total Cost to run (USD, log scale)' : 'Total Cost to run (USD)'),
+      unit: 'usd',
+      title: 'AA-Omniscience Total Cost',
+      shortTitle: 'Omniscience cost',
+      axisTitle: () => (state.costScale === 'log' ? 'AA-Omniscience Total Cost (USD, log scale)' : 'AA-Omniscience Total Cost (USD)'),
       better: 'low',
       threshold: 25,
       thresholdLabel: 'at most $25',
       shortThreshold: '<= $25',
-      summary: 'Total Cost to run (lower is better) is the combined input, reasoning, and answer API cost in USD across the benchmark.',
       baseBounds: () => (state.costScale === 'log' ? [0.04, 1200] : [0, 800]),
-      dataBounds: () => (state.costScale === 'log' ? [0.05, 950] : [0, 790]),
+      isLog: () => state.costScale === 'log'
+    },
+    briefcaseElo: {
+      key: 'briefcaseElo',
+      unit: 'elo',
+      title: 'AA-Briefcase Elo',
+      shortTitle: 'Briefcase Elo',
+      axisTitle: () => 'AA-Briefcase Elo',
+      better: 'high',
+      threshold: 1400,
+      thresholdLabel: 'at least 1,400 Elo',
+      shortThreshold: '>= 1,400',
+      baseBounds: () => [600, 1800],
+      isLog: () => false
+    },
+    briefcaseTotalCost: {
+      key: 'briefcaseTotalCost',
+      unit: 'usd',
+      title: 'AA-Briefcase Elo Total Cost',
+      shortTitle: 'Briefcase total cost',
+      axisTitle: () => (state.costScale === 'log' ? 'AA-Briefcase Elo Total Cost (USD, log scale)' : 'AA-Briefcase Elo Total Cost (USD)'),
+      better: 'low',
+      threshold: 100,
+      thresholdLabel: 'at most $100',
+      shortThreshold: '<= $100',
+      baseBounds: () => (state.costScale === 'log' ? [0.4, 1200] : [0, 900]),
       isLog: () => state.costScale === 'log'
     }
   };
@@ -1264,12 +1234,34 @@
     return Math.max(0, Math.min(1, (val - min) / (max - min)));
   }
 
-  function getPresetNormRange(metricKey) {
+  function computeFitNormRange(metricKey, models) {
+    if (!models || !models.length) return [0, 1];
     const spec = METRICS[metricKey];
     const [bMin, bMax] = spec.baseBounds();
-    const [dMin, dMax] = spec.dataBounds();
     const isLog = spec.isLog();
-    return [valueToNorm(dMin, bMin, bMax, isLog), valueToNorm(dMax, bMin, bMax, isLog)];
+    let nMin = Infinity;
+    let nMax = -Infinity;
+    for (const m of models) {
+      const n = valueToNorm(m[metricKey], bMin, bMax, isLog);
+      if (n < nMin) nMin = n;
+      if (n > nMax) nMax = n;
+    }
+    if (!Number.isFinite(nMin) || !Number.isFinite(nMax)) return [0, 1];
+    const span = Math.max(0, nMax - nMin);
+    const pad = span < 1e-6 ? 0.08 : Math.min(0.08, Math.max(0.04, span * 0.11));
+    let fitMin = Math.max(0, nMin - pad);
+    let fitMax = Math.min(1, nMax + pad);
+    const minSpan = Math.max(MIN_NORM_GAP, 0.08);
+    if (fitMax - fitMin < minSpan) {
+      if (fitMin <= 0.001) fitMax = Math.min(1, minSpan);
+      else if (fitMax >= 0.999) fitMin = Math.max(0, 1 - minSpan);
+      else {
+        const mid = (fitMin + fitMax) / 2;
+        fitMin = Math.max(0, mid - minSpan / 2);
+        fitMax = Math.min(1, mid + minSpan / 2);
+      }
+    }
+    return [fitMin, fitMax];
   }
 
   function isRangeZoomed(range) {
@@ -1280,15 +1272,17 @@
     return isRangeZoomed(state.xRange) || isRangeZoomed(state.yRange);
   }
 
-  function matchesDataPreset() {
-    const px = getPresetNormRange(state.xMetric);
-    const py = getPresetNormRange(state.yMetric);
-    return (
-      Math.abs(state.xRange[0] - px[0]) < 0.005 &&
-      Math.abs(state.xRange[1] - px[1]) < 0.005 &&
-      Math.abs(state.yRange[0] - py[0]) < 0.005 &&
-      Math.abs(state.yRange[1] - py[1]) < 0.005
-    );
+  function applyZoomToData() {
+    const models = visibleModels();
+    if (!models.length) {
+      state.xRange = [0, 1];
+      state.yRange = [0, 1];
+      return;
+    }
+    const xr = computeFitNormRange(state.xMetric, models);
+    const yr = computeFitNormRange(state.yMetric, models);
+    state.xRange = isRangeZoomed(xr) ? xr : [0, 1];
+    state.yRange = isRangeZoomed(yr) ? yr : [0, 1];
   }
 
   function getAxisDomain(axis) {
@@ -1347,8 +1341,9 @@
     const lo = dom.min;
     const hi = dom.max;
     const span = Math.max(1e-9, hi - lo);
+    const unit = METRICS[dom.key].unit;
 
-    if (dom.key === 'totalCost' && dom.isLog) {
+    if (unit === 'usd' && dom.isLog) {
       const minExp = Math.floor(Math.log10(Math.max(1e-6, lo)));
       const maxExp = Math.ceil(Math.log10(Math.max(1e-6, hi)));
       const candidateSets = [
@@ -1359,7 +1354,10 @@
         [1, 1.1, 1.2, 1.3, 1.5, 1.7, 2, 2.5, 3, 3.5, 4, 5, 6, 7, 8, 9]
       ];
       if (!dom.isZoomed) {
-        return { values: [0.1, 1, 10, 100, 1000], step: null };
+        return {
+          values: dom.key === 'briefcaseTotalCost' ? [1, 10, 100, 1000] : [0.1, 1, 10, 100, 1000],
+          step: null
+        };
       }
       for (const mults of candidateSets) {
         const ticks = [];
@@ -1389,9 +1387,11 @@
       return { values: fallback, step: span / 5 };
     }
 
-    const steps = dom.key === 'totalCost'
+    const steps = unit === 'usd'
       ? [0.1, 0.2, 0.5, 1, 2, 5, 10, 20, 25, 50, 100, 200, 250, 500]
-      : [0.002, 0.005, 0.01, 0.02, 0.025, 0.05, 0.1, 0.2, 0.25];
+      : unit === 'elo'
+        ? [2, 5, 10, 20, 25, 50, 100, 200, 250, 300]
+        : [0.002, 0.005, 0.01, 0.02, 0.025, 0.05, 0.1, 0.2, 0.25];
     let step = steps[steps.length - 1];
     for (const s of steps) {
       if (span / s <= 6.2) {
@@ -1414,7 +1414,8 @@
   }
 
   function formatTickValue(key, val, step) {
-    if (key === 'totalCost') {
+    const unit = METRICS[key].unit;
+    if (unit === 'usd') {
       if (val === 0) return '$0';
       if (val < 0.1) return '$' + val.toFixed(2);
       if (val < 1) {
@@ -1431,17 +1432,25 @@
       }
       return '$' + val.toFixed(1);
     }
+    if (unit === 'elo') {
+      const needDecimal = step != null && step < 5 && Math.abs(val - Math.round(val)) > 0.05;
+      return needDecimal ? val.toFixed(1) : Math.round(val).toLocaleString('en-US');
+    }
     const pctVal = val * 100;
     const needDecimal = (step != null && step < 0.01) || Math.abs(pctVal - Math.round(pctVal)) > 0.05;
     return pctVal.toFixed(needDecimal ? 1 : 0) + '%';
   }
 
   function formatZoomReadout(key, val, span) {
-    if (key === 'totalCost') {
+    const unit = METRICS[key].unit;
+    if (unit === 'usd') {
       if (val < 1) return '$' + val.toFixed(2);
       if (val < 10) return '$' + val.toFixed(2);
       if (val < 100) return span < 30 ? '$' + val.toFixed(1) : '$' + Math.round(val);
       return '$' + Math.round(val).toLocaleString('en-US');
+    }
+    if (unit === 'elo') {
+      return span < 35 ? val.toFixed(1) : Math.round(val).toLocaleString('en-US');
     }
     const pctVal = val * 100;
     const decimals = span < 0.12 ? 1 : 0;
@@ -1461,40 +1470,176 @@
     return passesThreshold(m, state.yMetric) && passesThreshold(m, state.xMetric);
   }
 
+  function isCostMetric(key) {
+    return METRICS[key].unit === 'usd';
+  }
+
   function hasCostAxis() {
-    return state.xMetric === 'totalCost' || state.yMetric === 'totalCost';
+    return isCostMetric(state.xMetric) || isCostMetric(state.yMetric);
   }
 
   function visibleModels() {
     return MODELS.filter(m => state.creators.has(m.creatorSlug) && state.selectedSlugs.has(m.slug));
   }
 
+  function computeParetoFrontier(models, xKey, yKey) {
+    if (!models || !models.length) return [];
+    const xHigh = METRICS[xKey].better === 'high';
+    const yHigh = METRICS[yKey].better === 'high';
+    const sorted = [...models].sort((a, b) => {
+      const dx = xHigh ? b[xKey] - a[xKey] : a[xKey] - b[xKey];
+      if (Math.abs(dx) > 1e-12) return dx;
+      return yHigh ? b[yKey] - a[yKey] : a[yKey] - b[yKey];
+    });
+    const frontier = [];
+    let bestY = yHigh ? -Infinity : Infinity;
+    for (const m of sorted) {
+      const yVal = m[yKey];
+      const strictlyBetterY = yHigh ? yVal > bestY + 1e-12 : yVal < bestY - 1e-12;
+      const equalY = Math.abs(yVal - bestY) <= 1e-12;
+      const sameXAsPrev = frontier.length > 0 && Math.abs(m[xKey] - frontier[frontier.length - 1][xKey]) <= 1e-12;
+      if (strictlyBetterY) {
+        frontier.push(m);
+        bestY = yVal;
+      } else if (equalY && sameXAsPrev) {
+        frontier.push(m);
+      }
+    }
+    return frontier;
+  }
+
+  function fitToolbarButtons() {
+    toolbar.classList.remove('is-tight', 'is-tighter');
+    if (toolbar.scrollWidth > toolbar.clientWidth + 1) {
+      toolbar.classList.add('is-tight');
+      if (toolbar.scrollWidth > toolbar.clientWidth + 1) {
+        toolbar.classList.add('is-tighter');
+      }
+    }
+  }
+
   function syncZoomButton() {
     const zoomed = isAnyZoomed();
     state.zoomed = zoomed;
-    zoomBtn.setAttribute('aria-pressed', String(zoomed));
-    if (!zoomed) {
-      zoomBtn.textContent = hasCostAxis() ? 'Full scale' : 'Full scale (0% to 100%)';
-    } else if (matchesDataPreset()) {
+    zoomBtn.setAttribute('aria-pressed', String(state.zoomToData || zoomed));
+    if (state.zoomToData) {
       zoomBtn.textContent = 'Zoomed to data';
-    } else {
+    } else if (zoomed) {
       zoomBtn.textContent = 'Reset zoom';
+    } else {
+      const bothPercent = METRICS[state.xMetric].unit === 'pct' && METRICS[state.yMetric].unit === 'pct';
+      zoomBtn.textContent = bothPercent ? 'Full scale (0% to 100%)' : 'Full scale';
     }
+    zoomBtn.title = zoomBtn.textContent;
+    fitToolbarButtons();
   }
 
   function syncAxisCopy() {
     const ySpec = METRICS[state.yMetric];
     const xSpec = METRICS[state.xMetric];
-    const titleText = `${ySpec.title} vs. ${xSpec.title}`;
-    pageTitle.textContent = titleText;
-    document.title = titleText;
-    pageSubtitle.textContent = `AA-Omniscience v1.1 ${ySpec.summary} ${xSpec.summary}`;
-    quadrantNote.textContent =
-      `${ySpec.better === 'high' ? 'Higher' : 'Lower'} ${ySpec.shortTitle.toLowerCase()} (${ySpec.thresholdLabel}) and ` +
-      `${xSpec.better === 'high' ? 'higher' : 'lower'} ${xSpec.shortTitle.toLowerCase()} (${xSpec.thresholdLabel})`;
+    document.title = `${ySpec.title} vs. ${xSpec.title}`;
     costScaleBtn.hidden = !hasCostAxis();
     syncZoomButton();
     plot.setAttribute('aria-label', `Scatter plot of ${ySpec.title} versus ${xSpec.title} across 39 OpenAI and Google models.`);
+  }
+
+  function closeAxisMenu() {
+    if (!state.openAxisMenu && axisMenu.hidden) return;
+    state.openAxisMenu = null;
+    axisMenu.hidden = true;
+    for (const el of plot.querySelectorAll('.axis-title-btn')) {
+      el.setAttribute('aria-expanded', 'false');
+    }
+  }
+
+  function selectAxisMetric(axis, key) {
+    if (axis === 'y') {
+      if (key === state.xMetric) {
+        state.xMetric = state.yMetric;
+        const tmp = state.xRange;
+        state.xRange = state.yRange;
+        state.yRange = tmp;
+      } else if (!state.zoomToData && key !== state.yMetric) {
+        state.yRange = [0, 1];
+      }
+      state.yMetric = key;
+    } else {
+      if (key === state.yMetric) {
+        state.yMetric = state.xMetric;
+        const tmp = state.xRange;
+        state.xRange = state.yRange;
+        state.yRange = tmp;
+      } else if (!state.zoomToData && key !== state.xMetric) {
+        state.xRange = [0, 1];
+      }
+      state.xMetric = key;
+    }
+    closeAxisMenu();
+    applyAxisChange();
+  }
+
+  function openAxisMenu(axis, anchor) {
+    if (state.openAxisMenu === axis && !axisMenu.hidden) {
+      closeAxisMenu();
+      return;
+    }
+    state.openAxisMenu = axis;
+    const currentKey = axis === 'y' ? state.yMetric : state.xMetric;
+    const otherKey = axis === 'y' ? state.xMetric : state.yMetric;
+    const otherLabel = axis === 'y' ? 'X axis' : 'Y axis';
+
+    axisMenu.replaceChildren();
+    const title = document.createElement('div');
+    title.className = 'axis-menu-title';
+    title.textContent = axis === 'y' ? 'Y axis metric' : 'X axis metric';
+    axisMenu.appendChild(title);
+
+    for (const key of AXIS_KEYS) {
+      const spec = METRICS[key];
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'axis-menu-item';
+      btn.setAttribute('role', 'option');
+      btn.setAttribute('aria-selected', String(key === currentKey));
+
+      const nameSpan = document.createElement('span');
+      nameSpan.textContent = spec.title;
+      btn.appendChild(nameSpan);
+
+      if (key === currentKey || key === otherKey) {
+        const badge = document.createElement('span');
+        badge.className = 'axis-menu-badge';
+        badge.textContent = key === currentKey ? 'Active' : otherLabel;
+        btn.appendChild(badge);
+      }
+
+      btn.addEventListener('click', e => {
+        e.stopPropagation();
+        selectAxisMetric(axis, key);
+      });
+      axisMenu.appendChild(btn);
+    }
+
+    axisMenu.hidden = false;
+    for (const el of plot.querySelectorAll('.axis-title-btn')) {
+      el.setAttribute('aria-expanded', String(el.dataset.axis === axis));
+    }
+
+    const shellW = shell.clientWidth;
+    const shellH = shell.clientHeight;
+    const mw = axisMenu.offsetWidth;
+    const mh = axisMenu.offsetHeight;
+    let leftPos;
+    let topPos;
+    if (axis === 'y') {
+      leftPos = Math.min(shellW - mw - 6, Math.max(6, anchor.x + 16));
+      topPos = Math.min(shellH - mh - 6, Math.max(6, anchor.y - mh / 2));
+    } else {
+      leftPos = Math.min(shellW - mw - 6, Math.max(6, anchor.x - mw / 2));
+      topPos = Math.max(6, anchor.y - mh - 18);
+    }
+    axisMenu.style.left = leftPos + 'px';
+    axisMenu.style.top = topPos + 'px';
   }
 
   // Non-overlapping label placement with leader lines
@@ -1600,15 +1745,19 @@
     document.getElementById('tip-acc').textContent = pct(m.accuracy, 1);
     document.getElementById('tip-hal').textContent = pct(m.hallucinationRate, 1);
     document.getElementById('tip-cost').textContent = fmtCostExact(m.totalCost);
-    document.getElementById('tip-net').textContent = m.netScore.toFixed(1);
+    document.getElementById('tip-brief-elo').textContent = fmtEloExact(m.briefcaseElo);
+    document.getElementById('tip-brief-cost').textContent = fmtCostExact(m.briefcaseTotalCost);
     const quadEl = document.getElementById('tip-quad');
     const ySpec = METRICS[state.yMetric];
     const xSpec = METRICS[state.xMetric];
+    const paretoSlugs = new Set(computeParetoFrontier(visibleModels(), state.xMetric, state.yMetric).map(x => x.slug));
+    const onPareto = state.showPareto && paretoSlugs.has(m.slug);
+    const paretoSuffix = onPareto ? ' · Pareto optimal' : '';
     if (isAttractive(m)) {
-      quadEl.textContent = `Inside most attractive quadrant (${ySpec.shortTitle} ${ySpec.shortThreshold}, ${xSpec.shortTitle} ${xSpec.shortThreshold})`;
+      quadEl.textContent = `Inside most attractive quadrant (${ySpec.shortTitle} ${ySpec.shortThreshold}, ${xSpec.shortTitle} ${xSpec.shortThreshold})${paretoSuffix}`;
       quadEl.className = 'tip-quad good';
     } else {
-      quadEl.textContent = 'Outside most attractive quadrant';
+      quadEl.textContent = `Outside most attractive quadrant${paretoSuffix}`;
       quadEl.className = 'tip-quad';
     }
 
@@ -1676,6 +1825,7 @@
     for (const node of pointLayer.querySelectorAll('.plot-point')) {
       const m = node._model;
       const dot = node._dot;
+      const ring = node._paretoRing;
       const baseR = node._baseR || 5.5;
       const inFam = !fam || m.family === fam;
       const hov = state.hoveredSlug === m.slug;
@@ -1683,6 +1833,14 @@
       dot.setAttribute('stroke', hov ? '#ffffff' : '#000000');
       dot.setAttribute('stroke-width', hov ? '2' : '1.4');
       dot.setAttribute('opacity', inFam ? '1' : '0.2');
+      if (ring) {
+        ring.setAttribute('r', String(hov ? baseR + 4.8 : baseR + 3.2));
+        ring.setAttribute('stroke-opacity', inFam ? '0.82' : '0.2');
+      }
+    }
+    const paretoPath = plot.querySelector('.pareto-path');
+    if (paretoPath) {
+      paretoPath.setAttribute('stroke-opacity', fam ? '0.32' : '0.88');
     }
   }
 
@@ -1694,7 +1852,8 @@
 
     const width = Math.max(300, Math.round(shell.getBoundingClientRect().width));
     const mobile = width < 640;
-    const height = mobile ? Math.round(Math.max(400, Math.min(500, width * 1.05))) : Math.round(Math.max(480, Math.min(560, width * 0.54)));
+    const measuredPlotH = Math.round(plot.getBoundingClientRect().height);
+    const height = Math.max(260, measuredPlotH > 40 ? measuredPlotH : Math.max(360, Math.round(shell.getBoundingClientRect().height - 36)));
     const margin = {
       left: mobile ? 82 : 94,
       right: 24,
@@ -1715,7 +1874,6 @@
     plot.setAttribute('viewBox', `0 0 ${width} ${height}`);
     plot.setAttribute('width', String(width));
     plot.setAttribute('height', String(height));
-    plot.style.height = height + 'px';
 
     const clipId = 'plot-clip-area';
     const defs = svgEl('defs', {}, plot);
@@ -1812,26 +1970,75 @@
       }, plot, formatTickValue(yDom.key, t, yTickSet.step));
     }
 
-    svgEl('text', {
-      x: left + plotW / 2,
-      y: height - 10,
-      fill: '#d0d0d7',
-      'font-size': '12',
-      'font-weight': '500',
-      'text-anchor': 'middle'
-    }, plot, xSpec.axisTitle());
+    function buildAxisTrigger(axis, cx, cy, labelText, rotated) {
+      const g = svgEl('g', {
+        class: 'axis-title-btn',
+        'data-axis': axis,
+        role: 'button',
+        tabindex: '0',
+        'aria-haspopup': 'listbox',
+        'aria-expanded': String(state.openAxisMenu === axis && !axisMenu.hidden),
+        'aria-label': `Change ${axis.toUpperCase()} axis metric (currently ${labelText})`,
+        transform: rotated ? `translate(${cx} ${cy}) rotate(-90)` : `translate(${cx} ${cy})`
+      }, plot);
+
+      const bg = svgEl('rect', {
+        class: 'axis-title-bg',
+        x: -60,
+        y: -12,
+        width: 120,
+        height: 22,
+        rx: 5
+      }, g);
+
+      const txt = svgEl('text', {
+        class: 'axis-title-text',
+        x: -6,
+        y: 3,
+        fill: '#d0d0d7',
+        'font-size': '12',
+        'font-weight': '500',
+        'text-anchor': 'middle'
+      }, g, labelText);
+
+      let textLen = labelText.length * 6.5;
+      try {
+        textLen = txt.getComputedTextLength();
+      } catch (_) {}
+
+      const chevX = textLen / 2 - 1;
+      svgEl('path', {
+        d: `M${chevX} -2.5 L${chevX + 3.5} 1.5 L${chevX + 7} -2.5`,
+        fill: 'none',
+        stroke: '#9b9ba4',
+        'stroke-width': '1.4',
+        'stroke-linecap': 'round',
+        'stroke-linejoin': 'round',
+        'pointer-events': 'none'
+      }, g);
+
+      const padW = textLen + 26;
+      bg.setAttribute('x', String(-padW / 2));
+      bg.setAttribute('width', String(padW));
+
+      const activate = e => {
+        e.stopPropagation();
+        openAxisMenu(axis, { x: cx, y: cy });
+      };
+      g.addEventListener('click', activate);
+      g.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ' || e.key === 'ArrowDown') {
+          e.preventDefault();
+          activate(e);
+        }
+      });
+    }
+
+    buildAxisTrigger('x', left + plotW / 2, height - 13, xSpec.axisTitle(), false);
 
     const yTitleX = mobile ? 32 : 36;
     const yTitleY = top + plotH / 2;
-    svgEl('text', {
-      x: yTitleX,
-      y: yTitleY,
-      fill: '#d0d0d7',
-      'font-size': '12',
-      'font-weight': '500',
-      'text-anchor': 'middle',
-      transform: `rotate(-90 ${yTitleX} ${yTitleY})`
-    }, plot, ySpec.axisTitle());
+    buildAxisTrigger('y', yTitleX, yTitleY, ySpec.axisTitle(), true);
 
     const activeList = visibleModels();
     const allItems = activeList.map(m => ({
@@ -1844,6 +2051,33 @@
     );
 
     const focusFamily = state.lockedFamily || (state.hoveredSlug ? MODELS.find(x => x.slug === state.hoveredSlug)?.family : null);
+
+    const paretoFrontier = state.showPareto
+      ? computeParetoFrontier(activeList, state.xMetric, state.yMetric)
+      : [];
+    const paretoSlugs = new Set(paretoFrontier.map(m => m.slug));
+
+    if (state.showPareto && paretoFrontier.length >= 2) {
+      const paretoLayer = svgEl('g', { 'clip-path': `url(#${clipId})` }, plot);
+      const itemBySlug = new Map(allItems.map(it => [it.m.slug, it]));
+      const d = paretoFrontier
+        .map((m, idx) => {
+          const it = itemBySlug.get(m.slug);
+          return `${idx === 0 ? 'M' : 'L'}${it.px.toFixed(1)},${it.py.toFixed(1)}`;
+        })
+        .join(' ');
+      svgEl('path', {
+        d,
+        fill: 'none',
+        stroke: '#fbbf24',
+        'stroke-width': '2',
+        'stroke-opacity': focusFamily ? '0.32' : '0.88',
+        'stroke-linecap': 'round',
+        'stroke-linejoin': 'round',
+        'pointer-events': 'none',
+        class: 'pareto-path'
+      }, paretoLayer);
+    }
 
     if (state.showFamilyLines || focusFamily) {
       const byFamily = new Map();
@@ -1917,6 +2151,7 @@
       const inFocus = !focusFamily || m.family === focusFamily;
       const isHovered = state.hoveredSlug === m.slug;
       const col = creatorColor(m.creatorSlug);
+      const isPareto = state.showPareto && paretoSlugs.has(m.slug);
 
       const hit = svgEl('circle', {
         cx: item.px,
@@ -1925,9 +2160,24 @@
         fill: 'transparent',
         tabindex: '0',
         role: 'button',
-        'aria-label': `${m.shortName}, ${m.creatorName}, Accuracy ${pct(m.accuracy)}, Hallucination rate ${pct(m.hallucinationRate)}, Total cost ${fmtCostExact(m.totalCost)}, Net score ${m.netScore.toFixed(1)}`,
+        'aria-label': `${m.shortName}, ${m.creatorName}, Accuracy ${pct(m.accuracy)}, Hallucination rate ${pct(m.hallucinationRate)}, Total cost ${fmtCostExact(m.totalCost)}, Net score ${m.netScore.toFixed(1)}${isPareto ? ', Pareto optimal' : ''}`,
         class: 'plot-point'
       }, pointLayer);
+
+      let paretoRing = null;
+      if (isPareto) {
+        paretoRing = svgEl('circle', {
+          cx: item.px,
+          cy: item.py,
+          r: isHovered ? '10.3' : '8.7',
+          fill: 'none',
+          stroke: '#fbbf24',
+          'stroke-width': '1.35',
+          'stroke-opacity': inFocus ? '0.82' : '0.2',
+          'pointer-events': 'none',
+          class: 'pareto-ring'
+        }, pointLayer);
+      }
 
       const dot = svgEl('circle', {
         cx: item.px,
@@ -1941,6 +2191,7 @@
       }, pointLayer);
 
       hit._dot = dot;
+      hit._paretoRing = paretoRing;
       hit._model = m;
       hit._baseR = 5.5;
       attachPointEvents(hit, m, item.px, item.py, pointLayer);
@@ -1948,7 +2199,7 @@
 
     yZoomBar.style.top = top + 'px';
     yZoomBar.style.height = plotH + 'px';
-    xZoomBar.style.marginLeft = left + 'px';
+    xZoomBar.style.marginLeft = Math.max(0, left - 24) + 'px';
     xZoomBar.style.width = plotW + 'px';
     syncZoomSliders();
   }
@@ -1991,6 +2242,7 @@
       byFamily.get(m.family).models.push(m);
     }
 
+    const prevScroll = modelList.scrollTop;
     modelList.replaceChildren();
     let shownGroups = 0;
 
@@ -2020,7 +2272,8 @@
         </span>
         <span class="mp-fam-count">${famSelectedCount}/${g.models.length}</span>
       `;
-      famBtn.addEventListener('click', () => {
+      famBtn.addEventListener('click', e => {
+        e.stopPropagation();
         if (allFamSelected) {
           for (const m of g.models) state.selectedSlugs.delete(m.slug);
         } else {
@@ -2049,7 +2302,8 @@
 
         vBtn.appendChild(lbl);
         vBtn.appendChild(dot);
-        vBtn.addEventListener('click', () => {
+        vBtn.addEventListener('click', e => {
+          e.stopPropagation();
           if (state.selectedSlugs.has(m.slug)) {
             state.selectedSlugs.delete(m.slug);
           } else {
@@ -2071,6 +2325,7 @@
       modelList.appendChild(empty);
     }
 
+    modelList.scrollTop = prevScroll;
     syncCreatorCounts();
   }
 
@@ -2082,12 +2337,15 @@
     if (state.lockedFamily && !visibleModels().some(m => m.family === state.lockedFamily)) {
       state.lockedFamily = null;
     }
+    if (state.zoomToData) {
+      applyZoomToData();
+    }
+    syncZoomButton();
     setMpNote('');
     hideTooltip();
     renderModelPicker();
     updateStatus();
     renderChart();
-    renderTable();
   }
 
   function setPopoverOpen(open) {
@@ -2113,46 +2371,13 @@
   }
 
   function updateStatus() {
-    const visible = visibleModels();
-    const xDom = getAxisDomain('x');
-    const yDom = getAxisDomain('y');
-    const inZoom = visible.filter(m => inDomain(m[state.xMetric], xDom) && inDomain(m[state.yMetric], yDom));
-    const goodCount = inZoom.filter(isAttractive).length;
     if (state.lockedFamily) {
-      statusLine.textContent = `Highlighted family: ${state.lockedFamily}. Click a point again or anywhere on the background to clear.`;
-    } else if (visible.length === 0) {
-      statusLine.textContent = 'No models selected. Use Models or creator filters to show points.';
-    } else if (isAnyZoomed() && inZoom.length < visible.length) {
-      statusLine.textContent = `Showing ${inZoom.length} of ${visible.length} selected models in current zoom (${goodCount} in the most attractive quadrant).`;
+      lockPill.hidden = false;
+      lockPill.textContent = `Locked: ${state.lockedFamily} ×`;
+      lockPill.title = 'Click to unlock model family';
     } else {
-      statusLine.textContent = `Showing ${visible.length} of ${MODELS.length} models (${goodCount} in the most attractive quadrant).`;
-    }
-    filterHint.textContent = 'Hover a point to inspect metrics, or click to lock its model family.';
-  }
-
-  function renderTable() {
-    const list = [...visibleModels()].sort((a, b) => {
-      const k = state.sortKey === 'omniscienceNetScore' ? 'netScore' : state.sortKey;
-      const av = a[k];
-      const bv = b[k];
-      if (typeof av === 'string') return av.localeCompare(bv) * state.sortDir;
-      return (av - bv) * state.sortDir;
-    });
-
-    tableBody.replaceChildren();
-    for (const m of list) {
-      const tr = document.createElement('tr');
-      const good = isAttractive(m);
-      tr.innerHTML = `
-        <td>${m.shortName}</td>
-        <td>${m.creatorName}</td>
-        <td class="num">${pct(m.accuracy, 1)}</td>
-        <td class="num">${pct(m.hallucinationRate, 1)}</td>
-        <td class="num">${fmtCostExact(m.totalCost)}</td>
-        <td class="num">${m.netScore.toFixed(1)}</td>
-        <td class="${good ? 'quad-good' : ''}">${good ? 'Most attractive' : 'Outside'}</td>
-      `;
-      tableBody.appendChild(tr);
+      lockPill.hidden = true;
+      lockPill.textContent = '';
     }
   }
 
@@ -2161,6 +2386,7 @@
     const clampedMax = Math.min(1, Math.max(clampedMin + MIN_NORM_GAP, nMax));
     const zoomed = clampedMin > 0.002 || clampedMax < 0.998;
     const next = zoomed ? [clampedMin, clampedMax] : [0, 1];
+    state.zoomToData = false;
     if (axis === 'x') state.xRange = next;
     else state.yRange = next;
     syncZoomButton();
@@ -2382,44 +2608,17 @@
   }
 
   function applyAxisChange() {
-    ySelect.value = state.yMetric;
-    xSelect.value = state.xMetric;
+    if (state.zoomToData) {
+      applyZoomToData();
+    }
     hideTooltip();
     syncAxisCopy();
     updateStatus();
     renderChart();
-    renderTable();
   }
 
-  ySelect.addEventListener('change', () => {
-    const nextY = ySelect.value;
-    if (nextY === state.xMetric) {
-      state.xMetric = state.yMetric;
-      const tmp = state.xRange;
-      state.xRange = state.yRange;
-      state.yRange = tmp;
-    } else {
-      state.yRange = [0, 1];
-    }
-    state.yMetric = nextY;
-    applyAxisChange();
-  });
-
-  xSelect.addEventListener('change', () => {
-    const nextX = xSelect.value;
-    if (nextX === state.yMetric) {
-      state.yMetric = state.xMetric;
-      const tmp = state.xRange;
-      state.xRange = state.yRange;
-      state.yRange = tmp;
-    } else {
-      state.xRange = [0, 1];
-    }
-    state.xMetric = nextX;
-    applyAxisChange();
-  });
-
   swapAxesBtn.addEventListener('click', () => {
+    closeAxisMenu();
     const prevY = state.yMetric;
     state.yMetric = state.xMetric;
     state.xMetric = prevY;
@@ -2433,8 +2632,13 @@
     state.costScale = state.costScale === 'log' ? 'linear' : 'log';
     costScaleBtn.setAttribute('aria-pressed', String(state.costScale === 'log'));
     costScaleBtn.textContent = state.costScale === 'log' ? 'Cost scale: Log' : 'Cost scale: Linear';
-    if (state.xMetric === 'totalCost') state.xRange = [0, 1];
-    if (state.yMetric === 'totalCost') state.yRange = [0, 1];
+    costScaleBtn.title = costScaleBtn.textContent;
+    if (state.zoomToData) {
+      applyZoomToData();
+    } else {
+      if (isCostMetric(state.xMetric)) state.xRange = [0, 1];
+      if (isCostMetric(state.yMetric)) state.yRange = [0, 1];
+    }
     syncZoomButton();
     hideTooltip();
     updateStatus();
@@ -2443,7 +2647,12 @@
 
   modelTrigger.addEventListener('click', e => {
     e.stopPropagation();
+    closeAxisMenu();
     setPopoverOpen(modelPopover.hidden);
+  });
+
+  modelPopover.addEventListener('click', e => {
+    e.stopPropagation();
   });
 
   modelSearchInput.addEventListener('input', () => {
@@ -2503,12 +2712,22 @@
     if (!modelPopover.hidden && !modelPicker.contains(e.target)) {
       setPopoverOpen(false);
     }
+    if (!axisMenu.hidden && !axisMenu.contains(e.target)) {
+      closeAxisMenu();
+    }
   });
 
   document.addEventListener('keydown', e => {
-    if (e.key === 'Escape' && !modelPopover.hidden) {
-      setPopoverOpen(false);
-      modelTrigger.focus();
+    if (e.key === 'Escape') {
+      if (!axisMenu.hidden) {
+        const lastAxis = state.openAxisMenu;
+        closeAxisMenu();
+        const trigger = plot.querySelector(`.axis-title-btn[data-axis="${lastAxis}"]`);
+        if (trigger) trigger.focus();
+      } else if (!modelPopover.hidden) {
+        setPopoverOpen(false);
+        modelTrigger.focus();
+      }
     }
   });
 
@@ -2516,16 +2735,19 @@
     state.showLabels = !state.showLabels;
     labelsBtn.setAttribute('aria-pressed', String(!state.showLabels));
     labelsBtn.textContent = state.showLabels ? 'Hide model names' : 'Model names hidden';
+    labelsBtn.title = labelsBtn.textContent;
+    fitToolbarButtons();
     renderChart();
   });
 
   zoomBtn.addEventListener('click', () => {
-    if (isAnyZoomed()) {
+    if (state.zoomToData || isAnyZoomed()) {
+      state.zoomToData = false;
       state.xRange = [0, 1];
       state.yRange = [0, 1];
     } else {
-      state.xRange = getPresetNormRange(state.xMetric);
-      state.yRange = getPresetNormRange(state.yMetric);
+      state.zoomToData = true;
+      applyZoomToData();
     }
     syncAxisCopy();
     hideTooltip();
@@ -2536,6 +2758,13 @@
   linesBtn.addEventListener('click', () => {
     state.showFamilyLines = !state.showFamilyLines;
     linesBtn.setAttribute('aria-pressed', String(state.showFamilyLines));
+    renderChart();
+  });
+
+  lockPill.addEventListener('click', () => {
+    state.lockedFamily = null;
+    hideTooltip();
+    updateStatus();
     renderChart();
   });
 
@@ -2552,29 +2781,13 @@
       }
       creatorBtns.forEach(b => b.setAttribute('aria-pressed', String(state.creators.has(b.dataset.creator))));
       state.lockedFamily = null;
+      if (state.zoomToData) {
+        applyZoomToData();
+      }
+      syncZoomButton();
       hideTooltip();
       updateStatus();
       renderChart();
-      renderTable();
-    });
-  });
-
-  motionBtn.addEventListener('click', () => {
-    const next = !document.body.classList.contains('reduced-motion');
-    document.body.classList.toggle('reduced-motion', next);
-    motionBtn.setAttribute('aria-pressed', String(next));
-    motionBtn.textContent = next ? 'Motion reduced' : 'Reduce motion';
-  });
-
-  document.querySelectorAll('.sort-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const k = btn.dataset.sort;
-      if (state.sortKey === k) state.sortDir *= -1;
-      else {
-        state.sortKey = k;
-        state.sortDir = k === 'shortName' || k === 'creatorName' ? 1 : -1;
-      }
-      renderTable();
     });
   });
 
@@ -2591,7 +2804,9 @@
   window.addEventListener('resize', () => {
     clearTimeout(resizeTimer);
     resizeTimer = setTimeout(() => {
+      closeAxisMenu();
       hideTooltip();
+      fitToolbarButtons();
       renderChart();
     }, 90);
   });
@@ -2599,8 +2814,8 @@
   syncAxisCopy();
   syncCreatorCounts();
   updateStatus();
+  fitToolbarButtons();
   renderChart();
-  renderTable();
 })();
 </script>
 </body>
