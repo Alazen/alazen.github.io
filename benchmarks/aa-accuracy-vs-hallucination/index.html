@@ -1,0 +1,2607 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#000000">
+<meta name="description" content="AA-Omniscience v1.1 Accuracy, Hallucination Rate, and Total Cost to run across 39 OpenAI and Google model variants on a high-contrast dark scatter plot.">
+<title>AA-Omniscience Accuracy vs. AA-Omniscience Hallucination Rate</title>
+<style>
+  :root {
+    color-scheme: dark;
+    --bg: #000000;
+    --surface: #121216;
+    --surface-border: #303038;
+    --text: #f5f5f7;
+    --muted: #9b9ba4;
+    --sub: #d0d0d7;
+    --grid: rgba(255, 255, 255, 0.11);
+    --axis: rgba(255, 255, 255, 0.22);
+    --openai: #f5f5f7;
+    --google: #38c15c;
+    --quadrant: #4ade80;
+    --quadrant-fill: rgba(74, 222, 128, 0.13);
+    --quadrant-border: rgba(74, 222, 128, 0.36);
+    --opposite-fill: rgba(255, 255, 255, 0.045);
+    --leader: rgba(255, 255, 255, 0.28);
+    --label: rgba(255, 255, 255, 0.86);
+  }
+  * { box-sizing: border-box; }
+  html { background: var(--bg); }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  main {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: clamp(28px, 4.5vw, 56px) clamp(16px, 4vw, 48px) 64px;
+  }
+  .chart-header {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 18px;
+  }
+  .title-block {
+    max-width: 74ch;
+  }
+  h1 {
+    margin: 0 0 6px;
+    font-family: Georgia, Cambria, "Times New Roman", Times, serif;
+    font-weight: 400;
+    font-size: clamp(22px, 2.7vw, 30px);
+    line-height: 1.2;
+    letter-spacing: -0.015em;
+    color: var(--text);
+  }
+  .subtitle {
+    margin: 0;
+    max-width: 72ch;
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.55;
+  }
+  .controls-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px 18px;
+    padding: 10px 0 4px;
+    border-top: 1px solid #18181e;
+  }
+  .axis-controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 12px;
+  }
+  .axis-field {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 12px;
+    color: var(--muted);
+  }
+  .axis-field span {
+    white-space: nowrap;
+  }
+  .axis-select {
+    appearance: none;
+    background-color: #0a0a0d;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%239b9ba4' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    color: var(--text);
+    border: 1px solid var(--surface-border);
+    border-radius: 6px;
+    padding: 6px 28px 6px 10px;
+    font: inherit;
+    font-size: 12px;
+    line-height: 1.25;
+    cursor: pointer;
+    transition: border-color 0.16s ease, background-color 0.16s ease;
+  }
+  .axis-select:hover {
+    border-color: #6b6b76;
+    background-color: #111116;
+  }
+  .axis-select:focus-visible {
+    outline: 2px solid #ffffff;
+    outline-offset: 3px;
+  }
+  .toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: flex-end;
+  }
+  .ctrl-btn {
+    appearance: none;
+    background: #0a0a0d;
+    color: var(--sub);
+    border: 1px solid var(--surface-border);
+    border-radius: 6px;
+    padding: 7px 11px;
+    font: inherit;
+    font-size: 12px;
+    line-height: 1.2;
+    cursor: pointer;
+    transition: border-color 0.16s ease, color 0.16s ease, background-color 0.16s ease;
+    white-space: nowrap;
+  }
+  .ctrl-btn:hover {
+    border-color: #6b6b76;
+    color: #ffffff;
+  }
+  .ctrl-btn[aria-pressed="true"] {
+    background: #1a1a20;
+    border-color: #8f8f9b;
+    color: #ffffff;
+  }
+  .ctrl-btn[hidden] {
+    display: none;
+  }
+  .ctrl-btn:focus-visible,
+  .legend-btn:focus-visible,
+  summary:focus-visible,
+  .motion-btn:focus-visible,
+  .mp-btn:focus-visible,
+  .mp-family-btn:focus-visible,
+  .mp-variant-btn:focus-visible,
+  .mp-search:focus-visible,
+  a:focus-visible {
+    outline: 2px solid #ffffff;
+    outline-offset: 2px;
+  }
+  .model-picker {
+    position: relative;
+  }
+  .model-trigger {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .model-trigger .chev {
+    color: var(--muted);
+    transition: transform 0.16s ease;
+  }
+  .model-trigger[aria-expanded="true"] .chev {
+    transform: rotate(180deg);
+  }
+  .model-popover {
+    position: absolute;
+    top: calc(100% + 6px);
+    right: 0;
+    z-index: 30;
+    width: min(296px, calc(100vw - 32px));
+    background: #0b0b0f;
+    border: 1px solid #3c3c47;
+    border-radius: 8px;
+    box-shadow: 0 18px 44px rgba(0, 0, 0, 0.92);
+    overflow: hidden;
+  }
+  .model-popover[hidden] {
+    display: none;
+  }
+  .mp-search-wrap {
+    position: relative;
+    padding: 8px;
+    border-bottom: 1px solid #222229;
+  }
+  .mp-search-icon {
+    position: absolute;
+    left: 17px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--muted);
+    pointer-events: none;
+  }
+  .mp-search {
+    width: 100%;
+    background: #14141a;
+    color: var(--text);
+    border: 1px solid #2a2a33;
+    border-radius: 6px;
+    padding: 7px 10px 7px 30px;
+    font: inherit;
+    font-size: 12.5px;
+    line-height: 1.3;
+  }
+  .mp-search::placeholder {
+    color: var(--muted);
+  }
+  .mp-list {
+    max-height: 304px;
+    overflow-y: auto;
+    padding: 6px;
+    scrollbar-width: thin;
+    scrollbar-color: #3a3a44 #0b0b0f;
+  }
+  .mp-list::-webkit-scrollbar {
+    width: 6px;
+  }
+  .mp-list::-webkit-scrollbar-track {
+    background: #0b0b0f;
+  }
+  .mp-list::-webkit-scrollbar-thumb {
+    background: #3a3a44;
+    border-radius: 3px;
+  }
+  .mp-empty {
+    padding: 18px 10px;
+    text-align: center;
+    color: var(--muted);
+    font-size: 12px;
+  }
+  .mp-family {
+    margin-bottom: 4px;
+  }
+  .mp-family-btn {
+    appearance: none;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    background: transparent;
+    border: 0;
+    border-radius: 6px;
+    padding: 6px 8px;
+    color: var(--text);
+    font: inherit;
+    font-size: 12.5px;
+    font-weight: 500;
+    text-align: left;
+    cursor: pointer;
+    transition: background-color 0.12s ease;
+  }
+  .mp-family-btn:hover {
+    background: #17171e;
+  }
+  .mp-family-btn.is-empty {
+    color: var(--muted);
+  }
+  .mp-fam-left {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+  }
+  .mp-creator-icon {
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .mp-fam-count {
+    font-size: 11px;
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
+    flex-shrink: 0;
+  }
+  .mp-variants {
+    margin: 2px 0 4px 14px;
+    padding-left: 10px;
+    border-left: 1px solid #262630;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+  }
+  .mp-variant-btn {
+    appearance: none;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    background: transparent;
+    border: 0;
+    border-radius: 5px;
+    padding: 5px 8px;
+    color: var(--text);
+    font: inherit;
+    font-size: 12.5px;
+    text-align: left;
+    cursor: pointer;
+    transition: background-color 0.12s ease, color 0.12s ease;
+  }
+  .mp-variant-btn:hover {
+    background: #17171e;
+  }
+  .mp-variant-btn[aria-pressed="false"] {
+    color: var(--muted);
+  }
+  .mp-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    transition: opacity 0.12s ease, transform 0.12s ease;
+  }
+  .mp-variant-btn[aria-pressed="false"] .mp-dot {
+    background: transparent !important;
+    border: 1.5px solid #4d4d58;
+  }
+  .mp-actions {
+    padding: 8px;
+    border-top: 1px solid #222229;
+    background: #0d0d12;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .mp-row-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+  }
+  .mp-btn {
+    appearance: none;
+    width: 100%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+    background: #14141b;
+    color: var(--sub);
+    border: 1px solid #272731;
+    border-radius: 6px;
+    padding: 6px 10px;
+    font: inherit;
+    font-size: 12px;
+    line-height: 1.25;
+    cursor: pointer;
+    transition: border-color 0.14s ease, color 0.14s ease, background-color 0.14s ease;
+  }
+  .mp-btn:hover {
+    background: #1b1b24;
+    border-color: #4b4b58;
+    color: #ffffff;
+  }
+  .mp-btn svg {
+    color: var(--muted);
+    flex-shrink: 0;
+  }
+  .mp-note {
+    font-size: 11px;
+    color: var(--muted);
+    min-height: 0;
+    line-height: 1.3;
+  }
+  .mp-note:empty {
+    display: none;
+  }
+  @media (max-width: 720px) {
+    .model-popover {
+      left: 0;
+      right: auto;
+    }
+  }
+  .legend-bar {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+  .quadrant-key {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 18px;
+    font-size: 13px;
+    color: var(--text);
+  }
+  .quadrant-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .swatch-good {
+    width: 16px;
+    height: 12px;
+    border-radius: 2px;
+    background: var(--quadrant-fill);
+    border: 1px solid var(--quadrant-border);
+    flex-shrink: 0;
+  }
+  .quadrant-note {
+    color: var(--muted);
+    font-size: 12px;
+  }
+  .creator-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px 14px;
+  }
+  .legend-btn {
+    appearance: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 4px 6px;
+    margin-left: -6px;
+    border: 0;
+    border-radius: 4px;
+    background: transparent;
+    color: var(--text);
+    font: inherit;
+    font-size: 13px;
+    cursor: pointer;
+    transition: opacity 0.16s ease;
+  }
+  .legend-btn[aria-pressed="false"] {
+    opacity: 0.34;
+  }
+  .legend-dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .legend-count {
+    color: var(--muted);
+    font-size: 12px;
+    font-variant-numeric: tabular-nums;
+  }
+  .chart-shell {
+    position: relative;
+    width: 100%;
+    margin-top: 4px;
+  }
+  .plot {
+    display: block;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+    user-select: none;
+  }
+  .plot-point {
+    cursor: pointer;
+    transition: opacity 0.16s ease, r 0.14s ease;
+  }
+  .plot-point:focus-visible {
+    outline: none;
+  }
+  .aa-zoom-bar {
+    position: relative;
+    box-sizing: border-box;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: none;
+    z-index: 20;
+  }
+  .aa-zoom-bar--vertical {
+    position: absolute;
+    left: 0;
+    width: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .aa-zoom-bar--horizontal {
+    height: 20px;
+    display: flex;
+    align-items: center;
+    margin-top: 2px;
+    margin-bottom: 14px;
+  }
+  .aa-zoom-track {
+    position: relative;
+    background: rgba(255, 255, 255, 0.16);
+    border-radius: 999px;
+    cursor: pointer;
+    transition: background-color 120ms ease;
+  }
+  .aa-zoom-bar:hover .aa-zoom-track,
+  .aa-zoom-bar.is-dragging .aa-zoom-track {
+    background: rgba(255, 255, 255, 0.28);
+  }
+  .aa-zoom-bar--vertical .aa-zoom-track {
+    width: 5px;
+    height: 100%;
+  }
+  .aa-zoom-bar--horizontal .aa-zoom-track {
+    height: 5px;
+    width: 100%;
+  }
+  .aa-zoom-range {
+    position: absolute;
+    background: #52525e;
+    border-radius: 999px;
+    cursor: grab;
+    transition: background-color 120ms ease;
+  }
+  .aa-zoom-bar.is-zoomed .aa-zoom-range {
+    background: #a78bfa;
+  }
+  .aa-zoom-range:active {
+    cursor: grabbing;
+  }
+  .aa-zoom-bar--vertical .aa-zoom-range {
+    left: 0;
+    width: 100%;
+  }
+  .aa-zoom-bar--horizontal .aa-zoom-range {
+    top: 0;
+    height: 100%;
+  }
+  .aa-zoom-thumb {
+    position: absolute;
+    width: 13px;
+    height: 13px;
+    border-radius: 50%;
+    background: #f5f5f7;
+    border: 2px solid #27272a;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.75);
+    transform: translate(-50%, -50%);
+    transition: transform 100ms ease, border-color 120ms ease, box-shadow 120ms ease;
+    z-index: 2;
+  }
+  .aa-zoom-bar.is-zoomed .aa-zoom-thumb {
+    border-color: #a78bfa;
+  }
+  .aa-zoom-thumb:hover,
+  .aa-zoom-thumb.is-active,
+  .aa-zoom-thumb:focus-visible {
+    transform: translate(-50%, -50%) scale(1.18);
+    border-color: #c4b5fd;
+    box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.28);
+    outline: none;
+  }
+  .aa-zoom-bar--vertical .aa-zoom-thumb {
+    left: 50%;
+    cursor: ns-resize;
+  }
+  .aa-zoom-bar--horizontal .aa-zoom-thumb {
+    top: 50%;
+    cursor: ew-resize;
+  }
+  .aa-zoom-thumb::after {
+    content: "";
+    position: absolute;
+    inset: 3px;
+    border-radius: 50%;
+    background: #27272a;
+    opacity: 0.55;
+  }
+  .aa-zoom-bar.is-zoomed .aa-zoom-thumb::after {
+    background: #6d28d9;
+    opacity: 0.9;
+  }
+  .aa-zoom-tip {
+    position: absolute;
+    pointer-events: none;
+    background: #18181f;
+    color: #ffffff;
+    border: 1px solid #484854;
+    font-size: 11px;
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+    padding: 3px 6px;
+    border-radius: 4px;
+    white-space: nowrap;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.85);
+    opacity: 0;
+    transition: opacity 100ms ease;
+    z-index: 40;
+  }
+  .aa-zoom-thumb:hover .aa-zoom-tip,
+  .aa-zoom-thumb:focus-visible .aa-zoom-tip,
+  .aa-zoom-thumb.is-active .aa-zoom-tip,
+  .aa-zoom-bar.is-dragging .aa-zoom-tip {
+    opacity: 1;
+  }
+  .aa-zoom-bar--vertical .aa-zoom-tip {
+    left: 18px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  .aa-zoom-bar--horizontal .aa-zoom-tip {
+    bottom: 18px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  .aa-zoom-reset {
+    position: absolute;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    border-radius: 999px;
+    border: 1px solid rgba(167, 139, 250, 0.55);
+    background: #181822;
+    color: #ddd6fe;
+    font-size: 11px;
+    line-height: 1;
+    cursor: pointer;
+    padding: 0;
+    z-index: 30;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.7);
+  }
+  .aa-zoom-reset:hover {
+    background: #27213a;
+    border-color: #a78bfa;
+    color: #ffffff;
+  }
+  .aa-zoom-reset:focus-visible {
+    outline: 2px solid #ffffff;
+    outline-offset: 2px;
+  }
+  .aa-zoom-bar.is-zoomed .aa-zoom-reset {
+    display: inline-flex;
+  }
+  .aa-zoom-bar--vertical .aa-zoom-reset {
+    top: -21px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  .aa-zoom-bar--horizontal .aa-zoom-reset {
+    right: -21px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  .aa-zoom-edge-label {
+    position: absolute;
+    pointer-events: none;
+    font-size: 10px;
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+    color: #c4b5fd;
+    font-weight: 500;
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity 120ms ease;
+  }
+  .aa-zoom-bar.is-zoomed:not(.is-dragging) .aa-zoom-edge-label {
+    opacity: 0.92;
+  }
+  .aa-zoom-bar--vertical .aa-zoom-edge-label--max {
+    top: -13px;
+    left: 20px;
+  }
+  .aa-zoom-bar--vertical .aa-zoom-edge-label--min {
+    bottom: -13px;
+    left: 20px;
+  }
+  .aa-zoom-bar--horizontal .aa-zoom-edge-label--min {
+    left: 0;
+    top: 17px;
+  }
+  .aa-zoom-bar--horizontal .aa-zoom-edge-label--max {
+    right: 0;
+    top: 17px;
+  }
+  @media (max-width: 639px) {
+    .aa-zoom-bar--vertical {
+      width: 16px;
+    }
+  }
+  body.reduced-motion .aa-zoom-track,
+  body.reduced-motion .aa-zoom-range,
+  body.reduced-motion .aa-zoom-thumb,
+  body.reduced-motion .aa-zoom-tip,
+  body.reduced-motion .aa-zoom-edge-label {
+    transition: none !important;
+  }
+  @keyframes frontierPulse {
+    0%, 100% {
+      stroke-opacity: 0.32;
+      fill-opacity: 0.11;
+    }
+    50% {
+      stroke-opacity: 0.62;
+      fill-opacity: 0.18;
+    }
+  }
+  .attractive-quadrant {
+    animation: frontierPulse 6.5s ease-in-out infinite;
+  }
+  body.reduced-motion .attractive-quadrant {
+    animation: none;
+    stroke-opacity: 0.42;
+    fill-opacity: 0.13;
+  }
+  @keyframes pointReveal {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  .points-enter {
+    animation: pointReveal 0.45s ease-out both;
+  }
+  body.reduced-motion .points-enter {
+    animation: none;
+  }
+  .tooltip {
+    position: absolute;
+    z-index: 10;
+    visibility: hidden;
+    opacity: 0;
+    pointer-events: none;
+    background: var(--surface);
+    border: 1px solid #484854;
+    border-radius: 8px;
+    box-shadow: 0 14px 36px rgba(0, 0, 0, 0.85);
+    padding: 11px 13px;
+    min-width: 236px;
+    max-width: min(296px, calc(100vw - 24px));
+    font-size: 12px;
+    line-height: 1.45;
+    transition: opacity 0.1s ease;
+  }
+  .tooltip.visible {
+    visibility: visible;
+    opacity: 1;
+  }
+  .tip-head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 2px;
+  }
+  .tip-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .tip-name {
+    font-weight: 600;
+    font-size: 13px;
+    color: #ffffff;
+  }
+  .tip-creator {
+    color: var(--muted);
+    font-size: 11.5px;
+    margin-bottom: 9px;
+  }
+  .tip-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 18px;
+    padding: 2px 0;
+  }
+  .tip-row span {
+    color: #bdbdc6;
+  }
+  .tip-row strong {
+    color: #ffffff;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+  }
+  .tip-quad {
+    margin-top: 7px;
+    padding-top: 7px;
+    border-top: 1px solid #26262e;
+    font-size: 11.5px;
+    color: var(--muted);
+  }
+  .tip-quad.good {
+    color: #7ee7a4;
+  }
+  .meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 10px 24px;
+    margin-top: 10px;
+    color: var(--muted);
+    font-size: 12px;
+  }
+  .status-line {
+    margin: 0;
+  }
+  .data-section {
+    margin-top: 34px;
+    border-top: 1px solid #1d1d22;
+    padding-top: 20px;
+  }
+  details summary {
+    cursor: pointer;
+    width: max-content;
+    color: var(--sub);
+    font-size: 13px;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    padding: 4px 0;
+  }
+  details summary:hover {
+    color: #ffffff;
+  }
+  .table-wrap {
+    width: 100%;
+    overflow-x: auto;
+    margin-top: 14px;
+  }
+  table {
+    width: 100%;
+    min-width: 680px;
+    border-collapse: collapse;
+    font-size: 13px;
+    font-variant-numeric: tabular-nums;
+  }
+  th, td {
+    padding: 9px 14px 9px 0;
+    border-bottom: 1px solid #1e1e24;
+    text-align: left;
+    white-space: nowrap;
+  }
+  th {
+    color: var(--muted);
+    font-size: 12px;
+    font-weight: 500;
+  }
+  th.num, td.num {
+    text-align: right;
+  }
+  th button.sort-btn {
+    appearance: none;
+    background: none;
+    border: 0;
+    padding: 0;
+    color: inherit;
+    font: inherit;
+    cursor: pointer;
+    text-decoration: underline;
+    text-decoration-color: rgba(255, 255, 255, 0.25);
+    text-underline-offset: 4px;
+  }
+  th button.sort-btn:hover {
+    color: #ffffff;
+  }
+  td.quad-good {
+    color: #7ee7a4;
+  }
+  footer {
+    margin-top: 36px;
+    padding-top: 18px;
+    border-top: 1px solid #18181d;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px 24px;
+    color: var(--muted);
+    font-size: 12px;
+  }
+  footer a {
+    color: var(--sub);
+    text-underline-offset: 3px;
+  }
+  footer a:hover {
+    color: #ffffff;
+  }
+  .motion-btn {
+    appearance: none;
+    background: transparent;
+    border: 1px solid #2b2b33;
+    border-radius: 5px;
+    color: var(--muted);
+    padding: 5px 9px;
+    font: inherit;
+    font-size: 11.5px;
+    cursor: pointer;
+  }
+  .motion-btn:hover {
+    color: #ffffff;
+    border-color: #555562;
+  }
+  @media (max-width: 720px) {
+    .controls-bar {
+      align-items: flex-start;
+    }
+    .toolbar {
+      justify-content: flex-start;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .attractive-quadrant,
+    .points-enter {
+      animation: none !important;
+    }
+    * {
+      transition: none !important;
+    }
+  }
+</style>
+</head>
+<body>
+<main>
+  <header class="chart-header">
+    <div class="title-block">
+      <h1 id="page-title">AA-Omniscience Accuracy vs. AA-Omniscience Hallucination Rate</h1>
+      <p class="subtitle" id="page-subtitle">
+        AA-Omniscience v1.1 Accuracy (higher is better) measures the proportion of correctly answered questions out of all 3,000 questions. Hallucination Rate (lower is better) measures incorrect answers out of all non-correct responses.
+      </p>
+    </div>
+    <div class="controls-bar">
+      <div class="axis-controls" role="group" aria-label="Axis selection">
+        <label class="axis-field">
+          <span>Y axis</span>
+          <select class="axis-select" id="y-axis-select" aria-label="Y axis metric">
+            <option value="accuracy" selected>AA-Omniscience Accuracy</option>
+            <option value="hallucinationRate">AA-Omniscience Hallucination Rate</option>
+            <option value="totalCost">Total Cost to run (USD)</option>
+          </select>
+        </label>
+        <label class="axis-field">
+          <span>X axis</span>
+          <select class="axis-select" id="x-axis-select" aria-label="X axis metric">
+            <option value="accuracy">AA-Omniscience Accuracy</option>
+            <option value="hallucinationRate" selected>AA-Omniscience Hallucination Rate</option>
+            <option value="totalCost">Total Cost to run (USD)</option>
+          </select>
+        </label>
+        <button type="button" class="ctrl-btn" id="swap-axes">Swap axes</button>
+        <button type="button" class="ctrl-btn" id="toggle-cost-scale" aria-pressed="true" hidden>Cost scale: Log</button>
+      </div>
+      <div class="toolbar" role="group" aria-label="Chart display options">
+        <div class="model-picker" id="model-picker">
+          <button type="button" class="ctrl-btn model-trigger" id="model-trigger" aria-haspopup="dialog" aria-expanded="false">
+            <span id="model-trigger-label">Models (39/39)</span>
+            <svg class="chev" width="10" height="6" viewBox="0 0 10 6" aria-hidden="true"><path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="model-popover" id="model-popover" role="dialog" aria-label="Select models to show" hidden>
+            <div class="mp-search-wrap">
+              <svg class="mp-search-icon" width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><circle cx="7" cy="7" r="4.8" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M10.7 10.7L14 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+              <input type="search" class="mp-search" id="model-search" placeholder="Search..." aria-label="Search models">
+            </div>
+            <div class="mp-list" id="model-list"></div>
+            <div class="mp-actions">
+              <div class="mp-row-2">
+                <button type="button" class="mp-btn" id="mp-clear">
+                  <span>Clear</span>
+                  <svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 4h7M2.5 8h5M2.5 12h4M10.5 9.5l3 3M13.5 9.5l-3 3" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+                </button>
+                <button type="button" class="mp-btn" id="mp-select-all">
+                  <span>Select all</span>
+                  <svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 4h5M2.5 8h5M2.5 12h5M9.8 6l1.5 1.5L14 4.5M9.8 11.5l1.5 1.5L14 10" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </button>
+              </div>
+              <button type="button" class="mp-btn" id="mp-reset">
+                <span>Reset (to default)</span>
+                <svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 7.5a5 5 0 1 1 1.4 3.5M3 4.5v3h3" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </button>
+              <div class="mp-row-2">
+                <button type="button" class="mp-btn" id="mp-save">
+                  <span>Save</span>
+                  <svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5h8a.5.5 0 0 1 .5.5v10.5L8 10.5l-4.5 3V3a.5.5 0 0 1 .5-.5Z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
+                </button>
+                <button type="button" class="mp-btn" id="mp-load">
+                  <span>Load</span>
+                  <svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 4.5a1 1 0 0 1 1-1h3l1.3 1.5h4.7a1 1 0 0 1 1 1v6a1 1 0 0 1-1 1h-9a1 1 0 0 1-1-1v-7.5Z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
+                </button>
+              </div>
+              <div class="mp-note" id="mp-note" aria-live="polite"></div>
+            </div>
+          </div>
+        </div>
+        <button type="button" class="ctrl-btn" id="toggle-labels" aria-pressed="false">Hide model names</button>
+        <button type="button" class="ctrl-btn" id="toggle-zoom" aria-pressed="false">Full scale (0% to 100%)</button>
+        <button type="button" class="ctrl-btn" id="toggle-lines" aria-pressed="false">Connect model families</button>
+      </div>
+    </div>
+  </header>
+
+  <section class="legend-bar" aria-label="Chart legend and creator filters">
+    <div class="quadrant-key">
+      <span class="quadrant-item">
+        <span class="swatch-good" aria-hidden="true"></span>
+        <span>Most attractive quadrant</span>
+      </span>
+      <span class="quadrant-note" id="quadrant-note">Higher accuracy (at least 50%) and lower hallucination rate (at most 50%)</span>
+    </div>
+    <div class="creator-row">
+      <button type="button" class="legend-btn" data-creator="openai" aria-pressed="true">
+        <span class="legend-dot" style="background: var(--openai);" aria-hidden="true"></span>
+        <span>OpenAI</span>
+        <span class="legend-count" id="count-openai">(33)</span>
+      </button>
+      <button type="button" class="legend-btn" data-creator="google" aria-pressed="true">
+        <span class="legend-dot" style="background: var(--google);" aria-hidden="true"></span>
+        <span>Google</span>
+        <span class="legend-count" id="count-google">(6)</span>
+      </button>
+      <span class="quadrant-note" id="filter-hint">Hover a point to inspect metrics, or click to lock its model family.</span>
+    </div>
+  </section>
+
+  <section aria-label="Interactive scatter plot">
+    <div class="chart-shell" id="chart-shell">
+      <svg class="plot" id="plot" role="img" aria-label="Scatter plot comparing AA-Omniscience metrics across 39 OpenAI and Google models."></svg>
+      <div class="aa-zoom-bar aa-zoom-bar--vertical" id="y-zoom-bar" title="Drag grabbers to zoom Y axis scale (double-click track to reset)"></div>
+      <div class="aa-zoom-bar aa-zoom-bar--horizontal" id="x-zoom-bar" title="Drag grabbers to zoom X axis scale (double-click track to reset)"></div>
+      <div class="tooltip" id="tooltip" role="status" aria-hidden="true">
+        <div class="tip-head">
+          <span class="tip-dot" id="tip-dot"></span>
+          <span class="tip-name" id="tip-name"></span>
+        </div>
+        <div class="tip-creator" id="tip-creator"></div>
+        <div class="tip-row"><span>Accuracy</span><strong id="tip-acc"></strong></div>
+        <div class="tip-row"><span>Hallucination rate</span><strong id="tip-hal"></strong></div>
+        <div class="tip-row"><span>Total cost to run</span><strong id="tip-cost"></strong></div>
+        <div class="tip-row"><span>Omniscience net score</span><strong id="tip-net"></strong></div>
+        <div class="tip-quad" id="tip-quad"></div>
+      </div>
+    </div>
+    <div class="meta-row">
+      <p class="status-line" id="status-line">Showing 39 of 39 selected models (OpenAI and Google).</p>
+    </div>
+  </section>
+
+  <section class="data-section" aria-label="Underlying benchmark data">
+    <details id="data-details">
+      <summary>View all 39 model scores</summary>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th><button type="button" class="sort-btn" data-sort="shortName">Model</button></th>
+              <th><button type="button" class="sort-btn" data-sort="creatorName">Creator</button></th>
+              <th class="num"><button type="button" class="sort-btn" data-sort="accuracy">Accuracy</button></th>
+              <th class="num"><button type="button" class="sort-btn" data-sort="hallucinationRate">Hallucination rate</button></th>
+              <th class="num"><button type="button" class="sort-btn" data-sort="totalCost">Total cost</button></th>
+              <th class="num"><button type="button" class="sort-btn" data-sort="omniscienceNetScore">Net score</button></th>
+              <th>Quadrant</th>
+            </tr>
+          </thead>
+          <tbody id="table-body"></tbody>
+        </table>
+      </div>
+    </details>
+  </section>
+
+  <footer>
+    <span>
+      Data source: <a href="https://artificialanalysis.ai/evaluations/omniscience" target="_blank" rel="noopener noreferrer">Artificial Analysis AA-Omniscience v1.1</a>. OpenAI marker inverted to white for dark contrast.
+    </span>
+    <button type="button" class="motion-btn" id="motion-toggle" aria-pressed="false">Reduce motion</button>
+  </footer>
+</main>
+
+<script>
+(() => {
+  'use strict';
+
+  const MODELS = [
+    { slug: 'gpt-6-2-astra', family: 'GPT-6.2 Astra', shortName: 'GPT-6.2 Astra (max)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.6856666666666666, hallucinationRate: 0.5906680805938495, netScore: 50, totalCost: 766.9678 },
+    { slug: 'gpt-6-2-astra-xhigh', family: 'GPT-6.2 Astra', shortName: 'GPT-6.2 Astra (xhigh)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.672, hallucinationRate: 0.5772357723577236, netScore: 48.2666666666667, totalCost: 140.1531 },
+    { slug: 'gpt-6-2-astra-high', family: 'GPT-6.2 Astra', shortName: 'GPT-6.2 Astra (high)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.6633333333333333, hallucinationRate: 0.5811881188118811, netScore: 46.7666666666667, totalCost: 73.5467 },
+    { slug: 'gpt-6-2-astra-medium', family: 'GPT-6.2 Astra', shortName: 'GPT-6.2 Astra (medium)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.6416666666666667, hallucinationRate: 0.5413953488372093, netScore: 44.7666666666667, totalCost: 20.2045 },
+    { slug: 'gpt-6-2-astra-low', family: 'GPT-6.2 Astra', shortName: 'GPT-6.2 Astra (low)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.6063333333333333, hallucinationRate: 0.5580016934801016, netScore: 38.6666666666667, totalCost: 8.5378 },
+
+    { slug: 'gpt-6-astra', family: 'GPT-6 Astra', shortName: 'GPT-6 Astra (max)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.6156666666666667, hallucinationRate: 0.4978317432784042, netScore: 42.4333333333333, totalCost: 296.5485 },
+    { slug: 'gpt-6-astra-xhigh', family: 'GPT-6 Astra', shortName: 'GPT-6 Astra (xhigh)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.6103333333333333, hallucinationRate: 0.44568006843455943, netScore: 43.6666666666667, totalCost: 155.3311 },
+    { slug: 'gpt-6-astra-high', family: 'GPT-6 Astra', shortName: 'GPT-6 Astra (high)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.611, hallucinationRate: 0.4250214224507284, netScore: 44.5666666666667, totalCost: 83.8903 },
+    { slug: 'gpt-6-astra-medium', family: 'GPT-6 Astra', shortName: 'GPT-6 Astra (medium)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.5963333333333334, hallucinationRate: 0.4516928158546656, netScore: 41.4, totalCost: 32.8301 },
+    { slug: 'gpt-6-astra-low', family: 'GPT-6 Astra', shortName: 'GPT-6 Astra (low)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.586, hallucinationRate: 0.4420289855072464, netScore: 40.3, totalCost: 20.9225 },
+
+    { slug: 'gpt-6-2-sol', family: 'GPT-6.2 Sol', shortName: 'GPT-6.2 Sol (max)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.6163333333333333, hallucinationRate: 0.5543006081668115, netScore: 40.3666666666667, totalCost: 158.5068 },
+    { slug: 'gpt-6-2-sol-xhigh', family: 'GPT-6.2 Sol', shortName: 'GPT-6.2 Sol (xhigh)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.607, hallucinationRate: 0.5623409669211196, netScore: 38.6, totalCost: 59.1732 },
+    { slug: 'gpt-6-2-sol-high', family: 'GPT-6.2 Sol', shortName: 'GPT-6.2 Sol (high)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.6143333333333333, hallucinationRate: 0.5998271391529818, netScore: 38.3, totalCost: 19.8496 },
+    { slug: 'gpt-6-2-sol-medium', family: 'GPT-6.2 Sol', shortName: 'GPT-6.2 Sol (medium)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.5916666666666667, hallucinationRate: 0.6114285714285714, netScore: 34.2, totalCost: 6.3615 },
+    { slug: 'gpt-6-2-sol-low', family: 'GPT-6.2 Sol', shortName: 'GPT-6.2 Sol (low)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.5463333333333333, hallucinationRate: 0.6583394562821455, netScore: 24.7666666666667, totalCost: 1.6127 },
+
+    { slug: 'gpt-6-1-sol', family: 'GPT-6.1 Sol', shortName: 'GPT-6.1 Sol (max)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.6183333333333333, hallucinationRate: 0.5187772925764192, netScore: 42.0333333333333, totalCost: 54.9275 },
+    { slug: 'gpt-6-1-sol-xhigh', family: 'GPT-6.1 Sol', shortName: 'GPT-6.1 Sol (xhigh)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.6106666666666667, hallucinationRate: 0.4803082191780822, netScore: 42.3666666666667, totalCost: 27.5295 },
+    { slug: 'gpt-6-1-sol-high', family: 'GPT-6.1 Sol', shortName: 'GPT-6.1 Sol (high)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.604, hallucinationRate: 0.4898989898989899, netScore: 41, totalCost: 14.7999 },
+    { slug: 'gpt-6-1-sol-medium', family: 'GPT-6.1 Sol', shortName: 'GPT-6.1 Sol (medium)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.596, hallucinationRate: 0.48102310231023104, netScore: 40.1666666666667, totalCost: 6.4589 },
+    { slug: 'gpt-6-1-sol-low', family: 'GPT-6.1 Sol', shortName: 'GPT-6.1 Sol (low)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.5863333333333334, hallucinationRate: 0.49879129734085415, netScore: 38, totalCost: 4.481 },
+
+    { slug: 'gpt-6-sol', family: 'GPT-6 Sol', shortName: 'GPT-6 Sol (max)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.5113333333333333, hallucinationRate: 0.6084583901773534, netScore: 21.4, totalCost: 70.9166 },
+
+    { slug: 'gpt-6-1-terra', family: 'GPT-6.1 Terra', shortName: 'GPT-6.1 Terra (max)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.47633333333333333, hallucinationRate: 0.3450031826861871, netScore: 29.5666666666667, totalCost: 127.5439 },
+    { slug: 'gpt-6-1-terra-xhigh', family: 'GPT-6.1 Terra', shortName: 'GPT-6.1 Terra (xhigh)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.48033333333333333, hallucinationRate: 0.36754329698524696, netScore: 28.9333333333333, totalCost: 23.8064 },
+    { slug: 'gpt-6-1-terra-high', family: 'GPT-6.1 Terra', shortName: 'GPT-6.1 Terra (high)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.4726666666666667, hallucinationRate: 0.3697850821744627, netScore: 27.7666666666667, totalCost: 8.8566 },
+    { slug: 'gpt-6-1-terra-medium', family: 'GPT-6.1 Terra', shortName: 'GPT-6.1 Terra (medium)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.47433333333333333, hallucinationRate: 0.39632213062777427, netScore: 26.6, totalCost: 4.8677 },
+    { slug: 'gpt-6-1-terra-low', family: 'GPT-6.1 Terra', shortName: 'GPT-6.1 Terra (low)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.45566666666666666, hallucinationRate: 0.41579914268218005, netScore: 22.9333333333333, totalCost: 2.3587 },
+    { slug: 'gpt-6-1-terra-non-reasoning', family: 'GPT-6.1 Terra', shortName: 'GPT-6.1 Terra (non-reasoning)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.4073333333333333, hallucinationRate: 0.7710911136107986, netScore: -4.96666666666667, totalCost: 0.5782 },
+
+    { slug: 'gpt-6-luna', family: 'GPT-6 Luna', shortName: 'GPT-6 Luna (max)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.3963333333333333, hallucinationRate: 0.7934842628382109, netScore: -8.26666666666667, totalCost: 7.0313 },
+    { slug: 'gpt-6-luna-xhigh', family: 'GPT-6 Luna', shortName: 'GPT-6 Luna (xhigh)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.386, hallucinationRate: 0.8398479913137894, netScore: -12.9666666666667, totalCost: 2.6556 },
+    { slug: 'gpt-6-luna-high', family: 'GPT-6 Luna', shortName: 'GPT-6 Luna (high)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.39, hallucinationRate: 0.8491803278688524, netScore: -12.8, totalCost: 1.7202 },
+    { slug: 'gpt-6-luna-medium', family: 'GPT-6 Luna', shortName: 'GPT-6 Luna (medium)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.387, hallucinationRate: 0.8526373028820011, netScore: -13.5666666666667, totalCost: 1.0839 },
+    { slug: 'gpt-6-luna-low', family: 'GPT-6 Luna', shortName: 'GPT-6 Luna (low)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.361, hallucinationRate: 0.8482003129890454, netScore: -18.1, totalCost: 0.5354 },
+    { slug: 'gpt-6-luna-non-reasoning', family: 'GPT-6 Luna', shortName: 'GPT-6 Luna (non-reasoning)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.301, hallucinationRate: 0.7997138769670958, netScore: -25.8, totalCost: 0.063 },
+
+    { slug: 'gemini-4-hydrogen', family: 'Gemini 4 Hydrogen', shortName: 'Gemini 4 Hydrogen (xhigh)', creatorSlug: 'google', creatorName: 'Google', accuracy: 0.5046666666666667, hallucinationRate: 0.0847913862718708, netScore: 46.2666666666667, totalCost: 502.5118 },
+    { slug: 'gemini-4-hydrogen-high', family: 'Gemini 4 Hydrogen', shortName: 'Gemini 4 Hydrogen (high)', creatorSlug: 'google', creatorName: 'Google', accuracy: 0.4816666666666667, hallucinationRate: 0.08681672025723473, netScore: 43.6666666666667, totalCost: 42.1897 },
+    { slug: 'gemini-4-hydrogen-medium', family: 'Gemini 4 Hydrogen', shortName: 'Gemini 4 Hydrogen (medium)', creatorSlug: 'google', creatorName: 'Google', accuracy: 0.48333333333333334, hallucinationRate: 0.12451612903225806, netScore: 41.9, totalCost: 26.0944 },
+    { slug: 'gemini-4-hydrogen-low', family: 'Gemini 4 Hydrogen', shortName: 'Gemini 4 Hydrogen (low)', creatorSlug: 'google', creatorName: 'Google', accuracy: 0.4623333333333333, hallucinationRate: 0.1884686918784873, netScore: 36.1, totalCost: 9.9162 },
+
+    { slug: 'gemini-4-argon', family: 'Gemini 4 Argon', shortName: 'Gemini 4 Argon (high)', creatorSlug: 'google', creatorName: 'Google', accuracy: 0.483, hallucinationRate: 0.0425531914893617, netScore: 46.1, totalCost: 27.3283 },
+    { slug: 'gemini-4-argon-medium', family: 'Gemini 4 Argon', shortName: 'Gemini 4 Argon (medium)', creatorSlug: 'google', creatorName: 'Google', accuracy: 0.48966666666666664, hallucinationRate: 0.1541476159372959, netScore: 41.1, totalCost: 3.2475 }
+  ];
+
+  const NS = 'http://www.w3.org/2000/svg';
+  const plot = document.getElementById('plot');
+  const shell = document.getElementById('chart-shell');
+  const yZoomBar = document.getElementById('y-zoom-bar');
+  const xZoomBar = document.getElementById('x-zoom-bar');
+  const tooltip = document.getElementById('tooltip');
+  const pageTitle = document.getElementById('page-title');
+  const pageSubtitle = document.getElementById('page-subtitle');
+  const quadrantNote = document.getElementById('quadrant-note');
+  const ySelect = document.getElementById('y-axis-select');
+  const xSelect = document.getElementById('x-axis-select');
+  const swapAxesBtn = document.getElementById('swap-axes');
+  const costScaleBtn = document.getElementById('toggle-cost-scale');
+  const labelsBtn = document.getElementById('toggle-labels');
+  const zoomBtn = document.getElementById('toggle-zoom');
+  const linesBtn = document.getElementById('toggle-lines');
+  const motionBtn = document.getElementById('motion-toggle');
+  const filterHint = document.getElementById('filter-hint');
+  const creatorBtns = [...document.querySelectorAll('.legend-btn')];
+  const statusLine = document.getElementById('status-line');
+  const tableBody = document.getElementById('table-body');
+  const modelPicker = document.getElementById('model-picker');
+  const modelTrigger = document.getElementById('model-trigger');
+  const modelTriggerLabel = document.getElementById('model-trigger-label');
+  const modelPopover = document.getElementById('model-popover');
+  const modelSearchInput = document.getElementById('model-search');
+  const modelList = document.getElementById('model-list');
+  const mpClearBtn = document.getElementById('mp-clear');
+  const mpSelectAllBtn = document.getElementById('mp-select-all');
+  const mpResetBtn = document.getElementById('mp-reset');
+  const mpSaveBtn = document.getElementById('mp-save');
+  const mpLoadBtn = document.getElementById('mp-load');
+  const mpNote = document.getElementById('mp-note');
+  const countOpenai = document.getElementById('count-openai');
+  const countGoogle = document.getElementById('count-google');
+
+  const STORAGE_KEY = 'aa-omni-selected-models-v1';
+  const MIN_NORM_GAP = 0.025;
+
+  const state = {
+    creators: new Set(['openai', 'google']),
+    selectedSlugs: new Set(MODELS.map(m => m.slug)),
+    modelSearch: '',
+    xMetric: 'hallucinationRate',
+    yMetric: 'accuracy',
+    costScale: 'log',
+    showLabels: true,
+    zoomed: false,
+    xRange: [0, 1],
+    yRange: [0, 1],
+    showFamilyLines: false,
+    lockedFamily: null,
+    hoveredSlug: null,
+    sortKey: 'accuracy',
+    sortDir: -1
+  };
+
+  function svgEl(tag, attrs, parent, text) {
+    const node = document.createElementNS(NS, tag);
+    if (attrs) {
+      for (const [k, v] of Object.entries(attrs)) {
+        node.setAttribute(k, String(v));
+      }
+    }
+    if (text !== undefined) node.textContent = text;
+    if (parent) parent.appendChild(node);
+    return node;
+  }
+
+  function pct(val, digits = 1) {
+    return (val * 100).toFixed(digits) + '%';
+  }
+
+  function fmtCostExact(v) {
+    return '$' + v.toFixed(2);
+  }
+
+  const METRICS = {
+    accuracy: {
+      key: 'accuracy',
+      title: 'AA-Omniscience Accuracy',
+      shortTitle: 'Accuracy',
+      axisTitle: () => 'AA-Omniscience Accuracy',
+      better: 'high',
+      threshold: 0.5,
+      thresholdLabel: 'at least 50%',
+      shortThreshold: '>= 50%',
+      summary: 'Accuracy (higher is better) measures the proportion of correctly answered questions out of all 3,000 questions.',
+      baseBounds: () => [0, 1],
+      dataBounds: () => [0.24, 0.76],
+      isLog: () => false
+    },
+    hallucinationRate: {
+      key: 'hallucinationRate',
+      title: 'AA-Omniscience Hallucination Rate',
+      shortTitle: 'Hallucination rate',
+      axisTitle: () => 'AA-Omniscience Hallucination Rate',
+      better: 'low',
+      threshold: 0.5,
+      thresholdLabel: 'at most 50%',
+      shortThreshold: '<= 50%',
+      summary: 'Hallucination Rate (lower is better) measures incorrect answers out of all non-correct responses.',
+      baseBounds: () => [0, 1],
+      dataBounds: () => [0, 0.92],
+      isLog: () => false
+    },
+    totalCost: {
+      key: 'totalCost',
+      title: 'Total Cost to run',
+      shortTitle: 'Total cost',
+      axisTitle: () => (state.costScale === 'log' ? 'Total Cost to run (USD, log scale)' : 'Total Cost to run (USD)'),
+      better: 'low',
+      threshold: 25,
+      thresholdLabel: 'at most $25',
+      shortThreshold: '<= $25',
+      summary: 'Total Cost to run (lower is better) is the combined input, reasoning, and answer API cost in USD across the benchmark.',
+      baseBounds: () => (state.costScale === 'log' ? [0.04, 1200] : [0, 800]),
+      dataBounds: () => (state.costScale === 'log' ? [0.05, 950] : [0, 790]),
+      isLog: () => state.costScale === 'log'
+    }
+  };
+
+  function normToValue(t, min, max, isLog) {
+    const clamped = Math.max(0, Math.min(1, t));
+    if (isLog && min > 0 && max > min) {
+      return Math.exp(Math.log(min) + clamped * (Math.log(max) - Math.log(min)));
+    }
+    return min + clamped * (max - min);
+  }
+
+  function valueToNorm(val, min, max, isLog) {
+    if (max <= min) return 0;
+    if (isLog && min > 0 && val > 0) {
+      return Math.max(0, Math.min(1, (Math.log(val) - Math.log(min)) / (Math.log(max) - Math.log(min))));
+    }
+    return Math.max(0, Math.min(1, (val - min) / (max - min)));
+  }
+
+  function getPresetNormRange(metricKey) {
+    const spec = METRICS[metricKey];
+    const [bMin, bMax] = spec.baseBounds();
+    const [dMin, dMax] = spec.dataBounds();
+    const isLog = spec.isLog();
+    return [valueToNorm(dMin, bMin, bMax, isLog), valueToNorm(dMax, bMin, bMax, isLog)];
+  }
+
+  function isRangeZoomed(range) {
+    return range[0] > 0.002 || range[1] < 0.998;
+  }
+
+  function isAnyZoomed() {
+    return isRangeZoomed(state.xRange) || isRangeZoomed(state.yRange);
+  }
+
+  function matchesDataPreset() {
+    const px = getPresetNormRange(state.xMetric);
+    const py = getPresetNormRange(state.yMetric);
+    return (
+      Math.abs(state.xRange[0] - px[0]) < 0.005 &&
+      Math.abs(state.xRange[1] - px[1]) < 0.005 &&
+      Math.abs(state.yRange[0] - py[0]) < 0.005 &&
+      Math.abs(state.yRange[1] - py[1]) < 0.005
+    );
+  }
+
+  function getAxisDomain(axis) {
+    const metricKey = axis === 'x' ? state.xMetric : state.yMetric;
+    const range = axis === 'x' ? state.xRange : state.yRange;
+    const spec = METRICS[metricKey];
+    const [baseMin, baseMax] = spec.baseBounds();
+    const isLog = spec.isLog();
+    const zoomed = isRangeZoomed(range);
+    if (!zoomed) {
+      return {
+        key: metricKey,
+        min: baseMin,
+        max: baseMax,
+        baseMin,
+        baseMax,
+        normMin: 0,
+        normMax: 1,
+        isLog,
+        isZoomed: false
+      };
+    }
+    return {
+      key: metricKey,
+      min: normToValue(range[0], baseMin, baseMax, isLog),
+      max: normToValue(range[1], baseMin, baseMax, isLog),
+      baseMin,
+      baseMax,
+      normMin: range[0],
+      normMax: range[1],
+      isLog,
+      isZoomed: true
+    };
+  }
+
+  function mapAxisValue(v, dom) {
+    if (dom.isLog) {
+      const lo = Math.log10(dom.min);
+      const hi = Math.log10(dom.max);
+      if (hi <= lo) return 0;
+      return (Math.log10(Math.max(1e-9, v)) - lo) / (hi - lo);
+    }
+    if (dom.max <= dom.min) return 0;
+    return (v - dom.min) / (dom.max - dom.min);
+  }
+
+  function inDomain(v, dom) {
+    if (dom.isLog) {
+      return v >= dom.min * 0.999 && v <= dom.max * 1.001;
+    }
+    const eps = (dom.max - dom.min) * 1e-4;
+    return v >= dom.min - eps && v <= dom.max + eps;
+  }
+
+  function buildAxisTicks(dom) {
+    const lo = dom.min;
+    const hi = dom.max;
+    const span = Math.max(1e-9, hi - lo);
+
+    if (dom.key === 'totalCost' && dom.isLog) {
+      const minExp = Math.floor(Math.log10(Math.max(1e-6, lo)));
+      const maxExp = Math.ceil(Math.log10(Math.max(1e-6, hi)));
+      const candidateSets = [
+        [1, 10],
+        [1, 2, 5],
+        [1, 1.5, 2, 3, 5, 7],
+        [1, 1.2, 1.5, 2, 2.5, 3, 4, 5, 6, 8],
+        [1, 1.1, 1.2, 1.3, 1.5, 1.7, 2, 2.5, 3, 3.5, 4, 5, 6, 7, 8, 9]
+      ];
+      if (!dom.isZoomed) {
+        return { values: [0.1, 1, 10, 100, 1000], step: null };
+      }
+      for (const mults of candidateSets) {
+        const ticks = [];
+        for (let e = minExp; e <= maxExp; e++) {
+          const pow = Math.pow(10, e);
+          for (const m of mults) {
+            const v = Number((m * pow).toPrecision(6));
+            if (v >= lo * 0.9999 && v <= hi * 1.0001) {
+              if (!ticks.length || Math.abs(v - ticks[ticks.length - 1]) > v * 1e-4) {
+                ticks.push(v);
+              }
+            }
+          }
+        }
+        if (ticks.length >= 3 && ticks.length <= 7) {
+          return { values: ticks, step: null };
+        }
+        if (ticks.length > 7) {
+          const stride = Math.ceil(ticks.length / 6);
+          return { values: ticks.filter((_, idx) => idx % stride === 0), step: null };
+        }
+      }
+      const fallback = [];
+      for (let i = 1; i <= 4; i++) {
+        fallback.push(normToValue(i / 5, lo, hi, true));
+      }
+      return { values: fallback, step: span / 5 };
+    }
+
+    const steps = dom.key === 'totalCost'
+      ? [0.1, 0.2, 0.5, 1, 2, 5, 10, 20, 25, 50, 100, 200, 250, 500]
+      : [0.002, 0.005, 0.01, 0.02, 0.025, 0.05, 0.1, 0.2, 0.25];
+    let step = steps[steps.length - 1];
+    for (const s of steps) {
+      if (span / s <= 6.2) {
+        step = s;
+        break;
+      }
+    }
+    const values = [];
+    const start = Math.ceil(lo / step - 1e-9) * step;
+    for (let v = start; v <= hi + step * 1e-6; v += step) {
+      const clean = Number(v.toPrecision(6));
+      if (clean >= lo - span * 1e-4 && clean <= hi + span * 1e-4) {
+        values.push(clean);
+      }
+    }
+    if (values.length < 2) {
+      return { values: [lo, (lo + hi) / 2, hi], step: span / 2 };
+    }
+    return { values, step };
+  }
+
+  function formatTickValue(key, val, step) {
+    if (key === 'totalCost') {
+      if (val === 0) return '$0';
+      if (val < 0.1) return '$' + val.toFixed(2);
+      if (val < 1) {
+        const s = val.toFixed(2);
+        return s.endsWith('0') ? '$' + val.toFixed(2) : '$' + s;
+      }
+      if (val < 10) {
+        return Math.abs(val - Math.round(val)) < 0.005
+          ? '$' + Math.round(val)
+          : '$' + Number(val.toFixed(2));
+      }
+      if (Math.abs(val - Math.round(val)) < 0.05) {
+        return '$' + Math.round(val).toLocaleString('en-US');
+      }
+      return '$' + val.toFixed(1);
+    }
+    const pctVal = val * 100;
+    const needDecimal = (step != null && step < 0.01) || Math.abs(pctVal - Math.round(pctVal)) > 0.05;
+    return pctVal.toFixed(needDecimal ? 1 : 0) + '%';
+  }
+
+  function formatZoomReadout(key, val, span) {
+    if (key === 'totalCost') {
+      if (val < 1) return '$' + val.toFixed(2);
+      if (val < 10) return '$' + val.toFixed(2);
+      if (val < 100) return span < 30 ? '$' + val.toFixed(1) : '$' + Math.round(val);
+      return '$' + Math.round(val).toLocaleString('en-US');
+    }
+    const pctVal = val * 100;
+    const decimals = span < 0.12 ? 1 : 0;
+    return pctVal.toFixed(decimals) + '%';
+  }
+
+  function creatorColor(slug) {
+    return slug === 'google' ? '#38c15c' : '#f5f5f7';
+  }
+
+  function passesThreshold(m, key) {
+    const spec = METRICS[key];
+    return spec.better === 'high' ? m[key] >= spec.threshold : m[key] <= spec.threshold;
+  }
+
+  function isAttractive(m) {
+    return passesThreshold(m, state.yMetric) && passesThreshold(m, state.xMetric);
+  }
+
+  function hasCostAxis() {
+    return state.xMetric === 'totalCost' || state.yMetric === 'totalCost';
+  }
+
+  function visibleModels() {
+    return MODELS.filter(m => state.creators.has(m.creatorSlug) && state.selectedSlugs.has(m.slug));
+  }
+
+  function syncZoomButton() {
+    const zoomed = isAnyZoomed();
+    state.zoomed = zoomed;
+    zoomBtn.setAttribute('aria-pressed', String(zoomed));
+    if (!zoomed) {
+      zoomBtn.textContent = hasCostAxis() ? 'Full scale' : 'Full scale (0% to 100%)';
+    } else if (matchesDataPreset()) {
+      zoomBtn.textContent = 'Zoomed to data';
+    } else {
+      zoomBtn.textContent = 'Reset zoom';
+    }
+  }
+
+  function syncAxisCopy() {
+    const ySpec = METRICS[state.yMetric];
+    const xSpec = METRICS[state.xMetric];
+    const titleText = `${ySpec.title} vs. ${xSpec.title}`;
+    pageTitle.textContent = titleText;
+    document.title = titleText;
+    pageSubtitle.textContent = `AA-Omniscience v1.1 ${ySpec.summary} ${xSpec.summary}`;
+    quadrantNote.textContent =
+      `${ySpec.better === 'high' ? 'Higher' : 'Lower'} ${ySpec.shortTitle.toLowerCase()} (${ySpec.thresholdLabel}) and ` +
+      `${xSpec.better === 'high' ? 'higher' : 'lower'} ${xSpec.shortTitle.toLowerCase()} (${xSpec.thresholdLabel})`;
+    costScaleBtn.hidden = !hasCostAxis();
+    syncZoomButton();
+    plot.setAttribute('aria-label', `Scatter plot of ${ySpec.title} versus ${xSpec.title} across 39 OpenAI and Google models.`);
+  }
+
+  // Non-overlapping label placement with leader lines
+  function placeLabels(items, bounds, mobile) {
+    const labelH = mobile ? 11 : 13;
+    const padX = mobile ? 4 : 5;
+    const padY = mobile ? 2 : 3;
+    const estWidth = str => Math.max(40, str.length * (mobile ? 5.0 : 5.75) + 6);
+
+    const cxAll = items.length ? items.reduce((s, it) => s + it.px, 0) / items.length : bounds.midX;
+    const cyAll = items.length ? items.reduce((s, it) => s + it.py, 0) / items.length : bounds.midY;
+
+    const ordered = [...items].sort((a, b) => {
+      const da = Math.hypot(a.px - cxAll, a.py - cyAll);
+      const db = Math.hypot(b.px - cxAll, b.py - cyAll);
+      return db - da;
+    });
+
+    const angles = [];
+    for (let i = 0; i < 24; i++) angles.push((i * Math.PI * 2) / 24);
+    const radii = [12, 20, 30, 42, 56, 72, 90, 110, 132, 156, 182, 210, 240];
+
+    const boxes = [];
+    const placed = [];
+
+    function overlap(a, b) {
+      const ox = Math.max(0, Math.min(a.rx + a.rw + padX, b.rx + b.rw + padX) - Math.max(a.rx - padX, b.rx - padX));
+      const oy = Math.max(0, Math.min(a.ry + a.rh + padY, b.ry + b.rh + padY) - Math.max(a.ry - padY, b.ry - padY));
+      return ox * oy;
+    }
+
+    for (const item of ordered) {
+      const w = estWidth(item.m.shortName);
+      let best = null;
+      let bestScore = Infinity;
+
+      for (const r of radii) {
+        for (const ang of angles) {
+          const dx = Math.cos(ang) * r;
+          const dy = Math.sin(ang) * r;
+          let anchor = 'middle';
+          if (Math.cos(ang) > 0.25) anchor = 'start';
+          else if (Math.cos(ang) < -0.25) anchor = 'end';
+
+          const tx = item.px + dx;
+          const ty = item.py + dy + 4;
+          let rx = tx;
+          if (anchor === 'end') rx = tx - w;
+          else if (anchor === 'middle') rx = tx - w / 2;
+          const ry = ty - (mobile ? 8.5 : 10);
+
+          if (rx < bounds.left + 4 || rx + w > bounds.right - 4) continue;
+          if (ry < bounds.top + 3 || ry + labelH > bounds.bottom - 3) continue;
+
+          const cand = { rx, ry, rw: w, rh: labelH, tx, ty, anchor };
+          let penalty = r * 0.55;
+
+          const outDot = dx * (item.px - cxAll) + dy * (item.py - cyAll);
+          if (outDot < 0) penalty += 14;
+
+          let hitsDot = false;
+          for (const other of items) {
+            const nx = Math.max(cand.rx - 5, Math.min(other.px, cand.rx + cand.rw + 5));
+            const ny = Math.max(cand.ry - 4, Math.min(other.py, cand.ry + cand.rh + 4));
+            const d = Math.hypot(other.px - nx, other.py - ny);
+            if (d < 7) {
+              penalty += 5000 + (7 - d) * 400;
+              hitsDot = true;
+            }
+          }
+
+          let hitsLabel = false;
+          for (const b of boxes) {
+            const area = overlap(cand, b);
+            if (area > 0) {
+              penalty += 10000 + area * 100;
+              hitsLabel = true;
+            }
+          }
+
+          if (penalty < bestScore) {
+            bestScore = penalty;
+            best = { cand, clean: !hitsDot && !hitsLabel };
+          }
+        }
+        if (best && best.clean && r >= 20) break;
+      }
+
+      if (!best) continue;
+      if (mobile && !best.clean) continue;
+      boxes.push(best.cand);
+      placed.push({ item, box: best.cand });
+    }
+
+    return placed;
+  }
+
+  function showTooltip(m, px, py) {
+    const dot = document.getElementById('tip-dot');
+    dot.style.background = creatorColor(m.creatorSlug);
+    document.getElementById('tip-name').textContent = m.shortName;
+    document.getElementById('tip-creator').textContent = m.creatorName;
+    document.getElementById('tip-acc').textContent = pct(m.accuracy, 1);
+    document.getElementById('tip-hal').textContent = pct(m.hallucinationRate, 1);
+    document.getElementById('tip-cost').textContent = fmtCostExact(m.totalCost);
+    document.getElementById('tip-net').textContent = m.netScore.toFixed(1);
+    const quadEl = document.getElementById('tip-quad');
+    const ySpec = METRICS[state.yMetric];
+    const xSpec = METRICS[state.xMetric];
+    if (isAttractive(m)) {
+      quadEl.textContent = `Inside most attractive quadrant (${ySpec.shortTitle} ${ySpec.shortThreshold}, ${xSpec.shortTitle} ${xSpec.shortThreshold})`;
+      quadEl.className = 'tip-quad good';
+    } else {
+      quadEl.textContent = 'Outside most attractive quadrant';
+      quadEl.className = 'tip-quad';
+    }
+
+    tooltip.classList.add('visible');
+    tooltip.setAttribute('aria-hidden', 'false');
+
+    const w = shell.clientWidth;
+    const tw = tooltip.offsetWidth;
+    const th = tooltip.offsetHeight;
+    const left = px + 14 + tw <= w - 4 ? px + 14 : Math.max(4, px - tw - 14);
+    const top = py - th - 12 >= 4 ? py - th - 12 : Math.min(shell.clientHeight - th - 4, py + 14);
+    tooltip.style.left = left + 'px';
+    tooltip.style.top = Math.max(4, top) + 'px';
+  }
+
+  function hideTooltip() {
+    tooltip.classList.remove('visible');
+    tooltip.setAttribute('aria-hidden', 'true');
+  }
+
+  let hasAnimatedEntrance = false;
+
+  function attachPointEvents(hit, m, px, py, pointLayer) {
+    const enter = () => {
+      state.hoveredSlug = m.slug;
+      showTooltip(m, px, py);
+      updateHighlightStyles(pointLayer);
+    };
+    const leave = () => {
+      if (state.hoveredSlug === m.slug) {
+        state.hoveredSlug = null;
+        hideTooltip();
+        updateHighlightStyles(pointLayer);
+      }
+    };
+    const toggleLock = e => {
+      e.stopPropagation();
+      state.lockedFamily = state.lockedFamily === m.family ? null : m.family;
+      updateStatus();
+      renderChart();
+      if (state.lockedFamily) showTooltip(m, px, py);
+    };
+
+    hit.addEventListener('pointerenter', enter);
+    hit.addEventListener('pointerleave', leave);
+    hit.addEventListener('focus', enter);
+    hit.addEventListener('blur', leave);
+    hit.addEventListener('click', toggleLock);
+    hit.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        toggleLock(e);
+      } else if (e.key === 'Escape') {
+        state.lockedFamily = null;
+        state.hoveredSlug = null;
+        hideTooltip();
+        updateStatus();
+        renderChart();
+      }
+    });
+  }
+
+  function updateHighlightStyles(pointLayer) {
+    const fam = state.lockedFamily || (state.hoveredSlug ? MODELS.find(x => x.slug === state.hoveredSlug)?.family : null);
+    for (const node of pointLayer.querySelectorAll('.plot-point')) {
+      const m = node._model;
+      const dot = node._dot;
+      const baseR = node._baseR || 5.5;
+      const inFam = !fam || m.family === fam;
+      const hov = state.hoveredSlug === m.slug;
+      dot.setAttribute('r', String(hov ? baseR + 1.8 : baseR));
+      dot.setAttribute('stroke', hov ? '#ffffff' : '#000000');
+      dot.setAttribute('stroke-width', hov ? '2' : '1.4');
+      dot.setAttribute('opacity', inFam ? '1' : '0.2');
+    }
+  }
+
+  function renderChart() {
+    const xSpec = METRICS[state.xMetric];
+    const ySpec = METRICS[state.yMetric];
+    const xDom = getAxisDomain('x');
+    const yDom = getAxisDomain('y');
+
+    const width = Math.max(300, Math.round(shell.getBoundingClientRect().width));
+    const mobile = width < 640;
+    const height = mobile ? Math.round(Math.max(400, Math.min(500, width * 1.05))) : Math.round(Math.max(480, Math.min(560, width * 0.54)));
+    const margin = {
+      left: mobile ? 82 : 94,
+      right: 24,
+      top: 24,
+      bottom: mobile ? 52 : 58
+    };
+    const left = margin.left;
+    const right = width - margin.right;
+    const top = margin.top;
+    const bottom = height - margin.bottom;
+    const plotW = right - left;
+    const plotH = bottom - top;
+
+    const X = v => left + mapAxisValue(v, xDom) * plotW;
+    const Y = v => bottom - mapAxisValue(v, yDom) * plotH;
+
+    plot.replaceChildren();
+    plot.setAttribute('viewBox', `0 0 ${width} ${height}`);
+    plot.setAttribute('width', String(width));
+    plot.setAttribute('height', String(height));
+    plot.style.height = height + 'px';
+
+    const clipId = 'plot-clip-area';
+    const defs = svgEl('defs', {}, plot);
+    const clip = svgEl('clipPath', { id: clipId }, defs);
+    svgEl('rect', { x: left, y: top, width: plotW, height: plotH }, clip);
+
+    const midX = X(xSpec.threshold);
+    const midY = Y(ySpec.threshold);
+    const quadGroup = svgEl('g', { 'clip-path': `url(#${clipId})` }, plot);
+
+    const clampX = x => Math.max(left, Math.min(right, x));
+    const clampY = y => Math.max(top, Math.min(bottom, y));
+
+    // Dynamic "most attractive quadrant" aligned to the better X and better Y corner
+    const gx1 = clampX(xSpec.better === 'low' ? left : midX);
+    const gx2 = clampX(xSpec.better === 'low' ? midX : right);
+    const gy1 = clampY(ySpec.better === 'high' ? top : midY);
+    const gy2 = clampY(ySpec.better === 'high' ? midY : bottom);
+    const goodW = Math.max(0, gx2 - gx1);
+    const goodH = Math.max(0, gy2 - gy1);
+
+    if (goodW > 0 && goodH > 0) {
+      svgEl('rect', {
+        x: gx1,
+        y: gy1,
+        width: goodW,
+        height: goodH,
+        fill: '#4ade80',
+        'fill-opacity': '0.13',
+        stroke: '#4ade80',
+        'stroke-opacity': '0.36',
+        'stroke-width': '1',
+        class: 'attractive-quadrant'
+      }, quadGroup);
+    }
+
+    // Opposite (worst) quadrant
+    const bx1 = clampX(xSpec.better === 'low' ? midX : left);
+    const bx2 = clampX(xSpec.better === 'low' ? right : midX);
+    const by1 = clampY(ySpec.better === 'high' ? midY : top);
+    const by2 = clampY(ySpec.better === 'high' ? bottom : midY);
+    const badW = Math.max(0, bx2 - bx1);
+    const badH = Math.max(0, by2 - by1);
+
+    if (badW > 0 && badH > 0) {
+      svgEl('rect', {
+        x: bx1,
+        y: by1,
+        width: badW,
+        height: badH,
+        fill: '#ffffff',
+        'fill-opacity': '0.045'
+      }, quadGroup);
+    }
+
+    if (midX >= left && midX <= right) {
+      svgEl('line', {
+        x1: midX, y1: top, x2: midX, y2: bottom,
+        stroke: 'rgba(255,255,255,0.16)', 'stroke-width': '1', 'stroke-dasharray': '3 4'
+      }, quadGroup);
+    }
+    if (midY >= top && midY <= bottom) {
+      svgEl('line', {
+        x1: left, y1: midY, x2: right, y2: midY,
+        stroke: 'rgba(255,255,255,0.16)', 'stroke-width': '1', 'stroke-dasharray': '3 4'
+      }, quadGroup);
+    }
+
+    svgEl('line', { x1: left, y1: bottom, x2: right, y2: bottom, stroke: 'rgba(255,255,255,0.22)', 'stroke-width': '1' }, plot);
+    svgEl('line', { x1: left, y1: top, x2: left, y2: bottom, stroke: 'rgba(255,255,255,0.22)', 'stroke-width': '1' }, plot);
+
+    const xTickSet = buildAxisTicks(xDom);
+    const yTickSet = buildAxisTicks(yDom);
+
+    for (const t of xTickSet.values) {
+      const tx = X(t);
+      if (tx < left - 1 || tx > right + 1) continue;
+      svgEl('line', { x1: tx, y1: bottom, x2: tx, y2: bottom + 5, stroke: 'rgba(255,255,255,0.35)', 'stroke-width': '1' }, plot);
+      svgEl('text', {
+        x: tx, y: bottom + 18,
+        fill: '#9b9ba4', 'font-size': '11', 'text-anchor': 'middle',
+        style: 'font-variant-numeric: tabular-nums;'
+      }, plot, formatTickValue(xDom.key, t, xTickSet.step));
+    }
+
+    for (const t of yTickSet.values) {
+      const ty = Y(t);
+      if (ty < top - 1 || ty > bottom + 1) continue;
+      svgEl('line', { x1: left - 5, y1: ty, x2: left, y2: ty, stroke: 'rgba(255,255,255,0.35)', 'stroke-width': '1' }, plot);
+      svgEl('text', {
+        x: left - 9, y: ty + 4,
+        fill: '#9b9ba4', 'font-size': '11', 'text-anchor': 'end',
+        style: 'font-variant-numeric: tabular-nums;'
+      }, plot, formatTickValue(yDom.key, t, yTickSet.step));
+    }
+
+    svgEl('text', {
+      x: left + plotW / 2,
+      y: height - 10,
+      fill: '#d0d0d7',
+      'font-size': '12',
+      'font-weight': '500',
+      'text-anchor': 'middle'
+    }, plot, xSpec.axisTitle());
+
+    const yTitleX = mobile ? 32 : 36;
+    const yTitleY = top + plotH / 2;
+    svgEl('text', {
+      x: yTitleX,
+      y: yTitleY,
+      fill: '#d0d0d7',
+      'font-size': '12',
+      'font-weight': '500',
+      'text-anchor': 'middle',
+      transform: `rotate(-90 ${yTitleX} ${yTitleY})`
+    }, plot, ySpec.axisTitle());
+
+    const activeList = visibleModels();
+    const allItems = activeList.map(m => ({
+      m,
+      px: X(m[state.xMetric]),
+      py: Y(m[state.yMetric])
+    }));
+    const items = allItems.filter(it =>
+      inDomain(it.m[state.xMetric], xDom) && inDomain(it.m[state.yMetric], yDom)
+    );
+
+    const focusFamily = state.lockedFamily || (state.hoveredSlug ? MODELS.find(x => x.slug === state.hoveredSlug)?.family : null);
+
+    if (state.showFamilyLines || focusFamily) {
+      const byFamily = new Map();
+      for (const it of allItems) {
+        if (!byFamily.has(it.m.family)) byFamily.set(it.m.family, []);
+        byFamily.get(it.m.family).push(it);
+      }
+      const lineLayer = svgEl('g', { 'clip-path': `url(#${clipId})` }, plot);
+      for (const [fam, pts] of byFamily.entries()) {
+        if (pts.length < 2) continue;
+        if (!state.showFamilyLines && fam !== focusFamily) continue;
+        const sorted = [...pts].sort((a, b) => a.m.totalCost - b.m.totalCost);
+        const d = sorted.map((p, idx) => `${idx === 0 ? 'M' : 'L'}${p.px.toFixed(1)},${p.py.toFixed(1)}`).join(' ');
+        const col = creatorColor(sorted[0].m.creatorSlug);
+        svgEl('path', {
+          d,
+          fill: 'none',
+          stroke: col,
+          'stroke-width': fam === focusFamily ? '1.8' : '1.1',
+          'stroke-opacity': fam === focusFamily ? '0.7' : '0.28',
+          'stroke-dasharray': fam === focusFamily ? 'none' : '3 3'
+        }, lineLayer);
+      }
+    }
+
+    const labelLayer = svgEl('g', { class: hasAnimatedEntrance ? '' : 'points-enter' }, plot);
+    const pointLayer = svgEl('g', {
+      'clip-path': `url(#${clipId})`,
+      class: hasAnimatedEntrance ? '' : 'points-enter'
+    }, plot);
+    hasAnimatedEntrance = true;
+
+    if (state.showLabels) {
+      const placedLabels = placeLabels(items, { left, right, top, bottom, midX, midY }, mobile);
+      for (const { item, box } of placedLabels) {
+        const m = item.m;
+        const inFocus = !focusFamily || m.family === focusFamily;
+        const isHovered = state.hoveredSlug === m.slug;
+
+        const lx = Math.max(box.rx - 2, Math.min(item.px, box.rx + box.rw + 2));
+        const ly = Math.max(box.ry, Math.min(item.py, box.ry + box.rh));
+        const dist = Math.hypot(lx - item.px, ly - item.py);
+        if (dist > 9) {
+          svgEl('line', {
+            x1: item.px,
+            y1: item.py,
+            x2: lx,
+            y2: ly,
+            stroke: isHovered ? 'rgba(255,255,255,0.65)' : 'rgba(255,255,255,0.26)',
+            'stroke-width': '1',
+            opacity: inFocus ? '1' : '0.16',
+            'pointer-events': 'none'
+          }, labelLayer);
+        }
+
+        svgEl('text', {
+          x: box.tx,
+          y: box.ty,
+          fill: isHovered ? '#ffffff' : 'rgba(255,255,255,0.84)',
+          'font-size': mobile ? '9.5' : '10.8',
+          'font-weight': isHovered || (focusFamily && m.family === focusFamily) ? '600' : '400',
+          'text-anchor': box.anchor,
+          opacity: inFocus ? '1' : '0.16',
+          'pointer-events': 'none'
+        }, labelLayer, m.shortName);
+      }
+    }
+
+    for (const item of items) {
+      const m = item.m;
+      const inFocus = !focusFamily || m.family === focusFamily;
+      const isHovered = state.hoveredSlug === m.slug;
+      const col = creatorColor(m.creatorSlug);
+
+      const hit = svgEl('circle', {
+        cx: item.px,
+        cy: item.py,
+        r: mobile ? '12' : '10',
+        fill: 'transparent',
+        tabindex: '0',
+        role: 'button',
+        'aria-label': `${m.shortName}, ${m.creatorName}, Accuracy ${pct(m.accuracy)}, Hallucination rate ${pct(m.hallucinationRate)}, Total cost ${fmtCostExact(m.totalCost)}, Net score ${m.netScore.toFixed(1)}`,
+        class: 'plot-point'
+      }, pointLayer);
+
+      const dot = svgEl('circle', {
+        cx: item.px,
+        cy: item.py,
+        r: isHovered ? '7' : '5.5',
+        fill: col,
+        stroke: isHovered ? '#ffffff' : '#000000',
+        'stroke-width': isHovered ? '2' : '1.5',
+        opacity: inFocus ? '1' : '0.2',
+        'pointer-events': 'none'
+      }, pointLayer);
+
+      hit._dot = dot;
+      hit._model = m;
+      hit._baseR = 5.5;
+      attachPointEvents(hit, m, item.px, item.py, pointLayer);
+    }
+
+    yZoomBar.style.top = top + 'px';
+    yZoomBar.style.height = plotH + 'px';
+    xZoomBar.style.marginLeft = left + 'px';
+    xZoomBar.style.width = plotW + 'px';
+    syncZoomSliders();
+  }
+
+  function variantLabel(m) {
+    const match = m.shortName.match(/\(([^)]+)\)$/);
+    if (!match) return m.shortName;
+    const raw = match[1];
+    return raw.charAt(0).toUpperCase() + raw.slice(1);
+  }
+
+  function creatorIconSvg(creatorSlug) {
+    if (creatorSlug === 'google') {
+      return '<svg width="13" height="13" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="5" fill="#38c15c"/></svg>';
+    }
+    return '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2.5a4.8 4.8 0 0 1 4.2 2.4 4.8 4.8 0 0 1 4 4.7 4.8 4.8 0 0 1-1.9 3.8 4.8 4.8 0 0 1-2.2 5.4 4.8 4.8 0 0 1-4.1.8 4.8 4.8 0 0 1-4.2-2.4 4.8 4.8 0 0 1-4-4.7 4.8 4.8 0 0 1 1.9-3.8A4.8 4.8 0 0 1 7.9 3.3 4.8 4.8 0 0 1 12 2.5Z"/></svg>';
+  }
+
+  function syncCreatorCounts() {
+    const oaiTotal = MODELS.filter(m => m.creatorSlug === 'openai').length;
+    const oaiSel = MODELS.filter(m => m.creatorSlug === 'openai' && state.selectedSlugs.has(m.slug)).length;
+    const gogTotal = MODELS.filter(m => m.creatorSlug === 'google').length;
+    const gogSel = MODELS.filter(m => m.creatorSlug === 'google' && state.selectedSlugs.has(m.slug)).length;
+    countOpenai.textContent = oaiSel === oaiTotal ? `(${oaiTotal})` : `(${oaiSel}/${oaiTotal})`;
+    countGoogle.textContent = gogSel === gogTotal ? `(${gogTotal})` : `(${gogSel}/${gogTotal})`;
+    modelTriggerLabel.textContent = `Models (${state.selectedSlugs.size}/${MODELS.length})`;
+  }
+
+  function renderModelPicker() {
+    const q = state.modelSearch.trim().toLowerCase();
+    const groups = [];
+    const byFamily = new Map();
+
+    for (const m of MODELS) {
+      if (!byFamily.has(m.family)) {
+        const g = { family: m.family, creatorSlug: m.creatorSlug, creatorName: m.creatorName, models: [] };
+        byFamily.set(m.family, g);
+        groups.push(g);
+      }
+      byFamily.get(m.family).models.push(m);
+    }
+
+    modelList.replaceChildren();
+    let shownGroups = 0;
+
+    for (const g of groups) {
+      const famMatches = !q || g.family.toLowerCase().includes(q) || g.creatorName.toLowerCase().includes(q);
+      const matchingModels = famMatches
+        ? g.models
+        : g.models.filter(m => m.shortName.toLowerCase().includes(q) || variantLabel(m).toLowerCase().includes(q));
+
+      if (!matchingModels.length) continue;
+      shownGroups++;
+
+      const famSelectedCount = g.models.filter(m => state.selectedSlugs.has(m.slug)).length;
+      const allFamSelected = famSelectedCount === g.models.length;
+
+      const famWrap = document.createElement('div');
+      famWrap.className = 'mp-family';
+
+      const famBtn = document.createElement('button');
+      famBtn.type = 'button';
+      famBtn.className = 'mp-family-btn' + (famSelectedCount === 0 ? ' is-empty' : '');
+      famBtn.setAttribute('aria-pressed', String(allFamSelected));
+      famBtn.innerHTML = `
+        <span class="mp-fam-left">
+          <span class="mp-creator-icon">${creatorIconSvg(g.creatorSlug)}</span>
+          <span>${g.family}</span>
+        </span>
+        <span class="mp-fam-count">${famSelectedCount}/${g.models.length}</span>
+      `;
+      famBtn.addEventListener('click', () => {
+        if (allFamSelected) {
+          for (const m of g.models) state.selectedSlugs.delete(m.slug);
+        } else {
+          for (const m of g.models) state.selectedSlugs.add(m.slug);
+        }
+        onModelSelectionChange();
+      });
+      famWrap.appendChild(famBtn);
+
+      const varWrap = document.createElement('div');
+      varWrap.className = 'mp-variants';
+
+      for (const m of matchingModels) {
+        const active = state.selectedSlugs.has(m.slug);
+        const vBtn = document.createElement('button');
+        vBtn.type = 'button';
+        vBtn.className = 'mp-variant-btn';
+        vBtn.setAttribute('aria-pressed', String(active));
+
+        const lbl = document.createElement('span');
+        lbl.textContent = variantLabel(m);
+
+        const dot = document.createElement('span');
+        dot.className = 'mp-dot';
+        dot.style.background = creatorColor(m.creatorSlug);
+
+        vBtn.appendChild(lbl);
+        vBtn.appendChild(dot);
+        vBtn.addEventListener('click', () => {
+          if (state.selectedSlugs.has(m.slug)) {
+            state.selectedSlugs.delete(m.slug);
+          } else {
+            state.selectedSlugs.add(m.slug);
+          }
+          onModelSelectionChange();
+        });
+        varWrap.appendChild(vBtn);
+      }
+
+      famWrap.appendChild(varWrap);
+      modelList.appendChild(famWrap);
+    }
+
+    if (!shownGroups) {
+      const empty = document.createElement('div');
+      empty.className = 'mp-empty';
+      empty.textContent = 'No models match that search.';
+      modelList.appendChild(empty);
+    }
+
+    syncCreatorCounts();
+  }
+
+  function setMpNote(msg) {
+    mpNote.textContent = msg || '';
+  }
+
+  function onModelSelectionChange() {
+    if (state.lockedFamily && !visibleModels().some(m => m.family === state.lockedFamily)) {
+      state.lockedFamily = null;
+    }
+    setMpNote('');
+    hideTooltip();
+    renderModelPicker();
+    updateStatus();
+    renderChart();
+    renderTable();
+  }
+
+  function setPopoverOpen(open) {
+    modelPopover.hidden = !open;
+    modelTrigger.setAttribute('aria-expanded', String(open));
+    modelTrigger.setAttribute('aria-pressed', String(open));
+    if (open) {
+      modelPopover.style.left = '0';
+      modelPopover.style.right = 'auto';
+      const rect = modelPopover.getBoundingClientRect();
+      if (rect.right > window.innerWidth - 16) {
+        modelPopover.style.left = 'auto';
+        modelPopover.style.right = '0';
+        const rect2 = modelPopover.getBoundingClientRect();
+        if (rect2.left < 16) {
+          modelPopover.style.right = (rect2.left - 16) + 'px';
+        }
+      }
+      renderModelPicker();
+      setMpNote('');
+      modelSearchInput.focus();
+    }
+  }
+
+  function updateStatus() {
+    const visible = visibleModels();
+    const xDom = getAxisDomain('x');
+    const yDom = getAxisDomain('y');
+    const inZoom = visible.filter(m => inDomain(m[state.xMetric], xDom) && inDomain(m[state.yMetric], yDom));
+    const goodCount = inZoom.filter(isAttractive).length;
+    if (state.lockedFamily) {
+      statusLine.textContent = `Highlighted family: ${state.lockedFamily}. Click a point again or anywhere on the background to clear.`;
+    } else if (visible.length === 0) {
+      statusLine.textContent = 'No models selected. Use Models or creator filters to show points.';
+    } else if (isAnyZoomed() && inZoom.length < visible.length) {
+      statusLine.textContent = `Showing ${inZoom.length} of ${visible.length} selected models in current zoom (${goodCount} in the most attractive quadrant).`;
+    } else {
+      statusLine.textContent = `Showing ${visible.length} of ${MODELS.length} models (${goodCount} in the most attractive quadrant).`;
+    }
+    filterHint.textContent = 'Hover a point to inspect metrics, or click to lock its model family.';
+  }
+
+  function renderTable() {
+    const list = [...visibleModels()].sort((a, b) => {
+      const k = state.sortKey === 'omniscienceNetScore' ? 'netScore' : state.sortKey;
+      const av = a[k];
+      const bv = b[k];
+      if (typeof av === 'string') return av.localeCompare(bv) * state.sortDir;
+      return (av - bv) * state.sortDir;
+    });
+
+    tableBody.replaceChildren();
+    for (const m of list) {
+      const tr = document.createElement('tr');
+      const good = isAttractive(m);
+      tr.innerHTML = `
+        <td>${m.shortName}</td>
+        <td>${m.creatorName}</td>
+        <td class="num">${pct(m.accuracy, 1)}</td>
+        <td class="num">${pct(m.hallucinationRate, 1)}</td>
+        <td class="num">${fmtCostExact(m.totalCost)}</td>
+        <td class="num">${m.netScore.toFixed(1)}</td>
+        <td class="${good ? 'quad-good' : ''}">${good ? 'Most attractive' : 'Outside'}</td>
+      `;
+      tableBody.appendChild(tr);
+    }
+  }
+
+  function setAxisNormRange(axis, nMin, nMax) {
+    const clampedMin = Math.max(0, Math.min(1 - MIN_NORM_GAP, nMin));
+    const clampedMax = Math.min(1, Math.max(clampedMin + MIN_NORM_GAP, nMax));
+    const zoomed = clampedMin > 0.002 || clampedMax < 0.998;
+    const next = zoomed ? [clampedMin, clampedMax] : [0, 1];
+    if (axis === 'x') state.xRange = next;
+    else state.yRange = next;
+    syncZoomButton();
+    hideTooltip();
+    updateStatus();
+    renderChart();
+  }
+
+  function buildZoomSlider(bar, axis) {
+    const isVert = axis === 'y';
+
+    const track = document.createElement('div');
+    track.className = 'aa-zoom-track';
+
+    const range = document.createElement('div');
+    range.className = 'aa-zoom-range';
+
+    const thumbMin = document.createElement('div');
+    thumbMin.className = 'aa-zoom-thumb aa-zoom-thumb--min';
+    thumbMin.tabIndex = 0;
+    thumbMin.setAttribute('role', 'slider');
+    thumbMin.setAttribute('aria-orientation', isVert ? 'vertical' : 'horizontal');
+    thumbMin.setAttribute('aria-label', `${isVert ? 'Y' : 'X'} axis minimum zoom`);
+    thumbMin.setAttribute('aria-valuemin', '0');
+    thumbMin.setAttribute('aria-valuemax', '100');
+    const tipMin = document.createElement('div');
+    tipMin.className = 'aa-zoom-tip';
+    thumbMin.appendChild(tipMin);
+
+    const thumbMax = document.createElement('div');
+    thumbMax.className = 'aa-zoom-thumb aa-zoom-thumb--max';
+    thumbMax.tabIndex = 0;
+    thumbMax.setAttribute('role', 'slider');
+    thumbMax.setAttribute('aria-orientation', isVert ? 'vertical' : 'horizontal');
+    thumbMax.setAttribute('aria-label', `${isVert ? 'Y' : 'X'} axis maximum zoom`);
+    thumbMax.setAttribute('aria-valuemin', '0');
+    thumbMax.setAttribute('aria-valuemax', '100');
+    const tipMax = document.createElement('div');
+    tipMax.className = 'aa-zoom-tip';
+    thumbMax.appendChild(tipMax);
+
+    const edgeMin = document.createElement('div');
+    edgeMin.className = 'aa-zoom-edge-label aa-zoom-edge-label--min';
+    const edgeMax = document.createElement('div');
+    edgeMax.className = 'aa-zoom-edge-label aa-zoom-edge-label--max';
+
+    const resetBtn = document.createElement('button');
+    resetBtn.type = 'button';
+    resetBtn.className = 'aa-zoom-reset';
+    resetBtn.textContent = '\u21BA';
+    resetBtn.title = `Reset ${isVert ? 'Y' : 'X'} axis scale`;
+    resetBtn.setAttribute('aria-label', `Reset ${isVert ? 'Y' : 'X'} axis scale`);
+    resetBtn.addEventListener('click', e => {
+      e.stopPropagation();
+      setAxisNormRange(axis, 0, 1);
+    });
+
+    track.appendChild(range);
+    track.appendChild(thumbMin);
+    track.appendChild(thumbMax);
+    bar.replaceChildren(track, edgeMin, edgeMax, resetBtn);
+
+    function currentRange() {
+      return axis === 'x' ? state.xRange : state.yRange;
+    }
+
+    function positionFromEvent(e) {
+      const rect = track.getBoundingClientRect();
+      if (isVert) {
+        return Math.max(0, Math.min(1, (rect.bottom - e.clientY) / Math.max(1, rect.height)));
+      }
+      return Math.max(0, Math.min(1, (e.clientX - rect.left) / Math.max(1, rect.width)));
+    }
+
+    function startDrag(mode, e) {
+      e.preventDefault();
+      e.stopPropagation();
+      bar.classList.add('is-dragging');
+      if (mode === 'min') thumbMin.classList.add('is-active');
+      if (mode === 'max') thumbMax.classList.add('is-active');
+
+      const startT = positionFromEvent(e);
+      const [startMinN, startMaxN] = currentRange();
+      const targetEl = e.currentTarget;
+      try {
+        targetEl.setPointerCapture(e.pointerId);
+      } catch (_) {}
+
+      const onMove = ev => {
+        const t = positionFromEvent(ev);
+        const [curMinN, curMaxN] = currentRange();
+        if (mode === 'min') {
+          const nextMin = Math.max(0, Math.min(curMaxN - MIN_NORM_GAP, t));
+          setAxisNormRange(axis, nextMin, curMaxN);
+        } else if (mode === 'max') {
+          const nextMax = Math.min(1, Math.max(curMinN + MIN_NORM_GAP, t));
+          setAxisNormRange(axis, curMinN, nextMax);
+        } else if (mode === 'range') {
+          const span = startMaxN - startMinN;
+          let delta = t - startT;
+          if (startMinN + delta < 0) delta = -startMinN;
+          if (startMaxN + delta > 1) delta = 1 - startMaxN;
+          setAxisNormRange(axis, startMinN + delta, startMinN + delta + span);
+        }
+      };
+
+      const onUp = ev => {
+        bar.classList.remove('is-dragging');
+        thumbMin.classList.remove('is-active');
+        thumbMax.classList.remove('is-active');
+        try {
+          targetEl.releasePointerCapture(ev.pointerId);
+        } catch (_) {}
+        window.removeEventListener('pointermove', onMove);
+        window.removeEventListener('pointerup', onUp);
+        window.removeEventListener('pointercancel', onUp);
+      };
+
+      window.addEventListener('pointermove', onMove);
+      window.addEventListener('pointerup', onUp);
+      window.addEventListener('pointercancel', onUp);
+    }
+
+    function onThumbKey(mode, e) {
+      const step = e.shiftKey ? 0.1 : 0.025;
+      const [curMinN, curMaxN] = currentRange();
+      let delta = 0;
+      if (e.key === 'ArrowRight' || e.key === 'ArrowUp') delta = step;
+      else if (e.key === 'ArrowLeft' || e.key === 'ArrowDown') delta = -step;
+      else if (e.key === 'Home') {
+        e.preventDefault();
+        if (mode === 'min') setAxisNormRange(axis, 0, curMaxN);
+        else setAxisNormRange(axis, curMinN, curMinN + MIN_NORM_GAP);
+        return;
+      } else if (e.key === 'End') {
+        e.preventDefault();
+        if (mode === 'min') setAxisNormRange(axis, curMaxN - MIN_NORM_GAP, curMaxN);
+        else setAxisNormRange(axis, curMinN, 1);
+        return;
+      } else {
+        return;
+      }
+      e.preventDefault();
+      if (mode === 'min') {
+        setAxisNormRange(axis, Math.max(0, Math.min(curMaxN - MIN_NORM_GAP, curMinN + delta)), curMaxN);
+      } else {
+        setAxisNormRange(axis, curMinN, Math.min(1, Math.max(curMinN + MIN_NORM_GAP, curMaxN + delta)));
+      }
+    }
+
+    thumbMin.addEventListener('pointerdown', e => startDrag('min', e));
+    thumbMax.addEventListener('pointerdown', e => startDrag('max', e));
+    range.addEventListener('pointerdown', e => startDrag('range', e));
+    thumbMin.addEventListener('keydown', e => onThumbKey('min', e));
+    thumbMax.addEventListener('keydown', e => onThumbKey('max', e));
+
+    track.addEventListener('pointerdown', e => {
+      if (e.target !== track) return;
+      const t = positionFromEvent(e);
+      const [curMinN, curMaxN] = currentRange();
+      const dMin = Math.abs(t - curMinN);
+      const dMax = Math.abs(t - curMaxN);
+      if (dMin <= dMax) {
+        setAxisNormRange(axis, Math.min(t, curMaxN - MIN_NORM_GAP), curMaxN);
+        startDrag('min', e);
+      } else {
+        setAxisNormRange(axis, curMinN, Math.max(t, curMinN + MIN_NORM_GAP));
+        startDrag('max', e);
+      }
+    });
+
+    track.addEventListener('dblclick', e => {
+      e.stopPropagation();
+      setAxisNormRange(axis, 0, 1);
+    });
+
+    return {
+      update() {
+        const dom = getAxisDomain(axis);
+        const span = Math.abs(dom.max - dom.min);
+        const minLabel = formatZoomReadout(dom.key, dom.min, span);
+        const maxLabel = formatZoomReadout(dom.key, dom.max, span);
+
+        bar.classList.toggle('is-zoomed', dom.isZoomed);
+        if (isVert) {
+          const minTopPct = (1 - dom.normMin) * 100;
+          const maxTopPct = (1 - dom.normMax) * 100;
+          thumbMin.style.top = minTopPct + '%';
+          thumbMax.style.top = maxTopPct + '%';
+          range.style.top = maxTopPct + '%';
+          range.style.height = Math.max(0, minTopPct - maxTopPct) + '%';
+        } else {
+          const minLeftPct = dom.normMin * 100;
+          const maxLeftPct = dom.normMax * 100;
+          thumbMin.style.left = minLeftPct + '%';
+          thumbMax.style.left = maxLeftPct + '%';
+          range.style.left = minLeftPct + '%';
+          range.style.width = Math.max(0, maxLeftPct - minLeftPct) + '%';
+        }
+
+        tipMin.textContent = minLabel;
+        tipMax.textContent = maxLabel;
+        edgeMin.textContent = minLabel;
+        edgeMax.textContent = maxLabel;
+        thumbMin.setAttribute('aria-valuenow', String(Math.round(dom.normMin * 100)));
+        thumbMin.setAttribute('aria-valuetext', minLabel);
+        thumbMax.setAttribute('aria-valuenow', String(Math.round(dom.normMax * 100)));
+        thumbMax.setAttribute('aria-valuetext', maxLabel);
+      }
+    };
+  }
+
+  const ySlider = buildZoomSlider(yZoomBar, 'y');
+  const xSlider = buildZoomSlider(xZoomBar, 'x');
+
+  function syncZoomSliders() {
+    ySlider.update();
+    xSlider.update();
+  }
+
+  function applyAxisChange() {
+    ySelect.value = state.yMetric;
+    xSelect.value = state.xMetric;
+    hideTooltip();
+    syncAxisCopy();
+    updateStatus();
+    renderChart();
+    renderTable();
+  }
+
+  ySelect.addEventListener('change', () => {
+    const nextY = ySelect.value;
+    if (nextY === state.xMetric) {
+      state.xMetric = state.yMetric;
+      const tmp = state.xRange;
+      state.xRange = state.yRange;
+      state.yRange = tmp;
+    } else {
+      state.yRange = [0, 1];
+    }
+    state.yMetric = nextY;
+    applyAxisChange();
+  });
+
+  xSelect.addEventListener('change', () => {
+    const nextX = xSelect.value;
+    if (nextX === state.yMetric) {
+      state.yMetric = state.xMetric;
+      const tmp = state.xRange;
+      state.xRange = state.yRange;
+      state.yRange = tmp;
+    } else {
+      state.xRange = [0, 1];
+    }
+    state.xMetric = nextX;
+    applyAxisChange();
+  });
+
+  swapAxesBtn.addEventListener('click', () => {
+    const prevY = state.yMetric;
+    state.yMetric = state.xMetric;
+    state.xMetric = prevY;
+    const prevRange = state.yRange;
+    state.yRange = state.xRange;
+    state.xRange = prevRange;
+    applyAxisChange();
+  });
+
+  costScaleBtn.addEventListener('click', () => {
+    state.costScale = state.costScale === 'log' ? 'linear' : 'log';
+    costScaleBtn.setAttribute('aria-pressed', String(state.costScale === 'log'));
+    costScaleBtn.textContent = state.costScale === 'log' ? 'Cost scale: Log' : 'Cost scale: Linear';
+    if (state.xMetric === 'totalCost') state.xRange = [0, 1];
+    if (state.yMetric === 'totalCost') state.yRange = [0, 1];
+    syncZoomButton();
+    hideTooltip();
+    updateStatus();
+    renderChart();
+  });
+
+  modelTrigger.addEventListener('click', e => {
+    e.stopPropagation();
+    setPopoverOpen(modelPopover.hidden);
+  });
+
+  modelSearchInput.addEventListener('input', () => {
+    state.modelSearch = modelSearchInput.value;
+    renderModelPicker();
+  });
+
+  mpClearBtn.addEventListener('click', () => {
+    state.selectedSlugs.clear();
+    onModelSelectionChange();
+  });
+
+  mpSelectAllBtn.addEventListener('click', () => {
+    state.selectedSlugs = new Set(MODELS.map(m => m.slug));
+    state.creators = new Set(['openai', 'google']);
+    creatorBtns.forEach(b => b.setAttribute('aria-pressed', 'true'));
+    onModelSelectionChange();
+  });
+
+  mpResetBtn.addEventListener('click', () => {
+    state.selectedSlugs = new Set(MODELS.map(m => m.slug));
+    state.creators = new Set(['openai', 'google']);
+    state.modelSearch = '';
+    modelSearchInput.value = '';
+    creatorBtns.forEach(b => b.setAttribute('aria-pressed', 'true'));
+    onModelSelectionChange();
+    setMpNote('Reset to all 39 default models.');
+  });
+
+  mpSaveBtn.addEventListener('click', () => {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify([...state.selectedSlugs]));
+      setMpNote(`Saved ${state.selectedSlugs.size} models.`);
+    } catch {
+      setMpNote('Browser storage is unavailable here.');
+    }
+  });
+
+  mpLoadBtn.addEventListener('click', () => {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) {
+        setMpNote('No saved selection found.');
+        return;
+      }
+      const parsed = JSON.parse(raw);
+      const valid = new Set(MODELS.map(m => m.slug));
+      state.selectedSlugs = new Set(Array.isArray(parsed) ? parsed.filter(s => valid.has(s)) : []);
+      onModelSelectionChange();
+      setMpNote(`Loaded ${state.selectedSlugs.size} saved models.`);
+    } catch {
+      setMpNote('Could not read saved selection.');
+    }
+  });
+
+  document.addEventListener('click', e => {
+    if (!modelPopover.hidden && !modelPicker.contains(e.target)) {
+      setPopoverOpen(false);
+    }
+  });
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && !modelPopover.hidden) {
+      setPopoverOpen(false);
+      modelTrigger.focus();
+    }
+  });
+
+  labelsBtn.addEventListener('click', () => {
+    state.showLabels = !state.showLabels;
+    labelsBtn.setAttribute('aria-pressed', String(!state.showLabels));
+    labelsBtn.textContent = state.showLabels ? 'Hide model names' : 'Model names hidden';
+    renderChart();
+  });
+
+  zoomBtn.addEventListener('click', () => {
+    if (isAnyZoomed()) {
+      state.xRange = [0, 1];
+      state.yRange = [0, 1];
+    } else {
+      state.xRange = getPresetNormRange(state.xMetric);
+      state.yRange = getPresetNormRange(state.yMetric);
+    }
+    syncAxisCopy();
+    hideTooltip();
+    updateStatus();
+    renderChart();
+  });
+
+  linesBtn.addEventListener('click', () => {
+    state.showFamilyLines = !state.showFamilyLines;
+    linesBtn.setAttribute('aria-pressed', String(state.showFamilyLines));
+    renderChart();
+  });
+
+  creatorBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const c = btn.dataset.creator;
+      if (state.creators.has(c) && state.creators.size > 1) {
+        state.creators.delete(c);
+      } else if (state.creators.has(c)) {
+        state.creators.add('openai');
+        state.creators.add('google');
+      } else {
+        state.creators.add(c);
+      }
+      creatorBtns.forEach(b => b.setAttribute('aria-pressed', String(state.creators.has(b.dataset.creator))));
+      state.lockedFamily = null;
+      hideTooltip();
+      updateStatus();
+      renderChart();
+      renderTable();
+    });
+  });
+
+  motionBtn.addEventListener('click', () => {
+    const next = !document.body.classList.contains('reduced-motion');
+    document.body.classList.toggle('reduced-motion', next);
+    motionBtn.setAttribute('aria-pressed', String(next));
+    motionBtn.textContent = next ? 'Motion reduced' : 'Reduce motion';
+  });
+
+  document.querySelectorAll('.sort-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const k = btn.dataset.sort;
+      if (state.sortKey === k) state.sortDir *= -1;
+      else {
+        state.sortKey = k;
+        state.sortDir = k === 'shortName' || k === 'creatorName' ? 1 : -1;
+      }
+      renderTable();
+    });
+  });
+
+  plot.addEventListener('click', e => {
+    if (e.target === plot && state.lockedFamily) {
+      state.lockedFamily = null;
+      hideTooltip();
+      updateStatus();
+      renderChart();
+    }
+  });
+
+  let resizeTimer = null;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => {
+      hideTooltip();
+      renderChart();
+    }, 90);
+  });
+
+  syncAxisCopy();
+  syncCreatorCounts();
+  updateStatus();
+  renderChart();
+  renderTable();
+})();
+</script>
+</body>
+</html>
