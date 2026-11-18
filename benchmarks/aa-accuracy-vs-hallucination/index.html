@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#000000">
-<meta name="description" content="AA-Omniscience v1.1 Accuracy, Hallucination Rate, and Total Cost to run across 39 OpenAI and Google model variants on a high-contrast dark scatter plot.">
+<meta name="description" content="AA-Omniscience and AA-Briefcase benchmarks across 54 OpenAI, Google, and Anthropic model variants on a high-contrast dark scatter plot.">
 <title>AA-Omniscience Accuracy vs. AA-Omniscience Hallucination Rate</title>
 <style>
   :root {
@@ -20,6 +20,7 @@
     --axis: rgba(255, 255, 255, 0.22);
     --openai: #f5f5f7;
     --google: #38c15c;
+    --anthropic: #ea7b4f;
     --quadrant: #4ade80;
     --quadrant-fill: rgba(74, 222, 128, 0.13);
     --quadrant-border: rgba(74, 222, 128, 0.36);
@@ -919,7 +920,7 @@
       <div class="toolbar" id="toolbar" role="group" aria-label="Chart display options">
         <div class="model-picker" id="model-picker">
           <button type="button" class="ctrl-btn model-trigger" id="model-trigger" aria-haspopup="dialog" aria-expanded="false" title="Select models">
-            <span id="model-trigger-label">Models (39/39)</span>
+            <span id="model-trigger-label">Models (54/54)</span>
             <svg class="chev" width="10" height="6" viewBox="0 0 10 6" aria-hidden="true"><path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </button>
           <div class="model-popover" id="model-popover" role="dialog" aria-label="Select models to show" hidden>
@@ -977,6 +978,11 @@
         <span>Google</span>
         <span class="legend-count" id="count-google">(6)</span>
       </button>
+      <button type="button" class="legend-btn" data-creator="anthropic" aria-pressed="true">
+        <span class="legend-dot" style="background: var(--anthropic);" aria-hidden="true"></span>
+        <span>Anthropic</span>
+        <span class="legend-count" id="count-anthropic">(15)</span>
+      </button>
       <span class="quadrant-item" id="pareto-legend">
         <span class="swatch-pareto" aria-hidden="true"></span>
         <span>Pareto frontier</span>
@@ -991,7 +997,7 @@
 
   <section class="chart-stage" aria-label="Interactive scatter plot">
     <div class="chart-shell" id="chart-shell">
-      <svg class="plot" id="plot" role="img" aria-label="Scatter plot comparing AA-Omniscience and AA-Briefcase metrics across 39 OpenAI and Google models."></svg>
+      <svg class="plot" id="plot" role="img" aria-label="Scatter plot comparing AA-Omniscience and AA-Briefcase metrics across 54 OpenAI, Google, and Anthropic models."></svg>
       <div class="aa-zoom-bar aa-zoom-bar--vertical" id="y-zoom-bar" title="Drag grabbers to zoom Y axis scale (double-click track to reset)"></div>
       <div class="x-zoom-row">
         <button type="button" class="swap-square-btn" id="swap-axes" title="Swap X and Y axes" aria-label="Swap X and Y axes">
@@ -1070,7 +1076,25 @@
     { slug: 'gemini-4-hydrogen-low', family: 'Gemini 4 Hydrogen', shortName: 'Gemini 4 Hydrogen (low)', creatorSlug: 'google', creatorName: 'Google', accuracy: 0.4623333333333333, hallucinationRate: 0.1884686918784873, netScore: 36.1, totalCost: 9.9162, briefcaseElo: 946.87, briefcaseTotalCost: 19.0846 },
 
     { slug: 'gemini-4-argon', family: 'Gemini 4 Argon', shortName: 'Gemini 4 Argon (high)', creatorSlug: 'google', creatorName: 'Google', accuracy: 0.483, hallucinationRate: 0.0425531914893617, netScore: 46.1, totalCost: 27.3283, briefcaseElo: 1485.08, briefcaseTotalCost: 530.3252 },
-    { slug: 'gemini-4-argon-medium', family: 'Gemini 4 Argon', shortName: 'Gemini 4 Argon (medium)', creatorSlug: 'google', creatorName: 'Google', accuracy: 0.48966666666666664, hallucinationRate: 0.1541476159372959, netScore: 41.1, totalCost: 3.2475, briefcaseElo: 1466.63, briefcaseTotalCost: 431.9964 }
+    { slug: 'gemini-4-argon-medium', family: 'Gemini 4 Argon', shortName: 'Gemini 4 Argon (medium)', creatorSlug: 'google', creatorName: 'Google', accuracy: 0.48966666666666664, hallucinationRate: 0.1541476159372959, netScore: 41.1, totalCost: 3.2475, briefcaseElo: 1466.63, briefcaseTotalCost: 431.9964 },
+
+    { slug: 'claude-opus-5-5', family: 'Claude Opus 5.5', shortName: 'Claude Opus 5.5 (max)', creatorSlug: 'anthropic', creatorName: 'Anthropic', accuracy: 0.655, hallucinationRate: 0.5033816425120773, netScore: 48.1333333333333, totalCost: 562.1545, briefcaseElo: 1799.88, briefcaseTotalCost: 1915.1835 },
+    { slug: 'claude-opus-5-5-xhigh', family: 'Claude Opus 5.5', shortName: 'Claude Opus 5.5 (xhigh)', creatorSlug: 'anthropic', creatorName: 'Anthropic', accuracy: 0.6553333333333333, hallucinationRate: 0.6499032882011605, netScore: 43.1333333333333, totalCost: 44.3289, briefcaseElo: 1760.31, briefcaseTotalCost: 1116.2229 },
+    { slug: 'claude-opus-5-5-high', family: 'Claude Opus 5.5', shortName: 'Claude Opus 5.5 (high)', creatorSlug: 'anthropic', creatorName: 'Anthropic', accuracy: 0.6483333333333333, hallucinationRate: 0.6388625592417062, netScore: 42.3666666666667, totalCost: 27.942, briefcaseElo: 1682.17, briefcaseTotalCost: 570.6448 },
+    { slug: 'claude-opus-5-5-medium', family: 'Claude Opus 5.5', shortName: 'Claude Opus 5.5 (medium)', creatorSlug: 'anthropic', creatorName: 'Anthropic', accuracy: 0.639, hallucinationRate: 0.6685133887349953, netScore: 39.7666666666667, totalCost: 24.7262, briefcaseElo: 1616.65, briefcaseTotalCost: 400.2371 },
+    { slug: 'claude-opus-5-5-low', family: 'Claude Opus 5.5', shortName: 'Claude Opus 5.5 (low)', creatorSlug: 'anthropic', creatorName: 'Anthropic', accuracy: 0.6333333333333333, hallucinationRate: 0.6627272727272727, netScore: 39.0333333333333, totalCost: 18.8073, briefcaseElo: 1277.75, briefcaseTotalCost: 104.9068 },
+
+    { slug: 'claude-sonnet-5-5', family: 'Claude Sonnet 5.5', shortName: 'Claude Sonnet 5.5 (max)', creatorSlug: 'anthropic', creatorName: 'Anthropic', accuracy: 0.5146666666666667, hallucinationRate: 0.4326923076923077, netScore: 30.4666666666667, totalCost: 455.464, briefcaseElo: 1815.14, briefcaseTotalCost: 1863.1257 },
+    { slug: 'claude-sonnet-5-5-xhigh', family: 'Claude Sonnet 5.5', shortName: 'Claude Sonnet 5.5 (xhigh)', creatorSlug: 'anthropic', creatorName: 'Anthropic', accuracy: 0.509, hallucinationRate: 0.6171079429735234, netScore: 20.6, totalCost: 26.4798, briefcaseElo: 1739.19, briefcaseTotalCost: 634.7973 },
+    { slug: 'claude-sonnet-5-5-high', family: 'Claude Sonnet 5.5', shortName: 'Claude Sonnet 5.5 (high)', creatorSlug: 'anthropic', creatorName: 'Anthropic', accuracy: 0.5033333333333333, hallucinationRate: 0.636241610738255, netScore: 18.7333333333333, totalCost: 17.0099, briefcaseElo: 1633.7, briefcaseTotalCost: 297.6371 },
+    { slug: 'claude-sonnet-5-5-medium', family: 'Claude Sonnet 5.5', shortName: 'Claude Sonnet 5.5 (medium)', creatorSlug: 'anthropic', creatorName: 'Anthropic', accuracy: 0.45766666666666667, hallucinationRate: 0.5003073140749846, netScore: 18.6333333333333, totalCost: 9.3539, briefcaseElo: 1437.63, briefcaseTotalCost: 126.6787 },
+    { slug: 'claude-sonnet-5-5-low', family: 'Claude Sonnet 5.5', shortName: 'Claude Sonnet 5.5 (low)', creatorSlug: 'anthropic', creatorName: 'Anthropic', accuracy: 0.46, hallucinationRate: 0.4765432098765432, netScore: 20.2666666666667, totalCost: 8.7175, briefcaseElo: 1267.83, briefcaseTotalCost: 73.0258 },
+
+    { slug: 'claude-haiku-5-5', family: 'Claude Haiku 5.5', shortName: 'Claude Haiku 5.5 (max)', creatorSlug: 'anthropic', creatorName: 'Anthropic', accuracy: 0.3466666666666667, hallucinationRate: 0.3423469387755102, netScore: 12.3, totalCost: 18.0394, briefcaseElo: 1572.19, briefcaseTotalCost: 61.4126 },
+    { slug: 'claude-haiku-5-5-xhigh', family: 'Claude Haiku 5.5', shortName: 'Claude Haiku 5.5 (xhigh)', creatorSlug: 'anthropic', creatorName: 'Anthropic', accuracy: 0.33766666666666667, hallucinationRate: 0.39154504277805735, netScore: 7.83333333333333, totalCost: 2.0776, briefcaseElo: 1523.34, briefcaseTotalCost: 33.2883 },
+    { slug: 'claude-haiku-5-5-high', family: 'Claude Haiku 5.5', shortName: 'Claude Haiku 5.5 (high)', creatorSlug: 'anthropic', creatorName: 'Anthropic', accuracy: 0.31833333333333336, hallucinationRate: 0.38924205378973104, netScore: 5.3, totalCost: 1.2047, briefcaseElo: 1440.65, briefcaseTotalCost: 20.2879 },
+    { slug: 'claude-haiku-5-5-medium', family: 'Claude Haiku 5.5', shortName: 'Claude Haiku 5.5 (medium)', creatorSlug: 'anthropic', creatorName: 'Anthropic', accuracy: 0.31733333333333336, hallucinationRate: 0.40380859375, netScore: 4.16666666666667, totalCost: 0.9413, briefcaseElo: 1366.23, briefcaseTotalCost: 12.1032 },
+    { slug: 'claude-haiku-5-5-low', family: 'Claude Haiku 5.5', shortName: 'Claude Haiku 5.5 (low)', creatorSlug: 'anthropic', creatorName: 'Anthropic', accuracy: 0.30366666666666664, hallucinationRate: 0.40497845859262804, netScore: 2.16666666666667, totalCost: 0.7593, briefcaseElo: 1113.25, briefcaseTotalCost: 4.2959 }
   ];
 
   const NS = 'http://www.w3.org/2000/svg';
@@ -1102,13 +1126,15 @@
   const mpNote = document.getElementById('mp-note');
   const countOpenai = document.getElementById('count-openai');
   const countGoogle = document.getElementById('count-google');
+  const countAnthropic = document.getElementById('count-anthropic');
 
   const STORAGE_KEY = 'aa-omni-selected-models-v1';
   const MIN_NORM_GAP = 0.025;
+  const ALL_CREATORS = ['openai', 'google', 'anthropic'];
   const AXIS_KEYS = ['accuracy', 'hallucinationRate', 'totalCost', 'briefcaseElo', 'briefcaseTotalCost'];
 
   const state = {
-    creators: new Set(['openai', 'google']),
+    creators: new Set(ALL_CREATORS),
     selectedSlugs: new Set(MODELS.map(m => m.slug)),
     modelSearch: '',
     xMetric: 'hallucinationRate',
@@ -1200,7 +1226,7 @@
       threshold: 1400,
       thresholdLabel: 'at least 1,400 Elo',
       shortThreshold: '>= 1,400',
-      baseBounds: () => [600, 1800],
+      baseBounds: () => [600, 1900],
       isLog: () => false
     },
     briefcaseTotalCost: {
@@ -1213,7 +1239,7 @@
       threshold: 100,
       thresholdLabel: 'at most $100',
       shortThreshold: '<= $100',
-      baseBounds: () => (state.costScale === 'log' ? [0.4, 1200] : [0, 900]),
+      baseBounds: () => (state.costScale === 'log' ? [0.4, 3000] : [0, 2100]),
       isLog: () => state.costScale === 'log'
     }
   };
@@ -1458,7 +1484,9 @@
   }
 
   function creatorColor(slug) {
-    return slug === 'google' ? '#38c15c' : '#f5f5f7';
+    if (slug === 'google') return '#38c15c';
+    if (slug === 'anthropic') return '#ea7b4f';
+    return '#f5f5f7';
   }
 
   function passesThreshold(m, key) {
@@ -1540,7 +1568,7 @@
     document.title = `${ySpec.title} vs. ${xSpec.title}`;
     costScaleBtn.hidden = !hasCostAxis();
     syncZoomButton();
-    plot.setAttribute('aria-label', `Scatter plot of ${ySpec.title} versus ${xSpec.title} across 39 OpenAI and Google models.`);
+    plot.setAttribute('aria-label', `Scatter plot of ${ySpec.title} versus ${xSpec.title} across ${MODELS.length} OpenAI, Google, and Anthropic models.`);
   }
 
   function closeAxisMenu() {
@@ -2215,6 +2243,9 @@
     if (creatorSlug === 'google') {
       return '<svg width="13" height="13" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="5" fill="#38c15c"/></svg>';
     }
+    if (creatorSlug === 'anthropic') {
+      return '<svg width="13" height="13" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="5" fill="#ea7b4f"/></svg>';
+    }
     return '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2.5a4.8 4.8 0 0 1 4.2 2.4 4.8 4.8 0 0 1 4 4.7 4.8 4.8 0 0 1-1.9 3.8 4.8 4.8 0 0 1-2.2 5.4 4.8 4.8 0 0 1-4.1.8 4.8 4.8 0 0 1-4.2-2.4 4.8 4.8 0 0 1-4-4.7 4.8 4.8 0 0 1 1.9-3.8A4.8 4.8 0 0 1 7.9 3.3 4.8 4.8 0 0 1 12 2.5Z"/></svg>';
   }
 
@@ -2223,8 +2254,11 @@
     const oaiSel = MODELS.filter(m => m.creatorSlug === 'openai' && state.selectedSlugs.has(m.slug)).length;
     const gogTotal = MODELS.filter(m => m.creatorSlug === 'google').length;
     const gogSel = MODELS.filter(m => m.creatorSlug === 'google' && state.selectedSlugs.has(m.slug)).length;
+    const antTotal = MODELS.filter(m => m.creatorSlug === 'anthropic').length;
+    const antSel = MODELS.filter(m => m.creatorSlug === 'anthropic' && state.selectedSlugs.has(m.slug)).length;
     countOpenai.textContent = oaiSel === oaiTotal ? `(${oaiTotal})` : `(${oaiSel}/${oaiTotal})`;
     countGoogle.textContent = gogSel === gogTotal ? `(${gogTotal})` : `(${gogSel}/${gogTotal})`;
+    countAnthropic.textContent = antSel === antTotal ? `(${antTotal})` : `(${antSel}/${antTotal})`;
     modelTriggerLabel.textContent = `Models (${state.selectedSlugs.size}/${MODELS.length})`;
   }
 
@@ -2667,19 +2701,19 @@
 
   mpSelectAllBtn.addEventListener('click', () => {
     state.selectedSlugs = new Set(MODELS.map(m => m.slug));
-    state.creators = new Set(['openai', 'google']);
+    state.creators = new Set(ALL_CREATORS);
     creatorBtns.forEach(b => b.setAttribute('aria-pressed', 'true'));
     onModelSelectionChange();
   });
 
   mpResetBtn.addEventListener('click', () => {
     state.selectedSlugs = new Set(MODELS.map(m => m.slug));
-    state.creators = new Set(['openai', 'google']);
+    state.creators = new Set(ALL_CREATORS);
     state.modelSearch = '';
     modelSearchInput.value = '';
     creatorBtns.forEach(b => b.setAttribute('aria-pressed', 'true'));
     onModelSelectionChange();
-    setMpNote('Reset to all 39 default models.');
+    setMpNote(`Reset to all ${MODELS.length} default models.`);
   });
 
   mpSaveBtn.addEventListener('click', () => {
@@ -2774,8 +2808,7 @@
       if (state.creators.has(c) && state.creators.size > 1) {
         state.creators.delete(c);
       } else if (state.creators.has(c)) {
-        state.creators.add('openai');
-        state.creators.add('google');
+        for (const cr of ALL_CREATORS) state.creators.add(cr);
       } else {
         state.creators.add(c);
       }
