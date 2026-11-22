@@ -1030,76 +1030,76 @@
   'use strict';
 
   const MODELS = [
-    { slug: 'gpt-6-2-astra', family: 'GPT-6.2 Astra', shortName: 'GPT-6.2 Astra (max)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.6856666666666666, hallucinationRate: 0.5906680805938495, netScore: 50, totalCost: 766.9678, briefcaseElo: 1643.5, briefcaseTotalCost: 499.4953 },
-    { slug: 'gpt-6-2-astra-xhigh', family: 'GPT-6.2 Astra', shortName: 'GPT-6.2 Astra (xhigh)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.672, hallucinationRate: 0.5772357723577236, netScore: 48.2666666666667, totalCost: 140.1531, briefcaseElo: 1594.37, briefcaseTotalCost: 322.3522 },
-    { slug: 'gpt-6-2-astra-high', family: 'GPT-6.2 Astra', shortName: 'GPT-6.2 Astra (high)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.6633333333333333, hallucinationRate: 0.5811881188118811, netScore: 46.7666666666667, totalCost: 73.5467, briefcaseElo: 1570.41, briefcaseTotalCost: 254.0737 },
-    { slug: 'gpt-6-2-astra-medium', family: 'GPT-6.2 Astra', shortName: 'GPT-6.2 Astra (medium)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.6416666666666667, hallucinationRate: 0.5413953488372093, netScore: 44.7666666666667, totalCost: 20.2045, briefcaseElo: 1408.2, briefcaseTotalCost: 114.8852 },
-    { slug: 'gpt-6-2-astra-low', family: 'GPT-6.2 Astra', shortName: 'GPT-6.2 Astra (low)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.6063333333333333, hallucinationRate: 0.5580016934801016, netScore: 38.6666666666667, totalCost: 8.5378, briefcaseElo: 1038.71, briefcaseTotalCost: 38.2209 },
+    { slug: 'gpt-6-2-astra', family: 'GPT-6.2 Astra', shortName: 'GPT-6.2 Astra (max)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.6856666666666666, hallucinationRate: 0.5906680805938495, netScore: 50, totalCost: 766.9678, briefcaseElo: 1643.07, briefcaseTotalCost: 499.4953 },
+    { slug: 'gpt-6-2-astra-xhigh', family: 'GPT-6.2 Astra', shortName: 'GPT-6.2 Astra (xhigh)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.672, hallucinationRate: 0.5772357723577236, netScore: 48.2666666666667, totalCost: 140.1531, briefcaseElo: 1594.09, briefcaseTotalCost: 322.3522 },
+    { slug: 'gpt-6-2-astra-high', family: 'GPT-6.2 Astra', shortName: 'GPT-6.2 Astra (high)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.6633333333333333, hallucinationRate: 0.5811881188118811, netScore: 46.7666666666667, totalCost: 73.5467, briefcaseElo: 1569.91, briefcaseTotalCost: 254.0737 },
+    { slug: 'gpt-6-2-astra-medium', family: 'GPT-6.2 Astra', shortName: 'GPT-6.2 Astra (medium)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.6416666666666667, hallucinationRate: 0.5413953488372093, netScore: 44.7666666666667, totalCost: 20.2045, briefcaseElo: 1407.46, briefcaseTotalCost: 114.8852 },
+    { slug: 'gpt-6-2-astra-low', family: 'GPT-6.2 Astra', shortName: 'GPT-6.2 Astra (low)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.6063333333333333, hallucinationRate: 0.5580016934801016, netScore: 38.6666666666667, totalCost: 8.5378, briefcaseElo: 1038.86, briefcaseTotalCost: 38.2209 },
 
-    { slug: 'gpt-6-astra', family: 'GPT-6 Astra', shortName: 'GPT-6 Astra (max)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.6156666666666667, hallucinationRate: 0.4978317432784042, netScore: 42.4333333333333, totalCost: 296.5485, briefcaseElo: 1568.82, briefcaseTotalCost: 864.6896 },
-    { slug: 'gpt-6-astra-xhigh', family: 'GPT-6 Astra', shortName: 'GPT-6 Astra (xhigh)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.6103333333333333, hallucinationRate: 0.44568006843455943, netScore: 43.6666666666667, totalCost: 155.3311, briefcaseElo: 1543.65, briefcaseTotalCost: 597.2804 },
-    { slug: 'gpt-6-astra-high', family: 'GPT-6 Astra', shortName: 'GPT-6 Astra (high)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.611, hallucinationRate: 0.4250214224507284, netScore: 44.5666666666667, totalCost: 83.8903, briefcaseElo: 1502.98, briefcaseTotalCost: 433.4808 },
-    { slug: 'gpt-6-astra-medium', family: 'GPT-6 Astra', shortName: 'GPT-6 Astra (medium)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.5963333333333334, hallucinationRate: 0.4516928158546656, netScore: 41.4, totalCost: 32.8301, briefcaseElo: 1462.33, briefcaseTotalCost: 358.5387 },
-    { slug: 'gpt-6-astra-low', family: 'GPT-6 Astra', shortName: 'GPT-6 Astra (low)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.586, hallucinationRate: 0.4420289855072464, netScore: 40.3, totalCost: 20.9225, briefcaseElo: 1256.43, briefcaseTotalCost: 131.3122 },
+    { slug: 'gpt-6-astra', family: 'GPT-6 Astra', shortName: 'GPT-6 Astra (max)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.6156666666666667, hallucinationRate: 0.4978317432784042, netScore: 42.4333333333333, totalCost: 296.5485, briefcaseElo: 1570.86, briefcaseTotalCost: 864.6896 },
+    { slug: 'gpt-6-astra-xhigh', family: 'GPT-6 Astra', shortName: 'GPT-6 Astra (xhigh)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.6103333333333333, hallucinationRate: 0.44568006843455943, netScore: 43.6666666666667, totalCost: 155.3311, briefcaseElo: 1546.18, briefcaseTotalCost: 597.2804 },
+    { slug: 'gpt-6-astra-high', family: 'GPT-6 Astra', shortName: 'GPT-6 Astra (high)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.611, hallucinationRate: 0.4250214224507284, netScore: 44.5666666666667, totalCost: 83.8903, briefcaseElo: 1504.02, briefcaseTotalCost: 433.4808 },
+    { slug: 'gpt-6-astra-medium', family: 'GPT-6 Astra', shortName: 'GPT-6 Astra (medium)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.5963333333333334, hallucinationRate: 0.4516928158546656, netScore: 41.4, totalCost: 32.8301, briefcaseElo: 1462.85, briefcaseTotalCost: 358.5387 },
+    { slug: 'gpt-6-astra-low', family: 'GPT-6 Astra', shortName: 'GPT-6 Astra (low)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.586, hallucinationRate: 0.4420289855072464, netScore: 40.3, totalCost: 20.9225, briefcaseElo: 1256.34, briefcaseTotalCost: 131.3122 },
 
-    { slug: 'gpt-6-2-sol', family: 'GPT-6.2 Sol', shortName: 'GPT-6.2 Sol (max)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.6163333333333333, hallucinationRate: 0.5543006081668115, netScore: 40.3666666666667, totalCost: 158.5068, briefcaseElo: 1612.06, briefcaseTotalCost: 142.4645 },
-    { slug: 'gpt-6-2-sol-xhigh', family: 'GPT-6.2 Sol', shortName: 'GPT-6.2 Sol (xhigh)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.607, hallucinationRate: 0.5623409669211196, netScore: 38.6, totalCost: 59.1732, briefcaseElo: 1580.04, briefcaseTotalCost: 91.7455 },
-    { slug: 'gpt-6-2-sol-high', family: 'GPT-6.2 Sol', shortName: 'GPT-6.2 Sol (high)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.6143333333333333, hallucinationRate: 0.5998271391529818, netScore: 38.3, totalCost: 19.8496, briefcaseElo: 1540.79, briefcaseTotalCost: 72.1688 },
-    { slug: 'gpt-6-2-sol-medium', family: 'GPT-6.2 Sol', shortName: 'GPT-6.2 Sol (medium)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.5916666666666667, hallucinationRate: 0.6114285714285714, netScore: 34.2, totalCost: 6.3615, briefcaseElo: 1494.92, briefcaseTotalCost: 47.7534 },
-    { slug: 'gpt-6-2-sol-low', family: 'GPT-6.2 Sol', shortName: 'GPT-6.2 Sol (low)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.5463333333333333, hallucinationRate: 0.6583394562821455, netScore: 24.7666666666667, totalCost: 1.6127, briefcaseElo: 1229.56, briefcaseTotalCost: 16.4388 },
+    { slug: 'gpt-6-2-sol', family: 'GPT-6.2 Sol', shortName: 'GPT-6.2 Sol (max)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.6163333333333333, hallucinationRate: 0.5543006081668115, netScore: 40.3666666666667, totalCost: 158.5068, briefcaseElo: 1611.82, briefcaseTotalCost: 142.4645 },
+    { slug: 'gpt-6-2-sol-xhigh', family: 'GPT-6.2 Sol', shortName: 'GPT-6.2 Sol (xhigh)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.607, hallucinationRate: 0.5623409669211196, netScore: 38.6, totalCost: 59.1732, briefcaseElo: 1579.39, briefcaseTotalCost: 91.7455 },
+    { slug: 'gpt-6-2-sol-high', family: 'GPT-6.2 Sol', shortName: 'GPT-6.2 Sol (high)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.6143333333333333, hallucinationRate: 0.5998271391529818, netScore: 38.3, totalCost: 19.8496, briefcaseElo: 1540.82, briefcaseTotalCost: 72.1688 },
+    { slug: 'gpt-6-2-sol-medium', family: 'GPT-6.2 Sol', shortName: 'GPT-6.2 Sol (medium)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.5916666666666667, hallucinationRate: 0.6114285714285714, netScore: 34.2, totalCost: 6.3615, briefcaseElo: 1494.01, briefcaseTotalCost: 47.7534 },
+    { slug: 'gpt-6-2-sol-low', family: 'GPT-6.2 Sol', shortName: 'GPT-6.2 Sol (low)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.5463333333333333, hallucinationRate: 0.6583394562821455, netScore: 24.7666666666667, totalCost: 1.6127, briefcaseElo: 1228.98, briefcaseTotalCost: 16.4388 },
 
-    { slug: 'gpt-6-1-sol', family: 'GPT-6.1 Sol', shortName: 'GPT-6.1 Sol (max)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.6183333333333333, hallucinationRate: 0.5187772925764192, netScore: 42.0333333333333, totalCost: 54.9275, briefcaseElo: 1557.04, briefcaseTotalCost: 210.4469 },
-    { slug: 'gpt-6-1-sol-xhigh', family: 'GPT-6.1 Sol', shortName: 'GPT-6.1 Sol (xhigh)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.6106666666666667, hallucinationRate: 0.4803082191780822, netScore: 42.3666666666667, totalCost: 27.5295, briefcaseElo: 1504.23, briefcaseTotalCost: 94.5092 },
-    { slug: 'gpt-6-1-sol-high', family: 'GPT-6.1 Sol', shortName: 'GPT-6.1 Sol (high)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.604, hallucinationRate: 0.4898989898989899, netScore: 41, totalCost: 14.7999, briefcaseElo: 1468.58, briefcaseTotalCost: 76.1605 },
-    { slug: 'gpt-6-1-sol-medium', family: 'GPT-6.1 Sol', shortName: 'GPT-6.1 Sol (medium)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.596, hallucinationRate: 0.48102310231023104, netScore: 40.1666666666667, totalCost: 6.4589, briefcaseElo: 1360.59, briefcaseTotalCost: 42.2577 },
-    { slug: 'gpt-6-1-sol-low', family: 'GPT-6.1 Sol', shortName: 'GPT-6.1 Sol (low)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.5863333333333334, hallucinationRate: 0.49879129734085415, netScore: 38, totalCost: 4.481, briefcaseElo: 1114.73, briefcaseTotalCost: 16.1153 },
+    { slug: 'gpt-6-1-sol', family: 'GPT-6.1 Sol', shortName: 'GPT-6.1 Sol (max)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.6183333333333333, hallucinationRate: 0.5187772925764192, netScore: 42.0333333333333, totalCost: 54.9275, briefcaseElo: 1556.63, briefcaseTotalCost: 210.4469 },
+    { slug: 'gpt-6-1-sol-xhigh', family: 'GPT-6.1 Sol', shortName: 'GPT-6.1 Sol (xhigh)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.6106666666666667, hallucinationRate: 0.4803082191780822, netScore: 42.3666666666667, totalCost: 27.5295, briefcaseElo: 1508.08, briefcaseTotalCost: 94.5092 },
+    { slug: 'gpt-6-1-sol-high', family: 'GPT-6.1 Sol', shortName: 'GPT-6.1 Sol (high)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.604, hallucinationRate: 0.4898989898989899, netScore: 41, totalCost: 14.7999, briefcaseElo: 1470.84, briefcaseTotalCost: 76.1605 },
+    { slug: 'gpt-6-1-sol-medium', family: 'GPT-6.1 Sol', shortName: 'GPT-6.1 Sol (medium)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.596, hallucinationRate: 0.48102310231023104, netScore: 40.1666666666667, totalCost: 6.4589, briefcaseElo: 1360.89, briefcaseTotalCost: 42.2577 },
+    { slug: 'gpt-6-1-sol-low', family: 'GPT-6.1 Sol', shortName: 'GPT-6.1 Sol (low)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.5863333333333334, hallucinationRate: 0.49879129734085415, netScore: 38, totalCost: 4.481, briefcaseElo: 1115.32, briefcaseTotalCost: 16.1153 },
 
-    { slug: 'gpt-6-sol', family: 'GPT-6 Sol', shortName: 'GPT-6 Sol (max)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.5113333333333333, hallucinationRate: 0.6084583901773534, netScore: 21.4, totalCost: 70.9166, briefcaseElo: 1475.58, briefcaseTotalCost: 238.8124 },
+    { slug: 'gpt-6-sol', family: 'GPT-6 Sol', shortName: 'GPT-6 Sol (max)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.5113333333333333, hallucinationRate: 0.6084583901773534, netScore: 21.4, totalCost: 70.9166, briefcaseElo: 1472.66, briefcaseTotalCost: 238.8124 },
 
-    { slug: 'gpt-6-1-terra', family: 'GPT-6.1 Terra', shortName: 'GPT-6.1 Terra (max)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.47633333333333333, hallucinationRate: 0.3450031826861871, netScore: 29.5666666666667, totalCost: 127.5439, briefcaseElo: 1398.61, briefcaseTotalCost: 73.5076 },
-    { slug: 'gpt-6-1-terra-xhigh', family: 'GPT-6.1 Terra', shortName: 'GPT-6.1 Terra (xhigh)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.48033333333333333, hallucinationRate: 0.36754329698524696, netScore: 28.9333333333333, totalCost: 23.8064, briefcaseElo: 1333.66, briefcaseTotalCost: 36.9327 },
-    { slug: 'gpt-6-1-terra-high', family: 'GPT-6.1 Terra', shortName: 'GPT-6.1 Terra (high)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.4726666666666667, hallucinationRate: 0.3697850821744627, netScore: 27.7666666666667, totalCost: 8.8566, briefcaseElo: 1265.03, briefcaseTotalCost: 25.0763 },
-    { slug: 'gpt-6-1-terra-medium', family: 'GPT-6.1 Terra', shortName: 'GPT-6.1 Terra (medium)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.47433333333333333, hallucinationRate: 0.39632213062777427, netScore: 26.6, totalCost: 4.8677, briefcaseElo: 1190.66, briefcaseTotalCost: 16.7193 },
-    { slug: 'gpt-6-1-terra-low', family: 'GPT-6.1 Terra', shortName: 'GPT-6.1 Terra (low)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.45566666666666666, hallucinationRate: 0.41579914268218005, netScore: 22.9333333333333, totalCost: 2.3587, briefcaseElo: 1031.95, briefcaseTotalCost: 7.7196 },
-    { slug: 'gpt-6-1-terra-non-reasoning', family: 'GPT-6.1 Terra', shortName: 'GPT-6.1 Terra (non-reasoning)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.4073333333333333, hallucinationRate: 0.7710911136107986, netScore: -4.96666666666667, totalCost: 0.5782, briefcaseElo: 1225.88, briefcaseTotalCost: 20.0419 },
+    { slug: 'gpt-6-1-terra', family: 'GPT-6.1 Terra', shortName: 'GPT-6.1 Terra (max)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.47633333333333333, hallucinationRate: 0.3450031826861871, netScore: 29.5666666666667, totalCost: 127.5439, briefcaseElo: 1399.26, briefcaseTotalCost: 73.5076 },
+    { slug: 'gpt-6-1-terra-xhigh', family: 'GPT-6.1 Terra', shortName: 'GPT-6.1 Terra (xhigh)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.48033333333333333, hallucinationRate: 0.36754329698524696, netScore: 28.9333333333333, totalCost: 23.8064, briefcaseElo: 1330.49, briefcaseTotalCost: 36.9327 },
+    { slug: 'gpt-6-1-terra-high', family: 'GPT-6.1 Terra', shortName: 'GPT-6.1 Terra (high)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.4726666666666667, hallucinationRate: 0.3697850821744627, netScore: 27.7666666666667, totalCost: 8.8566, briefcaseElo: 1266.04, briefcaseTotalCost: 25.0763 },
+    { slug: 'gpt-6-1-terra-medium', family: 'GPT-6.1 Terra', shortName: 'GPT-6.1 Terra (medium)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.47433333333333333, hallucinationRate: 0.39632213062777427, netScore: 26.6, totalCost: 4.8677, briefcaseElo: 1189.44, briefcaseTotalCost: 16.7193 },
+    { slug: 'gpt-6-1-terra-low', family: 'GPT-6.1 Terra', shortName: 'GPT-6.1 Terra (low)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.45566666666666666, hallucinationRate: 0.41579914268218005, netScore: 22.9333333333333, totalCost: 2.3587, briefcaseElo: 1032.94, briefcaseTotalCost: 7.7196 },
+    { slug: 'gpt-6-1-terra-non-reasoning', family: 'GPT-6.1 Terra', shortName: 'GPT-6.1 Terra (non-reasoning)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.4073333333333333, hallucinationRate: 0.7710911136107986, netScore: -4.96666666666667, totalCost: 0.5782, briefcaseElo: 1223.45, briefcaseTotalCost: 20.0419 },
 
-    { slug: 'gpt-6-luna', family: 'GPT-6 Luna', shortName: 'GPT-6 Luna (max)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.3963333333333333, hallucinationRate: 0.7934842628382109, netScore: -8.26666666666667, totalCost: 7.0313, briefcaseElo: 1336.35, briefcaseTotalCost: 15.4693 },
-    { slug: 'gpt-6-luna-xhigh', family: 'GPT-6 Luna', shortName: 'GPT-6 Luna (xhigh)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.386, hallucinationRate: 0.8398479913137894, netScore: -12.9666666666667, totalCost: 2.6556, briefcaseElo: 1235.4, briefcaseTotalCost: 7.5075 },
-    { slug: 'gpt-6-luna-high', family: 'GPT-6 Luna', shortName: 'GPT-6 Luna (high)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.39, hallucinationRate: 0.8491803278688524, netScore: -12.8, totalCost: 1.7202, briefcaseElo: 1186.54, briefcaseTotalCost: 5.661 },
-    { slug: 'gpt-6-luna-medium', family: 'GPT-6 Luna', shortName: 'GPT-6 Luna (medium)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.387, hallucinationRate: 0.8526373028820011, netScore: -13.5666666666667, totalCost: 1.0839, briefcaseElo: 1096.24, briefcaseTotalCost: 3.0142 },
-    { slug: 'gpt-6-luna-low', family: 'GPT-6 Luna', shortName: 'GPT-6 Luna (low)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.361, hallucinationRate: 0.8482003129890454, netScore: -18.1, totalCost: 0.5354, briefcaseElo: 740.01, briefcaseTotalCost: 0.5538 },
-    { slug: 'gpt-6-luna-non-reasoning', family: 'GPT-6 Luna', shortName: 'GPT-6 Luna (non-reasoning)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.301, hallucinationRate: 0.7997138769670958, netScore: -25.8, totalCost: 0.063, briefcaseElo: 903.24, briefcaseTotalCost: 1.8932 },
+    { slug: 'gpt-6-luna', family: 'GPT-6 Luna', shortName: 'GPT-6 Luna (max)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.3963333333333333, hallucinationRate: 0.7934842628382109, netScore: -8.26666666666667, totalCost: 7.0313, briefcaseElo: 1335.97, briefcaseTotalCost: 15.4693 },
+    { slug: 'gpt-6-luna-xhigh', family: 'GPT-6 Luna', shortName: 'GPT-6 Luna (xhigh)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.386, hallucinationRate: 0.8398479913137894, netScore: -12.9666666666667, totalCost: 2.6556, briefcaseElo: 1234.15, briefcaseTotalCost: 7.5075 },
+    { slug: 'gpt-6-luna-high', family: 'GPT-6 Luna', shortName: 'GPT-6 Luna (high)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.39, hallucinationRate: 0.8491803278688524, netScore: -12.8, totalCost: 1.7202, briefcaseElo: 1183.84, briefcaseTotalCost: 5.661 },
+    { slug: 'gpt-6-luna-medium', family: 'GPT-6 Luna', shortName: 'GPT-6 Luna (medium)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.387, hallucinationRate: 0.8526373028820011, netScore: -13.5666666666667, totalCost: 1.0839, briefcaseElo: 1096.6, briefcaseTotalCost: 3.0142 },
+    { slug: 'gpt-6-luna-low', family: 'GPT-6 Luna', shortName: 'GPT-6 Luna (low)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.361, hallucinationRate: 0.8482003129890454, netScore: -18.1, totalCost: 0.5354, briefcaseElo: 742.06, briefcaseTotalCost: 0.5538 },
+    { slug: 'gpt-6-luna-non-reasoning', family: 'GPT-6 Luna', shortName: 'GPT-6 Luna (non-reasoning)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.301, hallucinationRate: 0.7997138769670958, netScore: -25.8, totalCost: 0.063, briefcaseElo: 905.61, briefcaseTotalCost: 1.8932 },
 
     { slug: 'gemini-4-neon', family: 'Gemini 4 Neon', shortName: 'Gemini 4 Neon (xhigh)', creatorSlug: 'google', creatorName: 'Google', accuracy: 0.6046666666666667, hallucinationRate: 0.14418212478920742, netScore: 54.7666666666667, totalCost: 1183.7532, briefcaseElo: 1698.69, briefcaseTotalCost: 608.9109 },
     { slug: 'gemini-4-neon-high', family: 'Gemini 4 Neon', shortName: 'Gemini 4 Neon (high)', creatorSlug: 'google', creatorName: 'Google', accuracy: 0.594, hallucinationRate: 0.138752052545156, netScore: 53.7666666666667, totalCost: 140.5989, briefcaseElo: 1631.53, briefcaseTotalCost: 384.5749 },
     { slug: 'gemini-4-neon-medium', family: 'Gemini 4 Neon', shortName: 'Gemini 4 Neon (medium)', creatorSlug: 'google', creatorName: 'Google', accuracy: 0.5793333333333334, hallucinationRate: 0.1624405705229794, netScore: 51.1, totalCost: 56.5986, briefcaseElo: 1517.3, briefcaseTotalCost: 197.2685 },
     { slug: 'gemini-4-neon-low', family: 'Gemini 4 Neon', shortName: 'Gemini 4 Neon (low)', creatorSlug: 'google', creatorName: 'Google', accuracy: 0.5663333333333334, hallucinationRate: 0.18754803996925443, netScore: 48.5, totalCost: 23.9861, briefcaseElo: 1296.11, briefcaseTotalCost: 75.8154 },
 
-    { slug: 'gemini-4-hydrogen', family: 'Gemini 4 Hydrogen', shortName: 'Gemini 4 Hydrogen (xhigh)', creatorSlug: 'google', creatorName: 'Google', accuracy: 0.5046666666666667, hallucinationRate: 0.0847913862718708, netScore: 46.2666666666667, totalCost: 502.5118, briefcaseElo: 1567.52, briefcaseTotalCost: 290.1277 },
-    { slug: 'gemini-4-hydrogen-high', family: 'Gemini 4 Hydrogen', shortName: 'Gemini 4 Hydrogen (high)', creatorSlug: 'google', creatorName: 'Google', accuracy: 0.4816666666666667, hallucinationRate: 0.08681672025723473, netScore: 43.6666666666667, totalCost: 42.1897, briefcaseElo: 1496.74, briefcaseTotalCost: 157.8217 },
-    { slug: 'gemini-4-hydrogen-medium', family: 'Gemini 4 Hydrogen', shortName: 'Gemini 4 Hydrogen (medium)', creatorSlug: 'google', creatorName: 'Google', accuracy: 0.48333333333333334, hallucinationRate: 0.12451612903225806, netScore: 41.9, totalCost: 26.0944, briefcaseElo: 1295.9, briefcaseTotalCost: 59.2182 },
-    { slug: 'gemini-4-hydrogen-low', family: 'Gemini 4 Hydrogen', shortName: 'Gemini 4 Hydrogen (low)', creatorSlug: 'google', creatorName: 'Google', accuracy: 0.4623333333333333, hallucinationRate: 0.1884686918784873, netScore: 36.1, totalCost: 9.9162, briefcaseElo: 946.87, briefcaseTotalCost: 19.0846 },
+    { slug: 'gemini-4-hydrogen', family: 'Gemini 4 Hydrogen', shortName: 'Gemini 4 Hydrogen (xhigh)', creatorSlug: 'google', creatorName: 'Google', accuracy: 0.5046666666666667, hallucinationRate: 0.0847913862718708, netScore: 46.2666666666667, totalCost: 502.5118, briefcaseElo: 1568.48, briefcaseTotalCost: 290.1277 },
+    { slug: 'gemini-4-hydrogen-high', family: 'Gemini 4 Hydrogen', shortName: 'Gemini 4 Hydrogen (high)', creatorSlug: 'google', creatorName: 'Google', accuracy: 0.4816666666666667, hallucinationRate: 0.08681672025723473, netScore: 43.6666666666667, totalCost: 42.1897, briefcaseElo: 1496.27, briefcaseTotalCost: 157.8217 },
+    { slug: 'gemini-4-hydrogen-medium', family: 'Gemini 4 Hydrogen', shortName: 'Gemini 4 Hydrogen (medium)', creatorSlug: 'google', creatorName: 'Google', accuracy: 0.48333333333333334, hallucinationRate: 0.12451612903225806, netScore: 41.9, totalCost: 26.0944, briefcaseElo: 1296.07, briefcaseTotalCost: 59.2182 },
+    { slug: 'gemini-4-hydrogen-low', family: 'Gemini 4 Hydrogen', shortName: 'Gemini 4 Hydrogen (low)', creatorSlug: 'google', creatorName: 'Google', accuracy: 0.4623333333333333, hallucinationRate: 0.1884686918784873, netScore: 36.1, totalCost: 9.9162, briefcaseElo: 947.97, briefcaseTotalCost: 19.0846 },
 
-    { slug: 'gemini-4-argon', family: 'Gemini 4 Argon', shortName: 'Gemini 4 Argon (high)', creatorSlug: 'google', creatorName: 'Google', accuracy: 0.483, hallucinationRate: 0.0425531914893617, netScore: 46.1, totalCost: 27.3283, briefcaseElo: 1485.08, briefcaseTotalCost: 530.3252 },
-    { slug: 'gemini-4-argon-medium', family: 'Gemini 4 Argon', shortName: 'Gemini 4 Argon (medium)', creatorSlug: 'google', creatorName: 'Google', accuracy: 0.48966666666666664, hallucinationRate: 0.1541476159372959, netScore: 41.1, totalCost: 3.2475, briefcaseElo: 1466.63, briefcaseTotalCost: 431.9964 },
+    { slug: 'gemini-4-argon', family: 'Gemini 4 Argon', shortName: 'Gemini 4 Argon (high)', creatorSlug: 'google', creatorName: 'Google', accuracy: 0.483, hallucinationRate: 0.0425531914893617, netScore: 46.1, totalCost: 54.6566, briefcaseElo: 1484.19, briefcaseTotalCost: 1060.6504 },
+    { slug: 'gemini-4-argon-medium', family: 'Gemini 4 Argon', shortName: 'Gemini 4 Argon (medium)', creatorSlug: 'google', creatorName: 'Google', accuracy: 0.48966666666666664, hallucinationRate: 0.1541476159372959, netScore: 41.1, totalCost: 6.495, briefcaseElo: 1466.3, briefcaseTotalCost: 863.9927 },
 
-    { slug: 'claude-opus-5-5', family: 'Claude Opus 5.5', shortName: 'Claude Opus 5.5 (max)', creatorSlug: 'anthropic', creatorName: 'Anthropic', accuracy: 0.655, hallucinationRate: 0.5033816425120773, netScore: 48.1333333333333, totalCost: 562.1545, briefcaseElo: 1799.88, briefcaseTotalCost: 1915.1835 },
-    { slug: 'claude-opus-5-5-xhigh', family: 'Claude Opus 5.5', shortName: 'Claude Opus 5.5 (xhigh)', creatorSlug: 'anthropic', creatorName: 'Anthropic', accuracy: 0.6553333333333333, hallucinationRate: 0.6499032882011605, netScore: 43.1333333333333, totalCost: 44.3289, briefcaseElo: 1760.31, briefcaseTotalCost: 1116.2229 },
-    { slug: 'claude-opus-5-5-high', family: 'Claude Opus 5.5', shortName: 'Claude Opus 5.5 (high)', creatorSlug: 'anthropic', creatorName: 'Anthropic', accuracy: 0.6483333333333333, hallucinationRate: 0.6388625592417062, netScore: 42.3666666666667, totalCost: 27.942, briefcaseElo: 1682.17, briefcaseTotalCost: 570.6448 },
-    { slug: 'claude-opus-5-5-medium', family: 'Claude Opus 5.5', shortName: 'Claude Opus 5.5 (medium)', creatorSlug: 'anthropic', creatorName: 'Anthropic', accuracy: 0.639, hallucinationRate: 0.6685133887349953, netScore: 39.7666666666667, totalCost: 24.7262, briefcaseElo: 1616.65, briefcaseTotalCost: 400.2371 },
-    { slug: 'claude-opus-5-5-low', family: 'Claude Opus 5.5', shortName: 'Claude Opus 5.5 (low)', creatorSlug: 'anthropic', creatorName: 'Anthropic', accuracy: 0.6333333333333333, hallucinationRate: 0.6627272727272727, netScore: 39.0333333333333, totalCost: 18.8073, briefcaseElo: 1277.75, briefcaseTotalCost: 104.9068 },
+    { slug: 'claude-opus-5-5', family: 'Claude Opus 5.5', shortName: 'Claude Opus 5.5 (max)', creatorSlug: 'anthropic', creatorName: 'Anthropic', accuracy: 0.655, hallucinationRate: 0.5033816425120773, netScore: 48.1333333333333, totalCost: 562.1545, briefcaseElo: 1797.44, briefcaseTotalCost: 1915.1835 },
+    { slug: 'claude-opus-5-5-xhigh', family: 'Claude Opus 5.5', shortName: 'Claude Opus 5.5 (xhigh)', creatorSlug: 'anthropic', creatorName: 'Anthropic', accuracy: 0.6553333333333333, hallucinationRate: 0.6499032882011605, netScore: 43.1333333333333, totalCost: 44.3289, briefcaseElo: 1757.91, briefcaseTotalCost: 1116.2229 },
+    { slug: 'claude-opus-5-5-high', family: 'Claude Opus 5.5', shortName: 'Claude Opus 5.5 (high)', creatorSlug: 'anthropic', creatorName: 'Anthropic', accuracy: 0.6483333333333333, hallucinationRate: 0.6388625592417062, netScore: 42.3666666666667, totalCost: 27.942, briefcaseElo: 1681.73, briefcaseTotalCost: 570.6448 },
+    { slug: 'claude-opus-5-5-medium', family: 'Claude Opus 5.5', shortName: 'Claude Opus 5.5 (medium)', creatorSlug: 'anthropic', creatorName: 'Anthropic', accuracy: 0.639, hallucinationRate: 0.6685133887349953, netScore: 39.7666666666667, totalCost: 24.7262, briefcaseElo: 1614.8, briefcaseTotalCost: 400.2371 },
+    { slug: 'claude-opus-5-5-low', family: 'Claude Opus 5.5', shortName: 'Claude Opus 5.5 (low)', creatorSlug: 'anthropic', creatorName: 'Anthropic', accuracy: 0.6333333333333333, hallucinationRate: 0.6627272727272727, netScore: 39.0333333333333, totalCost: 18.8073, briefcaseElo: 1277.74, briefcaseTotalCost: 104.9068 },
 
-    { slug: 'claude-sonnet-5-5', family: 'Claude Sonnet 5.5', shortName: 'Claude Sonnet 5.5 (max)', creatorSlug: 'anthropic', creatorName: 'Anthropic', accuracy: 0.5146666666666667, hallucinationRate: 0.4326923076923077, netScore: 30.4666666666667, totalCost: 455.464, briefcaseElo: 1815.14, briefcaseTotalCost: 1863.1257 },
-    { slug: 'claude-sonnet-5-5-xhigh', family: 'Claude Sonnet 5.5', shortName: 'Claude Sonnet 5.5 (xhigh)', creatorSlug: 'anthropic', creatorName: 'Anthropic', accuracy: 0.509, hallucinationRate: 0.6171079429735234, netScore: 20.6, totalCost: 26.4798, briefcaseElo: 1739.19, briefcaseTotalCost: 634.7973 },
-    { slug: 'claude-sonnet-5-5-high', family: 'Claude Sonnet 5.5', shortName: 'Claude Sonnet 5.5 (high)', creatorSlug: 'anthropic', creatorName: 'Anthropic', accuracy: 0.5033333333333333, hallucinationRate: 0.636241610738255, netScore: 18.7333333333333, totalCost: 17.0099, briefcaseElo: 1633.7, briefcaseTotalCost: 297.6371 },
-    { slug: 'claude-sonnet-5-5-medium', family: 'Claude Sonnet 5.5', shortName: 'Claude Sonnet 5.5 (medium)', creatorSlug: 'anthropic', creatorName: 'Anthropic', accuracy: 0.45766666666666667, hallucinationRate: 0.5003073140749846, netScore: 18.6333333333333, totalCost: 9.3539, briefcaseElo: 1437.63, briefcaseTotalCost: 126.6787 },
-    { slug: 'claude-sonnet-5-5-low', family: 'Claude Sonnet 5.5', shortName: 'Claude Sonnet 5.5 (low)', creatorSlug: 'anthropic', creatorName: 'Anthropic', accuracy: 0.46, hallucinationRate: 0.4765432098765432, netScore: 20.2666666666667, totalCost: 8.7175, briefcaseElo: 1267.83, briefcaseTotalCost: 73.0258 },
+    { slug: 'claude-sonnet-5-5', family: 'Claude Sonnet 5.5', shortName: 'Claude Sonnet 5.5 (max)', creatorSlug: 'anthropic', creatorName: 'Anthropic', accuracy: 0.5146666666666667, hallucinationRate: 0.4326923076923077, netScore: 30.4666666666667, totalCost: 455.464, briefcaseElo: 1813.08, briefcaseTotalCost: 1863.1257 },
+    { slug: 'claude-sonnet-5-5-xhigh', family: 'Claude Sonnet 5.5', shortName: 'Claude Sonnet 5.5 (xhigh)', creatorSlug: 'anthropic', creatorName: 'Anthropic', accuracy: 0.509, hallucinationRate: 0.6171079429735234, netScore: 20.6, totalCost: 26.4798, briefcaseElo: 1735.82, briefcaseTotalCost: 634.7973 },
+    { slug: 'claude-sonnet-5-5-high', family: 'Claude Sonnet 5.5', shortName: 'Claude Sonnet 5.5 (high)', creatorSlug: 'anthropic', creatorName: 'Anthropic', accuracy: 0.5033333333333333, hallucinationRate: 0.636241610738255, netScore: 18.7333333333333, totalCost: 17.0099, briefcaseElo: 1633.35, briefcaseTotalCost: 297.6371 },
+    { slug: 'claude-sonnet-5-5-medium', family: 'Claude Sonnet 5.5', shortName: 'Claude Sonnet 5.5 (medium)', creatorSlug: 'anthropic', creatorName: 'Anthropic', accuracy: 0.45766666666666667, hallucinationRate: 0.5003073140749846, netScore: 18.6333333333333, totalCost: 9.3539, briefcaseElo: 1436.15, briefcaseTotalCost: 126.6787 },
+    { slug: 'claude-sonnet-5-5-low', family: 'Claude Sonnet 5.5', shortName: 'Claude Sonnet 5.5 (low)', creatorSlug: 'anthropic', creatorName: 'Anthropic', accuracy: 0.46, hallucinationRate: 0.4765432098765432, netScore: 20.2666666666667, totalCost: 8.7175, briefcaseElo: 1267.74, briefcaseTotalCost: 73.0258 },
 
-    { slug: 'claude-haiku-5-5', family: 'Claude Haiku 5.5', shortName: 'Claude Haiku 5.5 (max)', creatorSlug: 'anthropic', creatorName: 'Anthropic', accuracy: 0.3466666666666667, hallucinationRate: 0.3423469387755102, netScore: 12.3, totalCost: 18.0394, briefcaseElo: 1572.19, briefcaseTotalCost: 61.4126 },
-    { slug: 'claude-haiku-5-5-xhigh', family: 'Claude Haiku 5.5', shortName: 'Claude Haiku 5.5 (xhigh)', creatorSlug: 'anthropic', creatorName: 'Anthropic', accuracy: 0.33766666666666667, hallucinationRate: 0.39154504277805735, netScore: 7.83333333333333, totalCost: 2.0776, briefcaseElo: 1523.34, briefcaseTotalCost: 33.2883 },
-    { slug: 'claude-haiku-5-5-high', family: 'Claude Haiku 5.5', shortName: 'Claude Haiku 5.5 (high)', creatorSlug: 'anthropic', creatorName: 'Anthropic', accuracy: 0.31833333333333336, hallucinationRate: 0.38924205378973104, netScore: 5.3, totalCost: 1.2047, briefcaseElo: 1440.65, briefcaseTotalCost: 20.2879 },
-    { slug: 'claude-haiku-5-5-medium', family: 'Claude Haiku 5.5', shortName: 'Claude Haiku 5.5 (medium)', creatorSlug: 'anthropic', creatorName: 'Anthropic', accuracy: 0.31733333333333336, hallucinationRate: 0.40380859375, netScore: 4.16666666666667, totalCost: 0.9413, briefcaseElo: 1366.23, briefcaseTotalCost: 12.1032 },
-    { slug: 'claude-haiku-5-5-low', family: 'Claude Haiku 5.5', shortName: 'Claude Haiku 5.5 (low)', creatorSlug: 'anthropic', creatorName: 'Anthropic', accuracy: 0.30366666666666664, hallucinationRate: 0.40497845859262804, netScore: 2.16666666666667, totalCost: 0.7593, briefcaseElo: 1113.25, briefcaseTotalCost: 4.2959 }
+    { slug: 'claude-haiku-5-5', family: 'Claude Haiku 5.5', shortName: 'Claude Haiku 5.5 (max)', creatorSlug: 'anthropic', creatorName: 'Anthropic', accuracy: 0.3466666666666667, hallucinationRate: 0.3423469387755102, netScore: 12.3, totalCost: 18.0394, briefcaseElo: 1571.33, briefcaseTotalCost: 61.4126 },
+    { slug: 'claude-haiku-5-5-xhigh', family: 'Claude Haiku 5.5', shortName: 'Claude Haiku 5.5 (xhigh)', creatorSlug: 'anthropic', creatorName: 'Anthropic', accuracy: 0.33766666666666667, hallucinationRate: 0.39154504277805735, netScore: 7.83333333333333, totalCost: 2.0776, briefcaseElo: 1522.23, briefcaseTotalCost: 33.2883 },
+    { slug: 'claude-haiku-5-5-high', family: 'Claude Haiku 5.5', shortName: 'Claude Haiku 5.5 (high)', creatorSlug: 'anthropic', creatorName: 'Anthropic', accuracy: 0.31833333333333336, hallucinationRate: 0.38924205378973104, netScore: 5.3, totalCost: 1.2047, briefcaseElo: 1440.31, briefcaseTotalCost: 20.2879 },
+    { slug: 'claude-haiku-5-5-medium', family: 'Claude Haiku 5.5', shortName: 'Claude Haiku 5.5 (medium)', creatorSlug: 'anthropic', creatorName: 'Anthropic', accuracy: 0.31733333333333336, hallucinationRate: 0.40380859375, netScore: 4.16666666666667, totalCost: 0.9413, briefcaseElo: 1364.34, briefcaseTotalCost: 12.1032 },
+    { slug: 'claude-haiku-5-5-low', family: 'Claude Haiku 5.5', shortName: 'Claude Haiku 5.5 (low)', creatorSlug: 'anthropic', creatorName: 'Anthropic', accuracy: 0.30366666666666664, hallucinationRate: 0.40497845859262804, netScore: 2.16666666666667, totalCost: 0.7593, briefcaseElo: 1112.25, briefcaseTotalCost: 4.2959 }
   ];
 
   const NS = 'http://www.w3.org/2000/svg';
@@ -1314,6 +1314,201 @@
     const yr = computeFitNormRange(state.yMetric, models);
     state.xRange = isRangeZoomed(xr) ? xr : [0, 1];
     state.yRange = isRangeZoomed(yr) ? yr : [0, 1];
+  }
+
+  const URL_PARAM_KEYS = ['y', 'x', 'scale', 'creators', 'models', 'hide', 'zoom', 'xr', 'yr', 'labels', 'lines', 'lock'];
+  const DEFAULT_Y_METRIC = 'accuracy';
+  const DEFAULT_X_METRIC = 'hallucinationRate';
+  const MODEL_SLUG_SET = new Set(MODELS.map(m => m.slug));
+  const MODEL_FAMILY_SET = new Set(MODELS.map(m => m.family));
+  let urlSyncTimer = null;
+
+  function formatUrlBound(metricKey, val) {
+    const unit = METRICS[metricKey].unit;
+    if (unit === 'pct') return String(Number(val.toFixed(4)));
+    if (unit === 'elo') return String(Number(val.toFixed(1)));
+    return String(Number(val.toPrecision(5)));
+  }
+
+  function parseUrlRange(raw, metricKey) {
+    if (!raw) return null;
+    const parts = raw.split(',');
+    if (parts.length !== 2) return null;
+    const vMin = Number(parts[0]);
+    const vMax = Number(parts[1]);
+    if (!Number.isFinite(vMin) || !Number.isFinite(vMax) || vMax <= vMin) return null;
+    const spec = METRICS[metricKey];
+    const [bMin, bMax] = spec.baseBounds();
+    const isLog = spec.isLog();
+    if (isLog && (vMin <= 0 || vMax <= 0)) return null;
+    const nMin = Math.max(0, Math.min(1 - MIN_NORM_GAP, valueToNorm(vMin, bMin, bMax, isLog)));
+    const nMax = Math.min(1, Math.max(nMin + MIN_NORM_GAP, valueToNorm(vMax, bMin, bMax, isLog)));
+    const zoomed = nMin > 0.002 || nMax < 0.998;
+    return zoomed ? [nMin, nMax] : [0, 1];
+  }
+
+  function applyUrlState() {
+    let params;
+    try {
+      params = new URLSearchParams(window.location.search);
+    } catch (_) {
+      return;
+    }
+    if (![...params.keys()].some(k => URL_PARAM_KEYS.includes(k))) return;
+
+    const yParam = params.get('y');
+    const xParam = params.get('x');
+    if (yParam && AXIS_KEYS.includes(yParam)) state.yMetric = yParam;
+    if (xParam && AXIS_KEYS.includes(xParam)) state.xMetric = xParam;
+    if (state.xMetric === state.yMetric) {
+      if (yParam && !xParam) {
+        state.xMetric = state.yMetric === DEFAULT_X_METRIC ? DEFAULT_Y_METRIC : DEFAULT_X_METRIC;
+      } else {
+        state.yMetric = state.xMetric === DEFAULT_Y_METRIC ? DEFAULT_X_METRIC : DEFAULT_Y_METRIC;
+      }
+    }
+
+    const scaleParam = params.get('scale');
+    if (scaleParam === 'log' || scaleParam === 'linear') {
+      state.costScale = scaleParam;
+    }
+
+    const creatorsParam = params.get('creators');
+    if (creatorsParam !== null) {
+      const parsed = creatorsParam.split(',').map(s => s.trim()).filter(s => ALL_CREATORS.includes(s));
+      if (parsed.length) state.creators = new Set(parsed);
+    }
+
+    const modelsParam = params.get('models');
+    const hideParam = params.get('hide');
+    if (modelsParam !== null) {
+      if (modelsParam === 'none' || modelsParam === '') {
+        state.selectedSlugs = new Set();
+      } else {
+        const parsed = modelsParam.split(',').map(s => s.trim()).filter(s => MODEL_SLUG_SET.has(s));
+        if (parsed.length) state.selectedSlugs = new Set(parsed);
+      }
+    } else if (hideParam !== null) {
+      const hidden = new Set(hideParam.split(',').map(s => s.trim()).filter(s => MODEL_SLUG_SET.has(s)));
+      if (hidden.size) {
+        state.selectedSlugs = new Set(MODELS.map(m => m.slug).filter(s => !hidden.has(s)));
+      }
+    }
+
+    const labelsParam = params.get('labels');
+    if (labelsParam === '0' || labelsParam === 'false') state.showLabels = false;
+    else if (labelsParam === '1' || labelsParam === 'true') state.showLabels = true;
+
+    const linesParam = params.get('lines');
+    if (linesParam === '1' || linesParam === 'true') state.showFamilyLines = true;
+    else if (linesParam === '0' || linesParam === 'false') state.showFamilyLines = false;
+
+    const lockParam = params.get('lock');
+    if (lockParam && MODEL_FAMILY_SET.has(lockParam)) {
+      state.lockedFamily = lockParam;
+    }
+
+    const zoomParam = params.get('zoom');
+    const xrParam = params.get('xr');
+    const yrParam = params.get('yr');
+    if (zoomParam === 'full') {
+      state.zoomToData = false;
+      state.xRange = [0, 1];
+      state.yRange = [0, 1];
+    } else if (xrParam || yrParam) {
+      const parsedX = parseUrlRange(xrParam, state.xMetric);
+      const parsedY = parseUrlRange(yrParam, state.yMetric);
+      if (parsedX || parsedY) {
+        state.zoomToData = false;
+        state.xRange = parsedX || [0, 1];
+        state.yRange = parsedY || [0, 1];
+      }
+    } else if (zoomParam === 'fit') {
+      state.zoomToData = true;
+    }
+  }
+
+  function syncControlsFromState() {
+    creatorBtns.forEach(b => b.setAttribute('aria-pressed', String(state.creators.has(b.dataset.creator))));
+    costScaleBtn.setAttribute('aria-pressed', String(state.costScale === 'log'));
+    costScaleBtn.textContent = state.costScale === 'log' ? 'Cost scale: Log' : 'Cost scale: Linear';
+    costScaleBtn.title = costScaleBtn.textContent;
+    labelsBtn.setAttribute('aria-pressed', String(!state.showLabels));
+    labelsBtn.textContent = state.showLabels ? 'Hide model names' : 'Model names hidden';
+    labelsBtn.title = labelsBtn.textContent;
+    linesBtn.setAttribute('aria-pressed', String(state.showFamilyLines));
+    if (state.lockedFamily && !visibleModels().some(m => m.family === state.lockedFamily)) {
+      state.lockedFamily = null;
+    }
+  }
+
+  function syncUrlState() {
+    if (urlSyncTimer) {
+      clearTimeout(urlSyncTimer);
+      urlSyncTimer = null;
+    }
+    try {
+      const params = new URLSearchParams(window.location.search);
+      for (const k of URL_PARAM_KEYS) params.delete(k);
+
+      if (state.yMetric !== DEFAULT_Y_METRIC) params.set('y', state.yMetric);
+      if (state.xMetric !== DEFAULT_X_METRIC) params.set('x', state.xMetric);
+      if (state.costScale !== 'log') params.set('scale', state.costScale);
+
+      if (state.creators.size < ALL_CREATORS.length) {
+        const orderedCreators = ALL_CREATORS.filter(c => state.creators.has(c));
+        params.set('creators', orderedCreators.join(','));
+      }
+
+      if (state.selectedSlugs.size === 0) {
+        params.set('models', 'none');
+      } else if (state.selectedSlugs.size < MODELS.length) {
+        const selectedOrdered = MODELS.map(m => m.slug).filter(s => state.selectedSlugs.has(s));
+        const hiddenOrdered = MODELS.map(m => m.slug).filter(s => !state.selectedSlugs.has(s));
+        if (hiddenOrdered.length < selectedOrdered.length) {
+          params.set('hide', hiddenOrdered.join(','));
+        } else {
+          params.set('models', selectedOrdered.join(','));
+        }
+      }
+
+      if (!state.zoomToData) {
+        const xZoomed = isRangeZoomed(state.xRange);
+        const yZoomed = isRangeZoomed(state.yRange);
+        if (!xZoomed && !yZoomed) {
+          params.set('zoom', 'full');
+        } else {
+          if (xZoomed) {
+            const xd = getAxisDomain('x');
+            params.set('xr', `${formatUrlBound(xd.key, xd.min)},${formatUrlBound(xd.key, xd.max)}`);
+          }
+          if (yZoomed) {
+            const yd = getAxisDomain('y');
+            params.set('yr', `${formatUrlBound(yd.key, yd.min)},${formatUrlBound(yd.key, yd.max)}`);
+          }
+        }
+      }
+
+      if (!state.showLabels) params.set('labels', '0');
+      if (state.showFamilyLines) params.set('lines', '1');
+      if (state.lockedFamily) params.set('lock', state.lockedFamily);
+
+      const qs = params.toString();
+      const nextUrl = window.location.pathname + (qs ? '?' + qs : '') + window.location.hash;
+      const curUrl = window.location.pathname + window.location.search + window.location.hash;
+      if (nextUrl !== curUrl) {
+        history.replaceState(null, '', nextUrl);
+      }
+    } catch (_) {}
+  }
+
+  function scheduleUrlSync(immediate = false) {
+    if (immediate) {
+      syncUrlState();
+      return;
+    }
+    if (urlSyncTimer) clearTimeout(urlSyncTimer);
+    urlSyncTimer = setTimeout(syncUrlState, 120);
   }
 
   function getAxisDomain(axis) {
@@ -1832,6 +2027,7 @@
       updateStatus();
       renderChart();
       if (state.lockedFamily) showTooltip(m, px, py);
+      scheduleUrlSync(true);
     };
 
     hit.addEventListener('pointerenter', enter);
@@ -1849,6 +2045,7 @@
         hideTooltip();
         updateStatus();
         renderChart();
+        scheduleUrlSync(true);
       }
     });
   }
@@ -2385,6 +2582,7 @@
     renderModelPicker();
     updateStatus();
     renderChart();
+    scheduleUrlSync(true);
   }
 
   function setPopoverOpen(open) {
@@ -2420,7 +2618,7 @@
     }
   }
 
-  function setAxisNormRange(axis, nMin, nMax) {
+  function setAxisNormRange(axis, nMin, nMax, immediate = false) {
     const clampedMin = Math.max(0, Math.min(1 - MIN_NORM_GAP, nMin));
     const clampedMax = Math.min(1, Math.max(clampedMin + MIN_NORM_GAP, nMax));
     const zoomed = clampedMin > 0.002 || clampedMax < 0.998;
@@ -2432,6 +2630,7 @@
     hideTooltip();
     updateStatus();
     renderChart();
+    scheduleUrlSync(immediate);
   }
 
   function buildZoomSlider(bar, axis) {
@@ -2480,7 +2679,7 @@
     resetBtn.setAttribute('aria-label', `Reset ${isVert ? 'Y' : 'X'} axis scale`);
     resetBtn.addEventListener('click', e => {
       e.stopPropagation();
-      setAxisNormRange(axis, 0, 1);
+      setAxisNormRange(axis, 0, 1, true);
     });
 
     track.appendChild(range);
@@ -2542,6 +2741,7 @@
         window.removeEventListener('pointermove', onMove);
         window.removeEventListener('pointerup', onUp);
         window.removeEventListener('pointercancel', onUp);
+        scheduleUrlSync(true);
       };
 
       window.addEventListener('pointermove', onMove);
@@ -2557,22 +2757,22 @@
       else if (e.key === 'ArrowLeft' || e.key === 'ArrowDown') delta = -step;
       else if (e.key === 'Home') {
         e.preventDefault();
-        if (mode === 'min') setAxisNormRange(axis, 0, curMaxN);
-        else setAxisNormRange(axis, curMinN, curMinN + MIN_NORM_GAP);
+        if (mode === 'min') setAxisNormRange(axis, 0, curMaxN, true);
+        else setAxisNormRange(axis, curMinN, curMinN + MIN_NORM_GAP, true);
         return;
       } else if (e.key === 'End') {
         e.preventDefault();
-        if (mode === 'min') setAxisNormRange(axis, curMaxN - MIN_NORM_GAP, curMaxN);
-        else setAxisNormRange(axis, curMinN, 1);
+        if (mode === 'min') setAxisNormRange(axis, curMaxN - MIN_NORM_GAP, curMaxN, true);
+        else setAxisNormRange(axis, curMinN, 1, true);
         return;
       } else {
         return;
       }
       e.preventDefault();
       if (mode === 'min') {
-        setAxisNormRange(axis, Math.max(0, Math.min(curMaxN - MIN_NORM_GAP, curMinN + delta)), curMaxN);
+        setAxisNormRange(axis, Math.max(0, Math.min(curMaxN - MIN_NORM_GAP, curMinN + delta)), curMaxN, true);
       } else {
-        setAxisNormRange(axis, curMinN, Math.min(1, Math.max(curMinN + MIN_NORM_GAP, curMaxN + delta)));
+        setAxisNormRange(axis, curMinN, Math.min(1, Math.max(curMinN + MIN_NORM_GAP, curMaxN + delta)), true);
       }
     }
 
@@ -2599,7 +2799,7 @@
 
     track.addEventListener('dblclick', e => {
       e.stopPropagation();
-      setAxisNormRange(axis, 0, 1);
+      setAxisNormRange(axis, 0, 1, true);
     });
 
     return {
@@ -2654,6 +2854,7 @@
     syncAxisCopy();
     updateStatus();
     renderChart();
+    scheduleUrlSync(true);
   }
 
   swapAxesBtn.addEventListener('click', () => {
@@ -2682,6 +2883,7 @@
     hideTooltip();
     updateStatus();
     renderChart();
+    scheduleUrlSync(true);
   });
 
   modelTrigger.addEventListener('click', e => {
@@ -2777,6 +2979,7 @@
     labelsBtn.title = labelsBtn.textContent;
     fitToolbarButtons();
     renderChart();
+    scheduleUrlSync(true);
   });
 
   zoomBtn.addEventListener('click', () => {
@@ -2792,12 +2995,14 @@
     hideTooltip();
     updateStatus();
     renderChart();
+    scheduleUrlSync(true);
   });
 
   linesBtn.addEventListener('click', () => {
     state.showFamilyLines = !state.showFamilyLines;
     linesBtn.setAttribute('aria-pressed', String(state.showFamilyLines));
     renderChart();
+    scheduleUrlSync(true);
   });
 
   lockPill.addEventListener('click', () => {
@@ -2805,6 +3010,7 @@
     hideTooltip();
     updateStatus();
     renderChart();
+    scheduleUrlSync(true);
   });
 
   creatorBtns.forEach(btn => {
@@ -2826,6 +3032,7 @@
       hideTooltip();
       updateStatus();
       renderChart();
+      scheduleUrlSync(true);
     });
   });
 
@@ -2835,6 +3042,7 @@
       hideTooltip();
       updateStatus();
       renderChart();
+      scheduleUrlSync(true);
     }
   });
 
@@ -2849,6 +3057,8 @@
     }, 90);
   });
 
+  applyUrlState();
+  syncControlsFromState();
   if (state.zoomToData) {
     applyZoomToData();
   }
