@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#000000">
-<meta name="description" content="AA-Omniscience and AA-Briefcase benchmarks across 54 OpenAI, Google, and Anthropic model variants on a high-contrast dark scatter plot.">
+<meta name="description" content="AA-Omniscience and AA-Briefcase benchmarks across 58 OpenAI, Google, and Anthropic model variants on a high-contrast dark scatter plot.">
 <title>AA-Omniscience Accuracy vs. AA-Omniscience Hallucination Rate</title>
 <style>
   :root {
@@ -920,7 +920,7 @@
       <div class="toolbar" id="toolbar" role="group" aria-label="Chart display options">
         <div class="model-picker" id="model-picker">
           <button type="button" class="ctrl-btn model-trigger" id="model-trigger" aria-haspopup="dialog" aria-expanded="false" title="Select models">
-            <span id="model-trigger-label">Models (54/54)</span>
+            <span id="model-trigger-label">Models (58/58)</span>
             <svg class="chev" width="10" height="6" viewBox="0 0 10 6" aria-hidden="true"><path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </button>
           <div class="model-popover" id="model-popover" role="dialog" aria-label="Select models to show" hidden>
@@ -959,7 +959,7 @@
           </div>
         </div>
         <button type="button" class="ctrl-btn" id="toggle-labels" aria-pressed="false" title="Hide model names">Hide model names</button>
-        <button type="button" class="ctrl-btn" id="toggle-zoom" aria-pressed="false" title="Toggle zoom scale">Full scale (0% to 100%)</button>
+        <button type="button" class="ctrl-btn" id="toggle-zoom" aria-pressed="true" title="Zoomed to data">Zoomed to data</button>
         <button type="button" class="ctrl-btn" id="toggle-lines" aria-pressed="false" title="Connect model families">Connect model families</button>
         <button type="button" class="ctrl-btn" id="toggle-cost-scale" aria-pressed="true" title="Toggle cost scale (Log / Linear)" hidden>Cost scale: Log</button>
       </div>
@@ -976,7 +976,7 @@
       <button type="button" class="legend-btn" data-creator="google" aria-pressed="true">
         <span class="legend-dot" style="background: var(--google);" aria-hidden="true"></span>
         <span>Google</span>
-        <span class="legend-count" id="count-google">(6)</span>
+        <span class="legend-count" id="count-google">(10)</span>
       </button>
       <button type="button" class="legend-btn" data-creator="anthropic" aria-pressed="true">
         <span class="legend-dot" style="background: var(--anthropic);" aria-hidden="true"></span>
@@ -997,7 +997,7 @@
 
   <section class="chart-stage" aria-label="Interactive scatter plot">
     <div class="chart-shell" id="chart-shell">
-      <svg class="plot" id="plot" role="img" aria-label="Scatter plot comparing AA-Omniscience and AA-Briefcase metrics across 54 OpenAI, Google, and Anthropic models."></svg>
+      <svg class="plot" id="plot" role="img" aria-label="Scatter plot comparing AA-Omniscience and AA-Briefcase metrics across 58 OpenAI, Google, and Anthropic models."></svg>
       <div class="aa-zoom-bar aa-zoom-bar--vertical" id="y-zoom-bar" title="Drag grabbers to zoom Y axis scale (double-click track to reset)"></div>
       <div class="x-zoom-row">
         <button type="button" class="swap-square-btn" id="swap-axes" title="Swap X and Y axes" aria-label="Swap X and Y axes">
@@ -1069,6 +1069,11 @@
     { slug: 'gpt-6-luna-medium', family: 'GPT-6 Luna', shortName: 'GPT-6 Luna (medium)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.387, hallucinationRate: 0.8526373028820011, netScore: -13.5666666666667, totalCost: 1.0839, briefcaseElo: 1096.24, briefcaseTotalCost: 3.0142 },
     { slug: 'gpt-6-luna-low', family: 'GPT-6 Luna', shortName: 'GPT-6 Luna (low)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.361, hallucinationRate: 0.8482003129890454, netScore: -18.1, totalCost: 0.5354, briefcaseElo: 740.01, briefcaseTotalCost: 0.5538 },
     { slug: 'gpt-6-luna-non-reasoning', family: 'GPT-6 Luna', shortName: 'GPT-6 Luna (non-reasoning)', creatorSlug: 'openai', creatorName: 'OpenAI', accuracy: 0.301, hallucinationRate: 0.7997138769670958, netScore: -25.8, totalCost: 0.063, briefcaseElo: 903.24, briefcaseTotalCost: 1.8932 },
+
+    { slug: 'gemini-4-neon', family: 'Gemini 4 Neon', shortName: 'Gemini 4 Neon (xhigh)', creatorSlug: 'google', creatorName: 'Google', accuracy: 0.6046666666666667, hallucinationRate: 0.14418212478920742, netScore: 54.7666666666667, totalCost: 1183.7532, briefcaseElo: 1698.69, briefcaseTotalCost: 608.9109 },
+    { slug: 'gemini-4-neon-high', family: 'Gemini 4 Neon', shortName: 'Gemini 4 Neon (high)', creatorSlug: 'google', creatorName: 'Google', accuracy: 0.594, hallucinationRate: 0.138752052545156, netScore: 53.7666666666667, totalCost: 140.5989, briefcaseElo: 1631.53, briefcaseTotalCost: 384.5749 },
+    { slug: 'gemini-4-neon-medium', family: 'Gemini 4 Neon', shortName: 'Gemini 4 Neon (medium)', creatorSlug: 'google', creatorName: 'Google', accuracy: 0.5793333333333334, hallucinationRate: 0.1624405705229794, netScore: 51.1, totalCost: 56.5986, briefcaseElo: 1517.3, briefcaseTotalCost: 197.2685 },
+    { slug: 'gemini-4-neon-low', family: 'Gemini 4 Neon', shortName: 'Gemini 4 Neon (low)', creatorSlug: 'google', creatorName: 'Google', accuracy: 0.5663333333333334, hallucinationRate: 0.18754803996925443, netScore: 48.5, totalCost: 23.9861, briefcaseElo: 1296.11, briefcaseTotalCost: 75.8154 },
 
     { slug: 'gemini-4-hydrogen', family: 'Gemini 4 Hydrogen', shortName: 'Gemini 4 Hydrogen (xhigh)', creatorSlug: 'google', creatorName: 'Google', accuracy: 0.5046666666666667, hallucinationRate: 0.0847913862718708, netScore: 46.2666666666667, totalCost: 502.5118, briefcaseElo: 1567.52, briefcaseTotalCost: 290.1277 },
     { slug: 'gemini-4-hydrogen-high', family: 'Gemini 4 Hydrogen', shortName: 'Gemini 4 Hydrogen (high)', creatorSlug: 'google', creatorName: 'Google', accuracy: 0.4816666666666667, hallucinationRate: 0.08681672025723473, netScore: 43.6666666666667, totalCost: 42.1897, briefcaseElo: 1496.74, briefcaseTotalCost: 157.8217 },
@@ -1142,7 +1147,7 @@
     costScale: 'log',
     showLabels: true,
     zoomed: false,
-    zoomToData: false,
+    zoomToData: true,
     xRange: [0, 1],
     yRange: [0, 1],
     showFamilyLines: false,
@@ -1213,7 +1218,7 @@
       threshold: 25,
       thresholdLabel: 'at most $25',
       shortThreshold: '<= $25',
-      baseBounds: () => (state.costScale === 'log' ? [0.04, 1200] : [0, 800]),
+      baseBounds: () => (state.costScale === 'log' ? [0.04, 1800] : [0, 1300]),
       isLog: () => state.costScale === 'log'
     },
     briefcaseElo: {
@@ -2844,6 +2849,9 @@
     }, 90);
   });
 
+  if (state.zoomToData) {
+    applyZoomToData();
+  }
   syncAxisCopy();
   syncCreatorCounts();
   updateStatus();
